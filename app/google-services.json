@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "71885804960",
+    "project_id": "ipchat-29feb",
+    "storage_bucket": "ipchat-29feb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:71885804960:android:546a057e3ad08bc325c0c5",
+        "android_client_info": {
+          "package_name": "ipca.project.ipchatv2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "71885804960-2p5gh52i1db6u287rri711figb1b9fqk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNJpF1U2Pv9g0weng1NorlvuesLwrbzDw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "71885804960-2p5gh52i1db6u287rri711figb1b9fqk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
