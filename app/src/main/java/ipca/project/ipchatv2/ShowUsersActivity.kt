@@ -1,13 +1,16 @@
 package ipca.project.ipchatv2
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.databinding.ActivityShowUsersBinding
+import kotlinx.android.synthetic.main.row_users.view.*
 
 class ShowUsersActivity : AppCompatActivity() {
 
@@ -50,13 +53,14 @@ class ShowUsersActivity : AppCompatActivity() {
 class UserItem(val user: User): Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
 
-        //val textViewUserName = viewHolder.textViewUserName
-        //val circleImagePhoto = viewHolder.itemView.circleImageView
+        val textViewUserName = viewHolder.itemView.textViewUserName
+        val circleImagePhoto = viewHolder.itemView.circleImagePhoto
 
-        //textViewUserName.text = user.username
+        textViewUserName.text = user.username
 
 
-        //Glide.with(ShowUsersActivity()).load(user.imageURL).override(100, 100).centerCrop().into(circleImagePhoto)
+        Picasso.get().load(user.imageURL).resize(100, 100).centerCrop()
+            .into(circleImagePhoto)
     }
 
     override fun getLayout(): Int {
