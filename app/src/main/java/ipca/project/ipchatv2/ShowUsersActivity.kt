@@ -2,8 +2,10 @@ package ipca.project.ipchatv2
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.Item
+import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.databinding.ActivityShowUsersBinding
 
@@ -24,8 +26,8 @@ class ShowUsersActivity : AppCompatActivity() {
 
     private fun fetchUsers(){
 
-        val adapter = GroupieAdapter()
-        //val adapter = GroupAdapter<ViewHolder>()
+        //val adapter = GroupieAdapter()
+        val adapter = GroupAdapter<ViewHolder>()
         binding.recyclerViewShowUsers.adapter = adapter
 
 
