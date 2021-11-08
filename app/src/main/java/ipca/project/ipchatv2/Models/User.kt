@@ -23,7 +23,7 @@ class User (
         hashMap["address"]          = address
         hashMap["imageURL"]         = imageURL
         hashMap["student_number"]   = student_number
-        //hashMap["year"]             = year
+        //hashMap["year"]            = year
 
         return hashMap
     }
