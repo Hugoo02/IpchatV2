@@ -1,8 +1,13 @@
-package ipca.project.ipchatv2
+package ipca.project.ipchatv2.Home
 
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
@@ -10,21 +15,29 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Chat.ChatActivity
 import ipca.project.ipchatv2.Models.User
-import ipca.project.ipchatv2.databinding.ActivityShowUsersBinding
+import ipca.project.ipchatv2.R
+import ipca.project.ipchatv2.UserItem
+import ipca.project.ipchatv2.databinding.FragmentHomeBinding
+import ipca.project.ipchatv2.databinding.FragmentUserListBinding
 import kotlinx.android.synthetic.main.row_users.view.*
 
-class ShowUsersActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityShowUsersBinding
+class UserListFragment : Fragment() {
+    private lateinit var binding: FragmentUserListBinding
     private var db = FirebaseFirestore.getInstance()
     val adapter = GroupAdapter<ViewHolder>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityShowUsersBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        supportActionBar?.title = "Select User"
+        (activity as AppCompatActivity).supportActionBar?.title = "IPCHAT"
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentUserListBinding.inflate(layoutInflater)
 
         fetchUsers()
 
@@ -36,10 +49,12 @@ class ShowUsersActivity : AppCompatActivity() {
 
             val intent = Intent(view.context, ChatActivity::class.java)
             intent.putExtra("User", userItem.user)
+            //intent.flags()
             startActivity(intent)
-            finish()
 
         }
+
+        return binding.root
     }
 
     private fun fetchUsers(){
