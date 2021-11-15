@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileFragment">
-
-
+    tools:context=".EditProfileFragment">
 
     <TextView
         android:id="@+id/textView1"
@@ -21,8 +19,8 @@
         android:textStyle="bold"
         android:textSize="20dp"/>
 
-     <Button
-        android:id="@+id/buttonEditProfile"
+    <Button
+        android:id="@+id/buttonEditImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginLeft="100dp"
@@ -193,5 +191,17 @@
         </com.google.android.material.textfield.TextInputEditText>
 
     </com.google.android.material.textfield.TextInputLayout>
+
+
+    <Button
+        android:id="@+id/buttonEditProfile"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:text="Editar"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayoutStudentNumber"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="#086A21"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
