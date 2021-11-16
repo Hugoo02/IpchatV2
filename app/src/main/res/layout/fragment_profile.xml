@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileFragment">
+    tools:context=".ProfileFragment"
+    android:id="@+id/fragment_container_profile">
 
 
 
@@ -22,7 +23,7 @@
         android:textSize="20dp"/>
 
      <Button
-        android:id="@+id/buttonEditProfile"
+        android:id="@+id/buttonEditImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginLeft="100dp"
@@ -42,156 +43,99 @@
 
 
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/circleImageViewLogo"
-        app:startIconDrawable="@drawable/icon_person"
+    <TextView
+        android:id="@+id/textViewUserName"
+        android:layout_width="200dp"
+        android:layout_height="30dp"
         android:layout_marginTop="20dp"
-        app:startIconTint="@color/black">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textInputEditTextName"
-            android:background="@drawable/text_input_edit_text_style"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:paddingTop="10dp"
-            android:textSize="16dp"
-            android:textColor="@color/black"
-            android:clickable="false"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false">
-        </com.google.android.material.textfield.TextInputEditText>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutCourse"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingTop="5dp"
+        android:paddingStart="5dp"
+        android:textColor="@color/black"
+        android:background="@drawable/text_view_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textInputLayoutName"
-        app:startIconDrawable="@drawable/icon_person"
-        android:layout_marginTop="20dp"
-        app:startIconTint="@color/black">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textInputEditTextCourse"
-            android:background="@drawable/text_input_edit_text_style"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:paddingTop="10dp"
-            android:textSize="16dp"
-            android:textColor="@color/black"
-            android:clickable="false"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false">
-        </com.google.android.material.textfield.TextInputEditText>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutAdress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textInputLayoutCourse"
-        app:startIconDrawable="@drawable/icon_person"
+        app:layout_constraintTop_toBottomOf="@+id/circleImageViewLogo"/>
+
+    <TextView
+        android:id="@+id/textViewCourse"
+        android:layout_width="200dp"
+        android:layout_height="30dp"
         android:layout_marginTop="20dp"
-        app:startIconTint="@color/black">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textInputEditTextAdress"
-            android:background="@drawable/text_input_edit_text_style"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:paddingTop="10dp"
-            android:textSize="16dp"
-            android:textColor="@color/black"
-            android:clickable="false"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false">
-        </com.google.android.material.textfield.TextInputEditText>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
+        android:paddingTop="5dp"
+        android:paddingStart="5dp"
+        android:textColor="@color/black"
+        android:background="@drawable/text_view_layout"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textInputLayoutAdress"
-        app:startIconDrawable="@drawable/icon_person"
+        app:layout_constraintTop_toBottomOf="@+id/textViewUserName"/>
+
+
+    <TextView
+        android:id="@+id/textViewAddress"
+        android:layout_width="200dp"
+        android:layout_height="30dp"
         android:layout_marginTop="20dp"
-        app:startIconTint="@color/black">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textInputEditTextEmail"
-            android:background="@drawable/text_input_edit_text_style"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:paddingTop="10dp"
-            android:textSize="16dp"
-            android:textColor="@color/black"
-            android:clickable="false"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false">
-        </com.google.android.material.textfield.TextInputEditText>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutStudentNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
+        android:paddingTop="5dp"
+        android:paddingStart="5dp"
+        android:textColor="@color/black"
+        android:background="@drawable/text_view_layout"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textInputLayoutEmail"
-        app:startIconDrawable="@drawable/icon_person"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCourse"/>
+
+
+    <TextView
+        android:id="@+id/textViewEmail"
+        android:layout_width="200dp"
+        android:layout_height="30dp"
         android:layout_marginTop="20dp"
-        app:startIconTint="@color/black">
+        android:paddingTop="5dp"
+        android:paddingStart="5dp"
+        android:textColor="@color/black"
+        android:background="@drawable/text_view_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAddress"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/textInputEditTextStudentNumber"
-            android:background="@drawable/text_input_edit_text_style"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:paddingTop="10dp"
-            android:textSize="16dp"
-            android:textColor="@color/black"
-            android:clickable="false"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false">
-        </com.google.android.material.textfield.TextInputEditText>
 
-    </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+        android:id="@+id/textViewStudentNumber"
+        android:layout_width="200dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:paddingTop="5dp"
+        android:paddingStart="5dp"
+        android:textColor="@color/black"
+        android:background="@drawable/text_view_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewEmail"/>
+
+    <Button
+        android:id="@+id/buttonSaveChanges"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:text="Guardar alterações"
+        android:textStyle="bold"
+        android:textSize="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewStudentNumber"
+        android:backgroundTint="@color/teal_700"/>
+
+    <Button
+        android:id="@+id/buttonEditActivity"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:text="Editar dados  do perfil"
+        android:textStyle="bold"
+        android:textSize="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonSaveChanges"
+        android:backgroundTint="@color/teal_700"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,11 +16,6 @@
         android:label="Página De Perfil"
         tools:layout="@layout/fragment_profile" />
     <fragment
-        android:id="@+id/editProfileFragment"
-        android:name="ipca.project.ipchatv2.EditProfileFragment"
-        android:label="Editar Perfil"
-        tools:layout="@layout/fragment_edit_profile" />
-    <fragment
         android:id="@+id/calendarFragment"
         android:name="ipca.project.ipchatv2.CalendarFragment"
         android:label="fragment_calendar"

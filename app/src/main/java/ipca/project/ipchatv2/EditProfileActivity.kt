@@ -1,74 +1,52 @@
 package ipca.project.ipchatv2
 
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.Button
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
-import android.view.LayoutInflater
-import androidx.fragment.app.Fragment
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import ipca.project.ipchatv2.Models.User
-import ipca.project.ipchatv2.databinding.FragmentEditProfileBinding
-import ipca.project.ipchatv2.databinding.FragmentProfileBinding
 import java.util.*
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class EditProfileActivity : AppCompatActivity() {
 
-
-class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
-    private var param1: String? = null
-    private var param2: String? = null
-
-    lateinit var binding: FragmentEditProfileBinding
     lateinit var circleImageView: CircleImageView
+    lateinit var buttonGoBack: Button
     lateinit var buttonEditImage: Button
     lateinit var buttonEditProfile: Button
-    lateinit var username : TextInputEditText
+    lateinit var username : EditText
     lateinit var course : TextInputEditText
     lateinit var address : TextInputEditText
     lateinit var email : TextInputEditText
     lateinit var studentNumber: TextInputEditText
-    private val pickImage = 100
     private var imageUri: Uri? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_edit_profile)
 
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+         buttonGoBack = findViewById<Button>(R.id.buttonEditProfile)
+         circleImageView = findViewById<CircleImageView>(R.id.circleImageViewLogo)
+         buttonEditImage = findViewById<Button>(R.id.buttonEditImage)
+         buttonEditProfile = findViewById<Button>(R.id.buttonEditProfile)
+         username = findViewById<EditText>(R.id.EditTextName)
+         course  = findViewById<TextInputEditText>(R.id.textInputEditTextCourse)
+         address = findViewById<TextInputEditText>(R.id.textInputEditTextAdress)
+         email = findViewById<TextInputEditText>(R.id.textInputEditTextEmail)
+         studentNumber = findViewById<TextInputEditText>(R.id.textInputEditTextStudentNumber)
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentEditProfileBinding.inflate(layoutInflater)
-        buttonEditImage = binding.buttonEditImage
-        buttonEditProfile = binding.buttonEditProfile
-        circleImageView = binding.circleImageViewLogo
-        username = binding.textInputEditTextName
-        course = binding.textInputEditTextCourse
-        address = binding.textInputEditTextAdress
-        email = binding.textInputEditTextEmail
-        studentNumber = binding.textInputEditTextStudentNumber
 
         getCurrentUser()
 
@@ -80,18 +58,19 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
         }
 
         buttonEditProfile.setOnClickListener {
-          uploadImageToFirebaseStorage()
+
+            editCurrentUser()
         }
 
         buttonEditImage.setOnClickListener {
-          val intent = Intent(Intent.ACTION_PICK)
-          intent.type = "image/*"
-          getImage.launch(intent)
-          uploadImageToFirebaseStorage()
-         }
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            getImage.launch(intent)
+            uploadImageToFirebaseStorage()
+        }
 
-        return binding.root
     }
+
 
 
     private fun uploadImageToFirebaseStorage(){
@@ -114,11 +93,10 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
 
             }
             .addOnFailureListener{
-                Toast.makeText(requireContext(), "Erro a uploadar a imagem!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Erro a uploadar a imagem!", Toast.LENGTH_SHORT).show()
             }
 
     }
-
 
     private fun saveUserToFireStore(imageURL: String) {
 
@@ -129,6 +107,7 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
         )
         ref.update(imageMap)
     }
+
 
 
     private fun getCurrentUser(){
@@ -150,8 +129,31 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
         }
     }
 
+    private fun editCurrentUser(){
 
-    companion object {
-        val FIREBASEURL = "https://messenger-28931-default-rtdb.europe-west1.firebasedatabase.app/"
+        val uid = FirebaseAuth.getInstance().uid
+        val ref = Firebase.firestore.collection("User").document(uid!!)
+
+        ref.get().addOnSuccessListener { result ->
+
+            val user = result.toObject(User::class.java)
+
+            var userTest = hashMapOf(
+                "username" to username.text.toString()
+            )
+
+            Firebase.firestore.collection("User").document(uid!!).set(userTest, SetOptions.merge())
+
+
+            /*Picasso.get().load(user!!.imageURL).into(circleImageView)
+            user!!.username
+            user!!.course = course.toString()
+            user!!.email = email.toString()
+            user!!.student_number = studentNumber.toString()
+            user!!.id = user.id
+            user!!.year = user.year
+            user!!.gender = user.gender*/
+
+        }
     }
 }
