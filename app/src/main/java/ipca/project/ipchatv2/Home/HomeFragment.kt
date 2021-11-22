@@ -1,28 +1,19 @@
 package ipca.project.ipchatv2
 
 
-import android.app.Activity
-import android.app.Instrumentation
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.tabs.TabLayout
-import com.google.firebase.firestore.FirebaseFirestore
-import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Home.HomeAdapter
 import ipca.project.ipchatv2.Models.ChatMessage
-import ipca.project.ipchatv2.Models.User
-import ipca.project.ipchatv2.databinding.ActivityMainBinding
 import ipca.project.ipchatv2.databinding.FragmentHomeBinding
-import kotlinx.android.synthetic.main.row_users.view.*
+import kotlinx.android.synthetic.main.fragment_home.view.*
 
 
 class HomeFragment : Fragment() {
@@ -58,11 +49,13 @@ class HomeFragment : Fragment() {
         val tabLayout = binding.tabLayout
         val viewPager = binding.viewPager
 
+        //tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.tab_layout_person))
         tabLayout.addTab(tabLayout.newTab().setText("Pessoas"))
         tabLayout.addTab(tabLayout.newTab().setText("Grupos"))
+        //tabLayout.setBackgroundResource()
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
 
-        val adapter = HomeAdapter(getFragmentManager()!! , requireContext(), tabLayout.tabCount)
+        val adapter = HomeAdapter(requireFragmentManager() , requireContext(), tabLayout.tabCount)
         viewPager.adapter = adapter
 
 
@@ -93,28 +86,15 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+    }
+
     /*
     fun openSomeActivityForResult() {
         val intent = Intent(requireContext(), ShowUsersActivity::class.java)
         resultLauncher!!.launch(intent)
     }*/
 
-}
-
-class ChatMessage(val user: User, val chatMessage: ChatMessage): Item<ViewHolder>() {
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-
-        val textViewUserName = viewHolder.itemView.textViewUserName
-        val circleImagePhoto = viewHolder.itemView.circleImagePhoto
-
-        textViewUserName.text = user.username
-
-
-        Picasso.get().load(user.imageURL).resize(100, 100).centerCrop()
-            .into(circleImagePhoto)
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.row_users
-    }
 }

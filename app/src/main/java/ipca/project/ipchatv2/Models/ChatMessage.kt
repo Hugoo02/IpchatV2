@@ -2,37 +2,34 @@ package ipca.project.ipchatv2.Models
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import java.util.*
+import kotlin.collections.HashMap
 
 @Parcelize
 class ChatMessage (
+    var senderId    : String? = null,
+    var text        : String? = null,
+    var time        : Date? = null,
+    var type        : String? = null): Parcelable {
 
-    var id                      : String? = null,
-    var text                    : String? = null,
-    var fromId                  : String? = null,
-    var toId                    : String? = null,
-    var timeStamp               : Long? = null): Parcelable {
-
-    constructor() : this("", "", "", "", -1)
+    constructor() : this(null, null, null, null)
 
     fun toHashMap() : HashMap<String, Any?>{
         val hashMap = HashMap<String, Any?>()
-        hashMap["id"]               = id
+        hashMap["senderId"]         = senderId
         hashMap["text"]             = text
-        hashMap["fromId"]           = fromId
-        hashMap["toId"]             = toId
-        hashMap["timeStamp"]        = timeStamp
+        hashMap["time"]             = time
+        hashMap["type"]             = type
 
         return hashMap
     }
-
     companion object{
-        fun fromHash(hashMap:  HashMap<String, Any?>) : User {
-            val item = User(
-                hashMap["id"].toString(),
+        fun fromHash(hashMap:  HashMap<String, Any?>) : ChatMessage {
+            val item = ChatMessage(
+                hashMap["senderId"].toString(),
                 hashMap["text"].toString(),
-                hashMap["fromId"].toString(),
-                hashMap["toId"].toString(),
-                hashMap["timeStamp"].toString(),
+                hashMap["time"] as Date,
+                hashMap["type"].toString()
             )
             return item
         }

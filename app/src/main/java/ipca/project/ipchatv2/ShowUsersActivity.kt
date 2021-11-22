@@ -35,7 +35,7 @@ class ShowUsersActivity : AppCompatActivity() {
             var userItem = item as UserItem
 
             val intent = Intent(view.context, ChatActivity::class.java)
-            intent.putExtra("User", userItem.user)
+            //intent.putExtra("User", userItem.user)
             startActivity(intent)
             finish()
 
@@ -44,13 +44,11 @@ class ShowUsersActivity : AppCompatActivity() {
 
     private fun fetchUsers(){
 
-        //val adapter = GroupieAdapter()
-
         db.collection("User")
             .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    val user = User.fromHash(document.data as HashMap<String, Any?>)
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val user = document.toObject(User::class.java)
                     adapter.add(UserItem(user))
                 }
             }

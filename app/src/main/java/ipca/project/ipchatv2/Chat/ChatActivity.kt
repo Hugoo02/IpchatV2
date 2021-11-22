@@ -13,7 +13,7 @@ class ChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
-        toUser = intent.getParcelableExtra<User>("User")!!
+        //toUser = intent.getParcelableExtra<User>("User")!!
 
         supportActionBar?.title = toUser.username
     }
