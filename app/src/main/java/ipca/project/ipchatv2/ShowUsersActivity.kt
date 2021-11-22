@@ -6,8 +6,8 @@ import android.os.Bundle
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
-import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Chat.ChatActivity
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.databinding.ActivityShowUsersBinding
@@ -17,7 +17,7 @@ class ShowUsersActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityShowUsersBinding
     private var db = FirebaseFirestore.getInstance()
-    val adapter = GroupAdapter<ViewHolder>()
+    val adapter = GroupAdapter<GroupieViewHolder>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,8 +61,8 @@ class ShowUsersActivity : AppCompatActivity() {
 
 }
 
-class UserItem(val user: User): Item<ViewHolder>() {
-    override fun bind(viewHolder: ViewHolder, position: Int) {
+class UserItem(val user: User): Item<GroupieViewHolder>() {
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 
         val textViewUserName = viewHolder.itemView.textViewUserName
         val circleImagePhoto = viewHolder.itemView.circleImagePhoto

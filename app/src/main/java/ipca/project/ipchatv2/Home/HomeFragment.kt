@@ -16,7 +16,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
-import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Home.HomeAdapter
 import ipca.project.ipchatv2.Models.ChatMessage
 import ipca.project.ipchatv2.Models.User
@@ -28,7 +27,7 @@ import kotlinx.android.synthetic.main.row_users.view.*
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
-    val adapter = GroupAdapter<ViewHolder>()
+    //val adapter = GroupAdapter<ViewHolder>()
 
     val latestMessageMap = HashMap<String, ChatMessage>()
 
@@ -62,8 +61,8 @@ class HomeFragment : Fragment() {
         tabLayout.addTab(tabLayout.newTab().setText("Grupos"))
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
 
-        val adapter = HomeAdapter(getFragmentManager()!! , requireContext(), tabLayout.tabCount)
-        viewPager.adapter = adapter
+       // val adapter = HomeAdapter(getFragmentManager()!! , requireContext(), tabLayout.tabCount)
+       // viewPager.adapter = adapter
 
 
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
@@ -101,6 +100,7 @@ class HomeFragment : Fragment() {
 
 }
 
+/*
 class ChatMessage(val user: User, val chatMessage: ChatMessage): Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
 
@@ -118,3 +118,5 @@ class ChatMessage(val user: User, val chatMessage: ChatMessage): Item<ViewHolder
         return R.layout.row_users
     }
 }
+
+ */

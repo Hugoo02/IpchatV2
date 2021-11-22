@@ -5,6 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 class User (
+    var id                  : String? = null,
     var username            : String? = null,
     var course              : String? = null,
     var email               : String? = null,
@@ -17,6 +18,7 @@ class User (
 
     fun toHashMap() : HashMap<String, Any?>{
         val hashMap = HashMap<String, Any?>()
+        hashMap["id"]               = id
         hashMap["username"]         = username
         hashMap["course"]           = course
         hashMap["email"]            = email
@@ -31,6 +33,7 @@ class User (
     companion object{
         fun fromHash(hashMap:  HashMap<String, Any?>) : User {
             val item = User(
+                hashMap["id"].toString(),
                 hashMap["username"].toString(),
                 hashMap["course"].toString(),
                 hashMap["email"].toString(),
