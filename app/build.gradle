@@ -56,9 +56,6 @@ dependencies {
 
     //Groupie
     implementation 'com.xwray:groupie:2.3.0'
-    //implementation 'com.xwray:groupie-kotlin-extensions:2.3.0'
-    //implementation "com.github.lisawray.groupie:groupie:2.10.0"
-    //implementation "com.github.lisawray.groupie:groupie-viewbinding:2.10.0"
 
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'

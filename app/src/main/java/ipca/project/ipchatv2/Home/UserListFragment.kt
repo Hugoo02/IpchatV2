@@ -18,6 +18,7 @@ import ipca.project.ipchatv2.Chat.ChatActivity
 import ipca.project.ipchatv2.Chat.LatestMessageRow
 import ipca.project.ipchatv2.Models.ChatMessage
 import ipca.project.ipchatv2.Models.LastMessage
+import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.R
 import ipca.project.ipchatv2.UserItem
 import ipca.project.ipchatv2.databinding.FragmentUserListBinding
@@ -31,6 +32,7 @@ class UserListFragment : Fragment() {
     private var db = FirebaseFirestore.getInstance()
     val adapter = GroupAdapter<ViewHolder>()
     val groupList : MutableList<LastMessage> = arrayListOf()
+    val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,15 +78,17 @@ class UserListFragment : Fragment() {
 
         refIdGroups.get().addOnSuccessListener { result ->
 
-            println("docuemntos = " + result.documents)
-
             result.documents.forEach{
 
-                val groupId = it.id
+                var groupId : String? = null
 
-                println("groupId = ${it.id}")
+                it.data!!.values.forEach{
 
-                val refLastMessageId = db.collection("chatChannels").document(it.id)
+                    groupId = it.toString()
+
+                }
+
+                val refLastMessageId = db.collection("chatChannels").document(groupId!!)
                     .collection("lastMessage")
 
                 //Referencia responsável por resgatar as ultimas mensagens de todos os grupos em que o user pertence
@@ -95,18 +99,43 @@ class UserListFragment : Fragment() {
 
                         for (document in it){
 
-                            val lastMessage = document.toObject(LastMessage::class.java)
-                            println("passou antes de adicionar")
-                            groupList.add(LastMessage(groupId, document.id, lastMessage.time))
-                            println(groupList[0].messageId)
+                            //Referencia responsável por listar todos os utilizadores da sala em questão
+                            val refMembers = db.collection("chatChannels")
+                                .document(groupId!!)
+
+                            var usersList : MutableList<String> = ArrayList()
+                            var otherUserId : String? = null
+
+                            refMembers.get().addOnSuccessListener { result ->
+
+                                result.data!!.forEach{ result ->
+
+                                    usersList = result.value as MutableList<String>
+
+                                    //Se o grupo tiver 2 membros, ou seja grupos individuais
+                                    if(usersList.size == 2){
+
+                                        if(usersList[0] == currentUserId)
+                                            otherUserId = usersList[1]
+                                        else
+                                            otherUserId = usersList[0]
+
+                                        val lastMessage = document.toObject(LastMessage::class.java)
+                                        groupList.add(LastMessage(groupId, otherUserId, document.id, lastMessage.time))
+                                        println("groupList = " + groupList)
+
+                                    }
+
+                                }
+
+                                println("groupList = " + groupList)
+                                groupList.sortByDescending{it.time}
+                                refreshAdapter()
+                            }
 
                         }
 
-                        groupList.sortByDescending{it.time}
-
                     }
-
-                    refreshAdapter()
 
                 }
 
@@ -116,8 +145,9 @@ class UserListFragment : Fragment() {
 
     private fun refreshAdapter() {
         adapter.clear()
-        println("passou no adapter")
+        println("passou1 " + groupList.size)
         groupList.forEach {
+            println("passou")
             adapter.add(LatestMessageRow(it))
         }
     }
