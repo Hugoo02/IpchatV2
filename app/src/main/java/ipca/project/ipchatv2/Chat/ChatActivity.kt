@@ -4,11 +4,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.type.Date
+import com.google.type.DateTime
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Models.ChatMessage
+import ipca.project.ipchatv2.Utils
 import ipca.project.ipchatv2.databinding.ActivityChatBinding
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 class ChatActivity : AppCompatActivity() {
 
@@ -48,6 +56,26 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun performSendMessage() {
+
+        val text = binding.editTextMessage.text.toString()
+
+        //println(FieldValue.serverTimestamp() as Date)
+
+        var dateTimeString = LocalDateTime.now()
+        var ldt = LocalDateTime.parse(dateTimeString.toString())
+        println(ldt)
+
+        //val message = ChatMessage(currentUser, text, LocalDateTime.now() as Date)
+
+        if(channelType == "group"){
+
+            val refSendMessage = db.collection("groupChannel")
+                .document(groupId!!)
+                .collection("messages")
+
+            //refSendMessage.add(message)
+
+        }
 
     }
 
