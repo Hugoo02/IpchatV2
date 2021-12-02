@@ -4,19 +4,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.type.Date
-import com.google.type.DateTime
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Models.ChatMessage
 import ipca.project.ipchatv2.Utils
 import ipca.project.ipchatv2.databinding.ActivityChatBinding
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
+import kotlinx.android.synthetic.main.activity_chat.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ChatActivity : AppCompatActivity() {
 
@@ -58,22 +55,40 @@ class ChatActivity : AppCompatActivity() {
     private fun performSendMessage() {
 
         val text = binding.editTextMessage.text.toString()
+        val date = Calendar.getInstance().time
 
-        //println(FieldValue.serverTimestamp() as Date)
-
-        var dateTimeString = LocalDateTime.now()
-        var ldt = LocalDateTime.parse(dateTimeString.toString())
-        println(ldt)
-
-        //val message = ChatMessage(currentUser, text, LocalDateTime.now() as Date)
+        val message = ChatMessage(currentUser, text, date, "TEXT")
 
         if(channelType == "group"){
 
-            val refSendMessage = db.collection("groupChannel")
+            println(groupId!!)
+
+            val refSendMessage = db.collection("groupChannels")
                 .document(groupId!!)
                 .collection("messages")
 
-            //refSendMessage.add(message)
+            val refSendLastMessage = db.collection("groupChannels")
+                .document(groupId!!)
+                .collection("lastMessage")
+
+            refSendLastMessage.get().addOnSuccessListener {
+
+                for(doc in it){
+
+                    refSendLastMessage.document(doc.id).delete()
+
+                }
+
+            }
+
+            refSendMessage.add(message).addOnSuccessListener {
+
+                binding.editTextMessage.text.clear()
+                binding.recyclerViewChat.scrollToPosition(adapter.itemCount - 1)
+
+                refSendLastMessage.document(it.id).set(message)
+
+            }
 
         }
 
@@ -81,13 +96,26 @@ class ChatActivity : AppCompatActivity() {
 
     private fun listenForMessages() {
 
-        if(channelType == "group"){
+        var refMessages : CollectionReference? = null
 
-            val refMessages = db.collection("groupChannels")
+        if(channelType == "group") {
+
+            refMessages = db.collection("groupChannels")
+                .document(groupId!!)
+                .collection("messages")
+        }
+        else{
+
+            refMessages = db.collection("privateChannels")
                 .document(groupId!!)
                 .collection("messages")
 
+        }
+
             refMessages.addSnapshotListener{result, e ->
+
+                messages.clear()
+                adapter.clear()
 
                 for (doc in result!!){
 
@@ -95,8 +123,7 @@ class ChatActivity : AppCompatActivity() {
 
                 }
 
-                println("message 1 antes = ${messages[0]}")
-                messages.sortByDescending{it.time}
+                messages.sortBy{it.time}
 
                 messages.forEach {
 
@@ -107,9 +134,9 @@ class ChatActivity : AppCompatActivity() {
 
                 }
 
-            }
+                recyclerViewChat.scrollToPosition(adapter.itemCount - 1)
 
-        }
+            }
 
     }
 }

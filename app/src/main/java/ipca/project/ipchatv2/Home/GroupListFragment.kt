@@ -84,6 +84,9 @@ class GroupListFragment : Fragment() {
 
                 refLastMessageId.addSnapshotListener{ documents, e ->
 
+                    adapter.clear()
+                    groupList.clear()
+
                     documents?.let {
 
                         for (document in it){

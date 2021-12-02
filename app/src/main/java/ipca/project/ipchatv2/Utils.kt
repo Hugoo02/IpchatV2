@@ -2,12 +2,7 @@ package ipca.project.ipchatv2
 
 import android.app.AlertDialog
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LifecycleOwner
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.system.exitProcess
 
@@ -50,6 +45,5 @@ object Utils {
         return "$hour:$minute"
 
     }
-
 
 }

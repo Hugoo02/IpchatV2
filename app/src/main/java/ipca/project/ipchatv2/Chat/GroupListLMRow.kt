@@ -70,8 +70,6 @@ class GroupListLMRow(val lastMessageGroup: LastMessageGroup): Item<ViewHolder>()
 
             }
 
-            //textViewMessageLM.text = message!!.text
-
         }
 
     }
