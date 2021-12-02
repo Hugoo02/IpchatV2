@@ -3,6 +3,7 @@ package ipca.project.ipchatv2.Home
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,16 +16,10 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Chat.ChatActivity
-import ipca.project.ipchatv2.Chat.LatestMessageRow
-import ipca.project.ipchatv2.Models.ChatMessage
+import ipca.project.ipchatv2.Chat.UserListLMRow
 import ipca.project.ipchatv2.Models.LastMessage
-import ipca.project.ipchatv2.Models.User
-import ipca.project.ipchatv2.R
 import ipca.project.ipchatv2.UserItem
 import ipca.project.ipchatv2.databinding.FragmentUserListBinding
-import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.row_last_messages.view.*
-import kotlinx.android.synthetic.main.row_users.view.*
 import java.util.*
 
 class UserListFragment : Fragment() {
@@ -32,7 +27,6 @@ class UserListFragment : Fragment() {
     private var db = FirebaseFirestore.getInstance()
     val adapter = GroupAdapter<ViewHolder>()
     val groupList : MutableList<LastMessage> = arrayListOf()
-    val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +41,8 @@ class UserListFragment : Fragment() {
     ): View {
         binding = FragmentUserListBinding.inflate(layoutInflater)
 
-        binding.recyclerViewShowUsers.adapter = adapter
-        binding.recyclerViewShowUsers.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+        binding.recyclerViewUserLM.adapter = adapter
+        binding.recyclerViewUserLM.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
         listenForLatestMessages()
 
@@ -69,9 +63,9 @@ class UserListFragment : Fragment() {
 
     private fun listenForLatestMessages() {
 
-        val fromId = FirebaseAuth.getInstance().uid
+        val currentUserId = FirebaseAuth.getInstance().uid
         val refIdGroups = db.collection("User")
-            .document("$fromId")
+            .document("$currentUserId")
             .collection("engagedChatChannels")
 
         //Referencia responsável por resgatar todos os grupos do user em questão
@@ -122,13 +116,11 @@ class UserListFragment : Fragment() {
 
                                         val lastMessage = document.toObject(LastMessage::class.java)
                                         groupList.add(LastMessage(groupId, otherUserId, document.id, lastMessage.time))
-                                        println("groupList = " + groupList)
 
                                     }
 
                                 }
 
-                                println("groupList = " + groupList)
                                 groupList.sortByDescending{it.time}
                                 refreshAdapter()
                             }
@@ -145,10 +137,8 @@ class UserListFragment : Fragment() {
 
     private fun refreshAdapter() {
         adapter.clear()
-        println("passou1 " + groupList.size)
         groupList.forEach {
-            println("passou")
-            adapter.add(LatestMessageRow(it))
+            adapter.add(UserListLMRow(it))
         }
     }
 }

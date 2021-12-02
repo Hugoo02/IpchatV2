@@ -3,62 +3,74 @@ package ipca.project.ipchatv2.Chat
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
-import ipca.project.ipchatv2.Models.ChatMessage
-import ipca.project.ipchatv2.Models.LastMessage
-import ipca.project.ipchatv2.Models.User
+import ipca.project.ipchatv2.Models.*
 import ipca.project.ipchatv2.R
 import ipca.project.ipchatv2.Utils
 import kotlinx.android.synthetic.main.row_last_messages.view.*
 
-class LatestMessageRow(val lastMessage: LastMessage): Item<ViewHolder>(){
+class GroupListLMRow(val lastMessageGroup: LastMessageGroup): Item<ViewHolder>(){
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun bind(viewHolder: ViewHolder, position: Int) {
 
-        var message : ChatMessage? = null
-        var senderUser : User? = null
-
         val db = FirebaseFirestore.getInstance()
+        val currentUser = FirebaseAuth.getInstance().uid
 
         //Referencia responsável por buscar as informações da conversa da row
-        val refMessage = db.collection("chatChannels")
-            .document(lastMessage.groupId.toString())
-            .collection("messages")
-            .document(lastMessage.messageId.toString())
+        val refGroup = db.collection("groupChannels")
+            .document(lastMessageGroup.groupId.toString())
 
-        val textViewUserNameLM = viewHolder.itemView.textViewUserNameLM
+        val refMessage = db.collection("groupChannels")
+            .document(lastMessageGroup.groupId.toString())
+            .collection("messages")
+            .document(lastMessageGroup.messageId.toString())
+
+        val textViewChatNameLM = viewHolder.itemView.textViewChatNameLM
         val textViewMessageLM = viewHolder.itemView.textViewMessageLM
         val textViewHourLM = viewHolder.itemView.textViewHourLM
 
-        val circleImageUserLM = viewHolder.itemView.circleImageUserLM
+        val circleImageLM = viewHolder.itemView.circleImageLM
+
+        refGroup.get().addOnSuccessListener { result ->
+
+            val group = result.toObject(GroupChannel::class.java)
+
+            textViewHourLM.text = Utils.formatDateToChat(lastMessageGroup.time!!)
+
+            textViewChatNameLM.text = group!!.chatName
+
+            Picasso.get().load(group.groupImageURL).into(circleImageLM)
+
+
+        }
 
         refMessage.get().addOnSuccessListener { result ->
 
-            message = result.toObject(ChatMessage::class.java)
+            val message = result.toObject(ChatMessage::class.java)
 
-            textViewMessageLM.text = message!!.text
+            if(message!!.senderId == currentUser)
+                textViewMessageLM.text = "Tu: ${message.text}"
+            else{
 
-            textViewHourLM.text = Utils.formatDateToChat(lastMessage.time!!)
+                val refSenderUser = db.collection("User")
+                    .document(message.senderId.toString())
 
-            //Busca pelo utilizador visitante da sala de chat
-            val refUserChat = db.collection("User")
-                .document(lastMessage.otherUserId!!)
+                refSenderUser.get().addOnSuccessListener { result ->
 
-            refUserChat.get().addOnSuccessListener { result ->
+                    val senderUser = result.toObject(User::class.java)
 
-                senderUser = result.toObject(User::class.java)
-
-                println(result.data)
-
-                textViewUserNameLM.text = senderUser!!.username
-
-                Picasso.get().load(senderUser!!.imageURL).into(circleImageUserLM)
+                    textViewMessageLM.text = "${senderUser!!.username}: ${message.text}"
+                }
 
             }
+
+            //textViewMessageLM.text = message!!.text
 
         }
 
