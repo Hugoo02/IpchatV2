@@ -1,5 +1,6 @@
 package ipca.project.ipchatv2.Home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,11 +11,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import ipca.project.ipchatv2.Chat.ChatActivity
 import ipca.project.ipchatv2.Chat.GroupListLMRow
 import ipca.project.ipchatv2.Chat.UserListLMRow
 import ipca.project.ipchatv2.Models.LastMessage
 import ipca.project.ipchatv2.Models.LastMessageGroup
 import ipca.project.ipchatv2.R
+import ipca.project.ipchatv2.UserItem
+import ipca.project.ipchatv2.databinding.ActivityChatBinding
 import ipca.project.ipchatv2.databinding.FragmentGroupListBinding
 import ipca.project.ipchatv2.databinding.FragmentUserListBinding
 import java.util.ArrayList
@@ -42,6 +46,18 @@ class GroupListFragment : Fragment() {
         binding.recyclerViewGroupLM.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
         listenForLatestMessages()
+
+        //set item click listener on the adapter
+        adapter.setOnItemClickListener{item, view ->
+
+            val row = item as GroupListLMRow
+
+            val intent = Intent(requireContext(), ChatActivity::class.java)
+            intent.putExtra("groupId", row.lastMessageGroup.groupId)
+            intent.putExtra("channelType", "group")
+            startActivity(intent)
+
+        }
 
 
         return binding.root
@@ -94,7 +110,6 @@ class GroupListFragment : Fragment() {
 
     private fun refreshAdapter() {
         adapter.clear()
-        println(groupList.size)
         groupList.forEach {
             adapter.add(GroupListLMRow(it))
         }
