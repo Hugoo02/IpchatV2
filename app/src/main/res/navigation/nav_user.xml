@@ -17,7 +17,7 @@
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/calendarFragment"
-        android:name="ipca.project.ipchatv2.CalendarFragment"
+        android:name="ipca.project.ipchatv2.Calendar.CalendarFragment"
         android:label="fragment_calendar"
         tools:layout="@layout/fragment_calendar" />
 </navigation>
