@@ -5,6 +5,13 @@
       <map>
         <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/activity_confirm_login.xml" value="0.1" />
         <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/activity_login.xml" value="0.12771739130434784" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/drawable/profile_style_view.xml" value="0.14635416666666667" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/drawable/text_input_edit_text_style.xml" value="0.2189873417721519" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/drawable/text_view_layout.xml" value="0.2189873417721519" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/layout/activity_edit_profile.xml" value="0.20854700854700856" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/layout/fragment_edit_profile.xml" value="0.10854700854700855" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/layout/fragment_profile.xml" value="0.264" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/menu/menu_user.xml" value="0.1076923076923077" />
         <entry key="app/src/main/res/drawable/button_rounded.xml" value="0.228125" />
         <entry key="app/src/main/res/drawable/buttonwhite.xml" value="0.228125" />
         <entry key="app/src/main/res/drawable/edit_text_rounded.xml" value="0.228125" />

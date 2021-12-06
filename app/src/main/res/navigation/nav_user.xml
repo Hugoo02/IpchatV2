@@ -13,7 +13,7 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="ipca.project.ipchatv2.ProfileFragment"
-        android:label="fragment_profile"
+        android:label="Página De Perfil"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/calendarFragment"
