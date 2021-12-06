@@ -37,6 +37,7 @@ class CalendarFragment : Fragment() {
 
 
         //Get Layout
+        //
         binding = FragmentCalendarBinding.inflate(layoutInflater)
         calendarView = binding.calendarView
 
