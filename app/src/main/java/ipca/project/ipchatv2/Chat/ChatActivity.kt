@@ -59,17 +59,30 @@ class ChatActivity : AppCompatActivity() {
 
         val message = ChatMessage(currentUser, text, date, "TEXT")
 
+        var refSendMessage : CollectionReference? = null
+        var refSendLastMessage : CollectionReference? = null
+
         if(channelType == "group"){
 
-            println(groupId!!)
-
-            val refSendMessage = db.collection("groupChannels")
+            refSendMessage = db.collection("groupChannels")
                 .document(groupId!!)
                 .collection("messages")
 
-            val refSendLastMessage = db.collection("groupChannels")
+            refSendLastMessage = db.collection("groupChannels")
                 .document(groupId!!)
                 .collection("lastMessage")
+
+        }else{
+
+            refSendMessage = db.collection("chatChannels")
+                .document(groupId!!)
+                .collection("messages")
+
+            refSendLastMessage = db.collection("chatChannels")
+                .document(groupId!!)
+                .collection("lastMessage")
+
+        }
 
             refSendLastMessage.get().addOnSuccessListener {
 
@@ -90,8 +103,6 @@ class ChatActivity : AppCompatActivity() {
 
             }
 
-        }
-
     }
 
     private fun listenForMessages() {
@@ -106,7 +117,7 @@ class ChatActivity : AppCompatActivity() {
         }
         else{
 
-            refMessages = db.collection("privateChannels")
+            refMessages = db.collection("chatChannels")
                 .document(groupId!!)
                 .collection("messages")
 

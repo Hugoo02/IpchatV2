@@ -8,13 +8,13 @@ import com.squareup.picasso.Picasso
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Models.ChatMessage
-import ipca.project.ipchatv2.Models.LastMessage
+import ipca.project.ipchatv2.Models.LastMessagePrivate
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.R
 import ipca.project.ipchatv2.Utils
 import kotlinx.android.synthetic.main.row_last_messages.view.*
 
-class UserListLMRow(val lastMessage: LastMessage): Item<ViewHolder>(){
+class UserListLMRow(val lastMessage: LastMessagePrivate): Item<ViewHolder>(){
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun bind(viewHolder: ViewHolder, position: Int) {
@@ -50,8 +50,6 @@ class UserListLMRow(val lastMessage: LastMessage): Item<ViewHolder>(){
             refUserChat.get().addOnSuccessListener { result ->
 
                 otherUser = result.toObject(User::class.java)
-
-                println(result.data)
 
                 textViewChatNameLM.text = otherUser!!.username
 

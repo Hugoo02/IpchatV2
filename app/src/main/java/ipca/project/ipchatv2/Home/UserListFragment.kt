@@ -2,8 +2,6 @@ package ipca.project.ipchatv2.Home
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,21 +10,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Chat.ChatActivity
 import ipca.project.ipchatv2.Chat.UserListLMRow
-import ipca.project.ipchatv2.Models.LastMessage
+import ipca.project.ipchatv2.Models.LastMessagePrivate
+import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.UserItem
 import ipca.project.ipchatv2.databinding.FragmentUserListBinding
 import java.util.*
+import kotlin.collections.HashMap
 
 class UserListFragment : Fragment() {
     private lateinit var binding: FragmentUserListBinding
     private var db = FirebaseFirestore.getInstance()
     val adapter = GroupAdapter<ViewHolder>()
-    val groupList : MutableList<LastMessage> = arrayListOf()
+    //val groupList : MutableList<LastMessagePrivate> = arrayListOf()
+    val groupList = HashMap<String, LastMessagePrivate>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,13 +47,14 @@ class UserListFragment : Fragment() {
 
         listenForLatestMessages()
 
-        adapter.setOnItemClickListener { item, view ->
+        //set item click listener on the adapter
+        adapter.setOnItemClickListener{item, view ->
 
-            var userItem = item as UserItem
+            val row = item as UserListLMRow
 
-            val intent = Intent(view.context, ChatActivity::class.java)
-            //intent.putExtra("User", userItem.user)
-            //intent.flags()
+            val intent = Intent(requireContext(), ChatActivity::class.java)
+            intent.putExtra("groupId", row.lastMessage.groupId)
+            intent.putExtra("channelType", "private")
             startActivity(intent)
 
         }
@@ -82,6 +84,31 @@ class UserListFragment : Fragment() {
 
                 }
 
+                //Referencia responsável por listar todos os utilizadores da sala em questão
+                val refMembers = db.collection("chatChannels")
+                    .document(groupId!!)
+
+                var usersList : MutableList<String> = ArrayList()
+                var otherUserId : String? = null
+
+                refMembers.get().addOnSuccessListener { result ->
+
+                    result.data!!.forEach{ result ->
+
+                        usersList = result.value as MutableList<String>
+
+                        //Se o grupo tiver 2 membros, ou seja grupos individuais
+                        if(usersList.size == 2){
+
+                            if(usersList[0] == currentUserId)
+                                otherUserId = usersList[1]
+                            else
+                                otherUserId = usersList[0]
+
+                        }
+
+                    }
+
                 val refLastMessageId = db.collection("chatChannels").document(groupId!!)
                     .collection("lastMessage")
 
@@ -91,39 +118,28 @@ class UserListFragment : Fragment() {
 
                     documents?.let {
 
+                        var lastMessage: LastMessagePrivate? = null
+
+                        var message : LastMessagePrivate? = null
+
                         for (document in it){
 
-                            //Referencia responsável por listar todos os utilizadores da sala em questão
-                            val refMembers = db.collection("chatChannels")
-                                .document(groupId!!)
+                            println("2. otherUserId = $otherUserId")
 
-                            var usersList : MutableList<String> = ArrayList()
-                            var otherUserId : String? = null
+                            lastMessage = document.toObject(LastMessagePrivate::class.java)
 
-                            refMembers.get().addOnSuccessListener { result ->
+                            message = LastMessagePrivate(groupId, otherUserId, document.id, lastMessage.time)
 
-                                result.data!!.forEach{ result ->
+                            println("2. group = ${message.groupId}")
 
-                                    usersList = result.value as MutableList<String>
+                            groupList[message.groupId!!] = message
 
-                                    //Se o grupo tiver 2 membros, ou seja grupos individuais
-                                    if(usersList.size == 2){
-
-                                        if(usersList[0] == currentUserId)
-                                            otherUserId = usersList[1]
-                                        else
-                                            otherUserId = usersList[0]
-
-                                        val lastMessage = document.toObject(LastMessage::class.java)
-                                        groupList.add(LastMessage(groupId, otherUserId, document.id, lastMessage.time))
-
-                                    }
-
-                                }
-
-                                groupList.sortByDescending{it.time}
-                                refreshAdapter()
                             }
+
+                        refreshAdapter()
+
+                        //Não está a ordenar direito
+                            println("3. otherUserId = $otherUserId")
 
                         }
 
@@ -137,7 +153,8 @@ class UserListFragment : Fragment() {
 
     private fun refreshAdapter() {
         adapter.clear()
-        groupList.forEach {
+        val messages = groupList.values.sortedByDescending { it.time }
+        messages.forEach {
             adapter.add(UserListLMRow(it))
         }
     }
