@@ -39,6 +39,7 @@ class ChatFromItem(val message: ChatMessage): Item<ViewHolder>(){
     }
 }
 
+
 class ChatToItem(val message: ChatMessage): Item<ViewHolder>(){
 
     val db = FirebaseFirestore.getInstance()

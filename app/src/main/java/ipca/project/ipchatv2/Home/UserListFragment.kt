@@ -1,23 +1,23 @@
 package ipca.project.ipchatv2.Home
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Chat.ChatActivity
 import ipca.project.ipchatv2.Chat.UserListLMRow
 import ipca.project.ipchatv2.Models.LastMessagePrivate
-import ipca.project.ipchatv2.Models.User
-import ipca.project.ipchatv2.UserItem
+import ipca.project.ipchatv2.ShowUsersActivity
 import ipca.project.ipchatv2.databinding.FragmentUserListBinding
 import java.util.*
 import kotlin.collections.HashMap
@@ -46,6 +46,22 @@ class UserListFragment : Fragment() {
         binding.recyclerViewUserLM.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
         listenForLatestMessages()
+
+        binding.buttonNewMessage.setOnClickListener {
+
+            val getResult =
+                registerForActivityResult(
+                    ActivityResultContracts.StartActivityForResult()
+                ) {
+                    if (it.resultCode == Activity.RESULT_OK) {
+                        val id = it.data?.getStringExtra("id")
+                    }
+                }
+
+            val intent = Intent(activity, ShowUsersActivity::class.java)
+            getResult.launch(intent)
+
+        }
 
         //set item click listener on the adapter
         adapter.setOnItemClickListener{item, view ->
@@ -98,14 +114,12 @@ class UserListFragment : Fragment() {
                         usersList = result.value as MutableList<String>
 
                         //Se o grupo tiver 2 membros, ou seja grupos individuais
-                        if(usersList.size == 2){
 
-                            if(usersList[0] == currentUserId)
-                                otherUserId = usersList[1]
-                            else
-                                otherUserId = usersList[0]
+                        if(usersList[0] == currentUserId)
+                            otherUserId = usersList[1]
+                        else
+                            otherUserId = usersList[0]
 
-                        }
 
                     }
 

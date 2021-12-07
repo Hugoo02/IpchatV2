@@ -76,12 +76,13 @@ class HomeFragment : Fragment() {
             }
         })
 
+        /*
         binding.buttonNewMessage.setOnClickListener {
 
             val intent = Intent(activity, ShowUsersActivity::class.java)
             startActivity(intent)
 
-        }
+        }*/
 
         return binding.root
     }

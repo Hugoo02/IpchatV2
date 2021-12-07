@@ -21,11 +21,12 @@
         <entry key="app/src/main/res/layout/fragment_group_list.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.14855072463768115" />
-        <entry key="app/src/main/res/layout/fragment_user_list.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_user_list.xml" value="0.16" />
         <entry key="app/src/main/res/layout/popwindow_alertinternet.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/row_image_message_from.xml" value="0.25677083333333334" />
         <entry key="app/src/main/res/layout/row_image_message_to.xml" value="0.25677083333333334" />
         <entry key="app/src/main/res/layout/row_last_messages.xml" value="0.3265625" />
+        <entry key="app/src/main/res/layout/row_new_chat.xml" value="0.25" />
         <entry key="app/src/main/res/layout/row_text_message_from.xml" value="0.25677083333333334" />
         <entry key="app/src/main/res/layout/row_text_message_to.xml" value="0.25677083333333334" />
         <entry key="app/src/main/res/layout/row_users.xml" value="0.18" />

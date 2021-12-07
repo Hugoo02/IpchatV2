@@ -5,25 +5,29 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 class User (
-    var username            : String? = null,
+    var address             : String? = null,
     var course              : String? = null,
     var email               : String? = null,
-    var address             : String? = null,
+    var gender              : String? = null,
+    var id                  : String? = null,
     var imageURL            : String? = null,
+    var username            : String? = null,
+    //var year      : Int? = null,
     var student_number      : String? = null): Parcelable{
-    //var year                : Int? = null): Parcelable {
 
-    constructor() : this("", "", "", "", "", "")
+    constructor() : this(null, null, null, null, null,
+        null, null, null)
 
     fun toHashMap() : HashMap<String, Any?>{
         val hashMap = HashMap<String, Any?>()
-        hashMap["username"]         = username
+        hashMap["address"]          = address
         hashMap["course"]           = course
         hashMap["email"]            = email
-        hashMap["address"]          = address
+        hashMap["gender"]           = gender
+        hashMap["id"]               = id
         hashMap["imageURL"]         = imageURL
+        hashMap["username"]         = username
         hashMap["student_number"]   = student_number
-        //hashMap["year"]            = year
 
         return hashMap
     }
@@ -31,13 +35,14 @@ class User (
     companion object{
         fun fromHash(hashMap:  HashMap<String, Any?>) : User {
             val item = User(
-                hashMap["username"].toString(),
+                hashMap["address"].toString(),
                 hashMap["course"].toString(),
                 hashMap["email"].toString(),
-                hashMap["address"].toString(),
+                hashMap["gender"].toString(),
+                hashMap["id"].toString(),
                 hashMap["imageURL"].toString(),
-                hashMap["student_number"].toString(),
-                //hashMap["year"] as Int
+                hashMap["username"].toString(),
+                hashMap["student_number"].toString()
             )
             return item
         }
