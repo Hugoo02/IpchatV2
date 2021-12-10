@@ -4,4 +4,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="internet_conection">Verifique a sua conexão a internet</string>
     <string name="try_again">Tentar Novamente</string>
+    <string name="cancel">Cancelar</string>
+    <string name="logout">Tem a certeza que deseja terminar Sessão?</string>
+    <string name="yes">Confirmar</string>
+    <string name="no">Cancelar</string>
+
 </resources>

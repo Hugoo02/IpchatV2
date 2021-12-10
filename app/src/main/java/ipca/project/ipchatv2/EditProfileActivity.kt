@@ -2,13 +2,10 @@ package ipca.project.ipchatv2
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.content.Intent
 import android.net.Uri
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
-import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
@@ -24,31 +21,45 @@ class EditProfileActivity : AppCompatActivity() {
 
     lateinit var circleImageView: CircleImageView
     lateinit var buttonGoBack: Button
-    lateinit var buttonEditImage: Button
+    lateinit var buttonEditImage: ImageButton
     lateinit var buttonEditProfile: Button
-    lateinit var username : EditText
-    lateinit var course : TextInputEditText
-    lateinit var address : TextInputEditText
-    lateinit var email : TextInputEditText
-    lateinit var studentNumber: TextInputEditText
+    lateinit var username : TextView
+    lateinit var course : TextView
+    lateinit var address : EditText
+    lateinit var email : TextView
+    lateinit var studentNumber: TextView
+    lateinit var biography: EditText
     private var imageUri: Uri? = null
+    private lateinit var mAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
 
+
+        mAuth = FirebaseAuth.getInstance()
+
+        if(mAuth == FirebaseAuth.getInstance()){
+
+            getCurrentUser()
+        }
+        else{
+        }
+
+        supportActionBar!!.hide()
+
          buttonGoBack = findViewById<Button>(R.id.buttonEditProfile)
          circleImageView = findViewById<CircleImageView>(R.id.circleImageViewLogo)
-         buttonEditImage = findViewById<Button>(R.id.buttonEditImage)
+         buttonEditImage = findViewById<ImageButton>(R.id.buttonEditImage)
          buttonEditProfile = findViewById<Button>(R.id.buttonEditProfile)
-         username = findViewById<EditText>(R.id.EditTextName)
-         course  = findViewById<TextInputEditText>(R.id.textInputEditTextCourse)
-         address = findViewById<TextInputEditText>(R.id.textInputEditTextAdress)
-         email = findViewById<TextInputEditText>(R.id.textInputEditTextEmail)
-         studentNumber = findViewById<TextInputEditText>(R.id.textInputEditTextStudentNumber)
+         username = findViewById<TextView>(R.id.textViewUserName)
+         course  = findViewById<TextView>(R.id.textViewCourse)
+         address = findViewById<EditText>(R.id.editTextAddress)
+         email = findViewById<TextView>(R.id.textViewEmail)
+         studentNumber = findViewById<TextView>(R.id.textViewStudentNumber)
+         biography = findViewById<EditText>(R.id.editTextBiography)
 
 
-        getCurrentUser()
 
         val getImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
 
@@ -60,13 +71,15 @@ class EditProfileActivity : AppCompatActivity() {
         buttonEditProfile.setOnClickListener {
 
             editCurrentUser()
+            uploadImageToFirebaseStorage()
+            Toast.makeText(this, "Perfil editado com sucesso!", Toast.LENGTH_SHORT).show()
+
         }
 
         buttonEditImage.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             getImage.launch(intent)
-            uploadImageToFirebaseStorage()
         }
 
     }
@@ -83,12 +96,13 @@ class EditProfileActivity : AppCompatActivity() {
         ref.putFile(imageUri!!)
             .addOnSuccessListener {
 
-                println("Image uploaded successfully: ${it.metadata?.path}")
 
+                println("Image uploaded successfully: ${it.metadata?.path}")
                 ref.downloadUrl.addOnSuccessListener {
 
                     saveUserToFireStore(it.toString())
 
+                    println("Image chegou la")
                 }
 
             }
@@ -125,6 +139,7 @@ class EditProfileActivity : AppCompatActivity() {
             address.setText(user.address)
             email.setText(user.email)
             studentNumber.setText(user.student_number)
+            biography.setText(user.biography)
 
         }
     }
@@ -138,11 +153,12 @@ class EditProfileActivity : AppCompatActivity() {
 
             val user = result.toObject(User::class.java)
 
-            var userTest = hashMapOf(
-                "username" to username.text.toString()
+            var userEdit = hashMapOf(
+                "biography" to biography.text.toString(),
+                "address" to address.text.toString()
             )
 
-            Firebase.firestore.collection("User").document(uid!!).set(userTest, SetOptions.merge())
+            Firebase.firestore.collection("User").document(uid!!).set(userEdit, SetOptions.merge())
 
 
             /*Picasso.get().load(user!!.imageURL).into(circleImageView)

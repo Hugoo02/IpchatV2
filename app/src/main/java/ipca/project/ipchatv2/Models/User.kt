@@ -13,10 +13,11 @@ class User (
     var imageURL            : String? = null,
     var student_number      : String? = null,
     var year                : String? = null,
-    var gender              : String? = null)
+    var gender              : String? = null,
+    var biography           : String? = null)
 : Parcelable {
 
-    constructor() : this("", "", "", "", "", "","","","")
+    constructor() : this("", "", "", "", "", "","","","","")
 
     fun toHashMap() : HashMap<String, Any?>{
         val hashMap = HashMap<String, Any?>()
@@ -29,6 +30,7 @@ class User (
         hashMap["student_number"]   = student_number
         hashMap["year"]             = year
         hashMap["gender"]           = gender
+        hashMap["biography"]           = biography
 
         return hashMap
     }
@@ -44,7 +46,8 @@ class User (
                 hashMap["imageURL"].toString(),
                 hashMap["student_number"].toString(),
                 hashMap["year"].toString(),
-                hashMap["gender"].toString()
+                hashMap["gender"].toString(),
+                hashMap["biography"].toString()
             )
             return item
         }
