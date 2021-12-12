@@ -16,7 +16,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Chat.ChatActivity
 import ipca.project.ipchatv2.Chat.UserListLMRow
-import ipca.project.ipchatv2.Models.LastMessagePrivate
+import ipca.project.ipchatv2.Models.MessagePrivate
 import ipca.project.ipchatv2.ShowUsersActivity
 import ipca.project.ipchatv2.databinding.FragmentUserListBinding
 import java.util.*
@@ -27,7 +27,7 @@ class UserListFragment : Fragment() {
     private var db = FirebaseFirestore.getInstance()
     val adapter = GroupAdapter<ViewHolder>()
     //val groupList : MutableList<LastMessagePrivate> = arrayListOf()
-    val groupList = HashMap<String, LastMessagePrivate>()
+    val groupList = HashMap<String, MessagePrivate>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,17 +49,8 @@ class UserListFragment : Fragment() {
 
         binding.buttonNewMessage.setOnClickListener {
 
-            val getResult =
-                registerForActivityResult(
-                    ActivityResultContracts.StartActivityForResult()
-                ) {
-                    if (it.resultCode == Activity.RESULT_OK) {
-                        val id = it.data?.getStringExtra("id")
-                    }
-                }
-
             val intent = Intent(activity, ShowUsersActivity::class.java)
-            getResult.launch(intent)
+            startActivity(intent)
 
         }
 
@@ -69,7 +60,7 @@ class UserListFragment : Fragment() {
             val row = item as UserListLMRow
 
             val intent = Intent(requireContext(), ChatActivity::class.java)
-            intent.putExtra("groupId", row.lastMessage.groupId)
+            intent.putExtra("groupId", row.message.groupId)
             intent.putExtra("channelType", "private")
             startActivity(intent)
 
@@ -84,24 +75,25 @@ class UserListFragment : Fragment() {
         val currentUserId = FirebaseAuth.getInstance().uid
         val refIdGroups = db.collection("User")
             .document("$currentUserId")
-            .collection("engagedChatChannels")
+            .collection("privateChannel")
 
         //Referencia responsável por resgatar todos os grupos do user em questão
 
-        refIdGroups.get().addOnSuccessListener { result ->
+        refIdGroups.addSnapshotListener { documents, e ->
 
-            result.documents.forEach{
+            documents!!.documents.forEach{
 
                 var groupId : String? = null
 
                 it.data!!.values.forEach{
 
                     groupId = it.toString()
+                    println("userList groupId = $groupId")
 
                 }
 
                 //Referencia responsável por listar todos os utilizadores da sala em questão
-                val refMembers = db.collection("chatChannels")
+                val refMembers = db.collection("privateChannels")
                     .document(groupId!!)
 
                 var usersList : MutableList<String> = ArrayList()
@@ -123,7 +115,7 @@ class UserListFragment : Fragment() {
 
                     }
 
-                val refLastMessageId = db.collection("chatChannels").document(groupId!!)
+                val refLastMessageId = db.collection("privateChannels").document(groupId!!)
                     .collection("lastMessage")
 
                 //Referencia responsável por resgatar as ultimas mensagens de todos os grupos em que o user pertence
@@ -132,17 +124,17 @@ class UserListFragment : Fragment() {
 
                     documents?.let {
 
-                        var lastMessage: LastMessagePrivate? = null
+                        var lastMessage: MessagePrivate? = null
 
-                        var message : LastMessagePrivate? = null
+                        var message : MessagePrivate? = null
 
                         for (document in it){
 
                             println("2. otherUserId = $otherUserId")
 
-                            lastMessage = document.toObject(LastMessagePrivate::class.java)
+                            lastMessage = document.toObject(MessagePrivate::class.java)
 
-                            message = LastMessagePrivate(groupId, otherUserId, document.id, lastMessage.time)
+                            message = MessagePrivate(groupId, otherUserId, document.id, lastMessage.time)
 
                             println("2. group = ${message.groupId}")
 

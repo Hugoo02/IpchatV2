@@ -8,13 +8,13 @@ import com.squareup.picasso.Picasso
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Models.ChatMessage
-import ipca.project.ipchatv2.Models.LastMessagePrivate
+import ipca.project.ipchatv2.Models.MessagePrivate
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.R
 import ipca.project.ipchatv2.Utils
 import kotlinx.android.synthetic.main.row_last_messages.view.*
 
-class UserListLMRow(val lastMessage: LastMessagePrivate): Item<ViewHolder>(){
+class UserListLMRow(val message: MessagePrivate): Item<ViewHolder>(){
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun bind(viewHolder: ViewHolder, position: Int) {
@@ -26,10 +26,10 @@ class UserListLMRow(val lastMessage: LastMessagePrivate): Item<ViewHolder>(){
         val db = FirebaseFirestore.getInstance()
 
         //Referencia responsável por buscar as informações da conversa da row
-        val refMessage = db.collection("chatChannels")
-            .document(lastMessage.groupId.toString())
+        val refMessage = db.collection("privateChannels")
+            .document(this.message.groupId.toString())
             .collection("messages")
-            .document(lastMessage.messageId.toString())
+            .document(this.message.messageId.toString())
 
         val textViewChatNameLM = viewHolder.itemView.textViewChatNameLM
         val textViewMessageLM = viewHolder.itemView.textViewMessageLM
@@ -41,11 +41,11 @@ class UserListLMRow(val lastMessage: LastMessagePrivate): Item<ViewHolder>(){
 
             message = result.toObject(ChatMessage::class.java)
 
-            textViewHourLM.text = Utils.formatDateToChat(lastMessage.time!!)
+            textViewHourLM.text = Utils.formatDateToChat(this.message.time!!)
 
             //Busca pelo utilizador visitante da sala de chat
             val refUserChat = db.collection("User")
-                .document(lastMessage.otherUserId!!)
+                .document(this.message.otherUserId!!)
 
             refUserChat.get().addOnSuccessListener { result ->
 

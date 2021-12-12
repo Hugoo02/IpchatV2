@@ -6,10 +6,10 @@ import java.util.*
 import kotlin.collections.HashMap
 
 @Parcelize
-class LastMessagePrivate (val groupId: String?,
-                          val otherUserId: String?,
-                          val messageId: String?,
-                          val time: Date?): Parcelable {
+class MessagePrivate (val groupId: String?,
+                      val otherUserId: String?,
+                      val messageId: String?,
+                      val time: Date?): Parcelable {
 
     constructor() : this(null, null, null, null)
 
@@ -24,8 +24,8 @@ class LastMessagePrivate (val groupId: String?,
     }
 
     companion object{
-        fun fromHash(hashMap:  HashMap<String, Any?>) : LastMessagePrivate {
-            val item = LastMessagePrivate(
+        fun fromHash(hashMap:  HashMap<String, Any?>) : MessagePrivate {
+            val item = MessagePrivate(
                 hashMap["groupId"].toString(),
                 hashMap["otherUserId"].toString(),
                 hashMap["messageId"].toString(),

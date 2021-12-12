@@ -74,11 +74,11 @@ class ChatActivity : AppCompatActivity() {
 
         }else{
 
-            refSendMessage = db.collection("chatChannels")
+            refSendMessage = db.collection("privateChannels")
                 .document(groupId!!)
                 .collection("messages")
 
-            refSendLastMessage = db.collection("chatChannels")
+            refSendLastMessage = db.collection("privateChannels")
                 .document(groupId!!)
                 .collection("lastMessage")
 
@@ -117,7 +117,9 @@ class ChatActivity : AppCompatActivity() {
         }
         else{
 
-            refMessages = db.collection("chatChannels")
+            println("groupId = $groupId")
+
+            refMessages = db.collection("privateChannels")
                 .document(groupId!!)
                 .collection("messages")
 

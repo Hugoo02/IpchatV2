@@ -3,9 +3,7 @@ package ipca.project.ipchatv2.Chat
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -14,7 +12,7 @@ import ipca.project.ipchatv2.R
 import ipca.project.ipchatv2.Utils
 import kotlinx.android.synthetic.main.row_last_messages.view.*
 
-class GroupListLMRow(val lastMessageGroup: LastMessageGroup): Item<ViewHolder>(){
+class GroupListLMRow(val messageGroup: MessageGroup): Item<ViewHolder>(){
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun bind(viewHolder: ViewHolder, position: Int) {
@@ -24,12 +22,12 @@ class GroupListLMRow(val lastMessageGroup: LastMessageGroup): Item<ViewHolder>()
 
         //Referencia responsável por buscar as informações da conversa da row
         val refGroup = db.collection("groupChannels")
-            .document(lastMessageGroup.groupId.toString())
+            .document(messageGroup.groupId.toString())
 
         val refMessage = db.collection("groupChannels")
-            .document(lastMessageGroup.groupId.toString())
+            .document(messageGroup.groupId.toString())
             .collection("messages")
-            .document(lastMessageGroup.messageId.toString())
+            .document(messageGroup.messageId.toString())
 
         val textViewChatNameLM = viewHolder.itemView.textViewChatNameLM
         val textViewMessageLM = viewHolder.itemView.textViewMessageLM
@@ -41,7 +39,7 @@ class GroupListLMRow(val lastMessageGroup: LastMessageGroup): Item<ViewHolder>()
 
             val group = result.toObject(GroupChannel::class.java)
 
-            textViewHourLM.text = Utils.formatDateToChat(lastMessageGroup.time!!)
+            textViewHourLM.text = Utils.formatDateToChat(messageGroup.time!!)
 
             textViewChatNameLM.text = group!!.chatName
 

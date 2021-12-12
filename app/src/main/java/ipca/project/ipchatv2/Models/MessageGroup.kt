@@ -6,9 +6,9 @@ import java.util.*
 import kotlin.collections.HashMap
 
 @Parcelize
-class LastMessageGroup ( val groupId: String?,
-                         val messageId: String?,
-                         val time: Date?): Parcelable {
+class MessageGroup (val groupId: String?,
+                    val messageId: String?,
+                    val time: Date?): Parcelable {
 
     constructor() : this(null, null, null)
 
@@ -22,8 +22,8 @@ class LastMessageGroup ( val groupId: String?,
     }
 
     companion object{
-        fun fromHash(hashMap:  HashMap<String, Any?>) : LastMessageGroup {
-            val item = LastMessageGroup(
+        fun fromHash(hashMap:  HashMap<String, Any?>) : MessageGroup {
+            val item = MessageGroup(
                 hashMap["groupId"].toString(),
                 hashMap["messageId"].toString(),
                 hashMap["time"] as Date

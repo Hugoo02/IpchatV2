@@ -13,7 +13,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Chat.ChatActivity
 import ipca.project.ipchatv2.Chat.GroupListLMRow
-import ipca.project.ipchatv2.Models.LastMessageGroup
+import ipca.project.ipchatv2.Models.MessageGroup
 import ipca.project.ipchatv2.databinding.FragmentGroupListBinding
 
 class GroupListFragment : Fragment() {
@@ -21,7 +21,7 @@ class GroupListFragment : Fragment() {
 
     val adapter = GroupAdapter<ViewHolder>()
     private var db = FirebaseFirestore.getInstance()
-    val groupList = HashMap<String, LastMessageGroup>()
+    val groupList = HashMap<String, MessageGroup>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +46,7 @@ class GroupListFragment : Fragment() {
             val row = item as GroupListLMRow
 
             val intent = Intent(requireContext(), ChatActivity::class.java)
-            intent.putExtra("groupId", row.lastMessageGroup.groupId)
+            intent.putExtra("groupId", row.messageGroup.groupId)
             intent.putExtra("channelType", "group")
             startActivity(intent)
 
@@ -82,8 +82,8 @@ class GroupListFragment : Fragment() {
                         for (document in it){
 
                             val lastMessageId = document.id
-                            val lastMessageGroup = document.toObject(LastMessageGroup::class.java)
-                            val message = LastMessageGroup(groupId, lastMessageId, lastMessageGroup.time)
+                            val lastMessageGroup = document.toObject(MessageGroup::class.java)
+                            val message = MessageGroup(groupId, lastMessageId, lastMessageGroup.time)
 
                             println("passou no snapshot")
                             groupList[message.groupId!!] = message

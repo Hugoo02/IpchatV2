@@ -10,9 +10,12 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Chat.ChatActivity
+import ipca.project.ipchatv2.Models.PrivateChannel
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.databinding.ActivityShowUsersBinding
 import kotlinx.android.synthetic.main.row_users.view.*
+import kotlinx.coroutines.channels.Channel
+import okhttp3.internal.Util
 
 class ShowUsersActivity : AppCompatActivity() {
 
@@ -35,13 +38,78 @@ class ShowUsersActivity : AppCompatActivity() {
         adapter.setOnItemClickListener { item, view ->
 
             var userItem = item as UserItem
+            var guestUserId : String? = null
+            var channelId : String? = null
 
-            val intent = Intent(view.context, ChatActivity::class.java)
-            intent.putExtra("id", userItem.user.id)
-            startActivity(intent)
-            finish()
+            db.collection("User")
+                .document(userItem.user.id!!)
+                .get()
+                .addOnSuccessListener { result ->
+
+                    currentUser.currentUser!!.getIdToken()
+                    guestUserId = result.toObject(User::class.java)!!.id
+
+                    println("guestUserId = $guestUserId")
+
+                    db.collection("User")
+                        .document(currentUser.uid!!)
+                        .collection("privateChannel")
+                        .document(guestUserId!!)
+                        .get().addOnSuccessListener {
+
+                            if(it.exists()){
+
+                                channelId = it["channelId"] as String
+                                startChatActivity(channelId!!)
+
+                            }
+                            else
+                            {
+
+                                db.collection("privateChannels")
+                                    .add(PrivateChannel(mutableListOf(currentUser.uid!!, guestUserId!!)))
+                                    .addOnSuccessListener {
+
+                                        db.collection("User")
+                                            .document(currentUser.uid!!)
+                                            .collection("privateChannel")
+                                            .document(guestUserId!!)
+                                            .set(mapOf("channelId" to it.id))
+
+                                        db.collection("User")
+                                            .document(guestUserId!!)
+                                            .collection("privateChannel")
+                                            .document(currentUser.uid!!)
+                                            .set(mapOf("channelId" to it.id))
+
+                                        channelId = it.id
+                                        startChatActivity(channelId!!)
+
+                                }
+                            }
+
+                            /*
+                            val intent = Intent(view.context, ChatActivity::class.java)
+                            intent.putExtra("groupId", channelId)
+                            intent.putExtra("channelType", "private")
+                            startActivity(intent)
+                            finish()*/
+
+                        }
+                }
+
 
         }
+    }
+
+    private fun startChatActivity(channelId: String){
+
+        val intent = Intent(this, ChatActivity::class.java)
+        intent.putExtra("groupId", channelId)
+        intent.putExtra("channelType", "private")
+        startActivity(intent)
+        finish()
+
     }
 
     private fun fetchUsers(){
