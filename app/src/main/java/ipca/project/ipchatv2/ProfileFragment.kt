@@ -1,22 +1,26 @@
 package ipca.project.ipchatv2
 
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import ipca.project.ipchatv2.Authentication.LoginActivity
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.databinding.FragmentProfileBinding
 import java.util.*
@@ -34,18 +38,19 @@ class ProfileFragment : Fragment(R.layout.fragment_profile)  {
     lateinit var address : TextView
     lateinit var email : TextView
     lateinit var studentNumber: TextView
+    lateinit var biography: TextView
+    lateinit var logout: ImageButton
     private var imageUri: Uri? = null
-
+    private lateinit var mAuth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        mAuth = FirebaseAuth.getInstance()
         //Get Layout
         binding = FragmentProfileBinding.inflate(layoutInflater)
-        buttonSaveChanges = binding.buttonSaveChanges
-        buttonEditImage = binding.buttonEditImage
         buttonEditProfile = binding.buttonEditActivity
         circleImageView = binding.circleImageViewLogo
         username = binding.textViewUserName
@@ -53,6 +58,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile)  {
         address = binding.textViewAddress
         email = binding.textViewEmail
         studentNumber = binding.textViewStudentNumber
+        biography = binding.textViewBiography
+        logout = binding.buttonLogout
 
         //Get User By Id
         getCurrentUser()
@@ -65,15 +72,25 @@ class ProfileFragment : Fragment(R.layout.fragment_profile)  {
 
         }
 
-        buttonSaveChanges.setOnClickListener {
-            uploadImageToFirebaseStorage()
-        }
+        logout.setOnClickListener {
 
-        buttonEditImage.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            getImage.launch(intent)
-            uploadImageToFirebaseStorage()
+            var builder = AlertDialog.Builder(activity)
+            builder.setTitle(getString(R.string.cancel))
+            builder.setTitle(getString(R.string.logout))
+            builder.setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener{ dialog, id ->
+
+                mAuth.signOut()
+                val intent = Intent(activity, LoginActivity::class.java)
+                startActivity(intent)
+
+            })
+            builder.setNegativeButton(getString(R.string.no), DialogInterface.OnClickListener{ dialog, id ->
+
+
+            })
+            var alert = builder.create()
+            alert.show()
+
         }
 
         buttonEditProfile.setOnClickListener {
@@ -86,30 +103,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile)  {
     }
 
 
-    private fun uploadImageToFirebaseStorage(){
-
-        if(imageUri == null) return
-
-        val filename = UUID.randomUUID().toString()
-        val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
-
-        ref.putFile(imageUri!!)
-            .addOnSuccessListener {
-
-                println("Image uploaded successfully: ${it.metadata?.path}")
-
-                ref.downloadUrl.addOnSuccessListener {
-
-                    saveUserToFireStore(it.toString())
-
-                }
-
-            }
-            .addOnFailureListener{
-                Toast.makeText(requireContext(), "Erro a uploadar a imagem!", Toast.LENGTH_SHORT).show()
-            }
-
-    }
 
     private fun saveUserToFireStore(imageURL: String) {
 
@@ -138,6 +131,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile)  {
             address.setText(user.address)
             email.setText(user.email)
             studentNumber.setText(user.student_number)
+            biography.setText(user.biography)
 
         }
     }
