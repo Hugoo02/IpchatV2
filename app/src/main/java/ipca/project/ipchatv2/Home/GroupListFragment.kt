@@ -1,6 +1,7 @@
 package ipca.project.ipchatv2.Home
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Chat.ChatActivity
 import ipca.project.ipchatv2.Chat.GroupListLMRow
 import ipca.project.ipchatv2.Models.MessageGroup
+import ipca.project.ipchatv2.ShowUsersActivity
 import ipca.project.ipchatv2.databinding.FragmentGroupListBinding
 
 class GroupListFragment : Fragment() {
@@ -40,6 +42,16 @@ class GroupListFragment : Fragment() {
 
         listenForLatestMessages()
 
+        binding.buttonNewMessage.setColorFilter(Color.WHITE)
+
+        binding.buttonNewMessage.setOnClickListener {
+
+            val intent = Intent(activity, ShowUsersActivity::class.java)
+            intent.putExtra("channelType", "public")
+            startActivity(intent)
+
+        }
+
         //set item click listener on the adapter
         adapter.setOnItemClickListener{item, view ->
 
@@ -61,12 +73,12 @@ class GroupListFragment : Fragment() {
         val currentUserId = FirebaseAuth.getInstance().uid
         val refIdGroups = db.collection("User")
             .document(currentUserId!!)
-            .collection("groupChannel")
+            .collection("groupChannels")
 
         //Referencia responsável por resgatar todos os grupos do utilizador
-        refIdGroups.get().addOnSuccessListener { result ->
+        refIdGroups.addSnapshotListener { documents, e ->
 
-            result.documents.forEach {
+            documents!!.documents.forEach {
 
                 val groupId = it.id
 
@@ -85,14 +97,12 @@ class GroupListFragment : Fragment() {
                             val lastMessageGroup = document.toObject(MessageGroup::class.java)
                             val message = MessageGroup(groupId, lastMessageId, lastMessageGroup.time)
 
-                            println("passou no snapshot")
                             groupList[message.groupId!!] = message
-                            refreshAdapter()
                         }
 
                         //MELHOR AQUI SECALHAR, TESTAR QUANDO EXISTIREM MAIS GRUPOS
                         //groupList.values.sortedByDescending { it.time }
-                        //refreshAdapter()
+                        refreshAdapter()
 
                     }
 
@@ -108,6 +118,8 @@ class GroupListFragment : Fragment() {
         adapter.clear()
         val messages = groupList.values.sortedByDescending { it.time }
         messages.forEach {
+
+            println(it.messageId)
             adapter.add(GroupListLMRow(it))
         }
     }

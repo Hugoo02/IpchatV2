@@ -7,31 +7,19 @@ import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Models.ChatMessage
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.R
+import kotlinx.android.synthetic.main.row_first_message.view.*
 import kotlinx.android.synthetic.main.row_text_message_from.view.*
 import kotlinx.android.synthetic.main.row_text_message_to.view.*
 
 
 class ChatFromItem(val message: ChatMessage): Item<ViewHolder>(){
 
-    val db = FirebaseFirestore.getInstance()
-
     override fun bind(viewHolder: ViewHolder, position: Int) {
 
-        val imageViewPhotoFrom = viewHolder.itemView.imageViewPhotoFrom
         val textViewChatMessageFrom = viewHolder.itemView.textViewChatMessageFrom
 
-        val refUser = db.collection("User")
-            .document(message.senderId!!)
+        textViewChatMessageFrom.text = message.text
 
-        refUser.get().addOnSuccessListener { result ->
-            val user = result.toObject(User::class.java)
-
-            Picasso.get().load(user!!.imageURL).into(imageViewPhotoFrom)
-            textViewChatMessageFrom.text = message.text
-
-        }
-
-        //Picasso.get().load(user.profileImageUrl).resize(20, 20).centerCrop().into(viewHolder.itemView.circleImageFromMessage)
     }
 
     override fun getLayout(): Int {
@@ -64,5 +52,18 @@ class ChatToItem(val message: ChatMessage): Item<ViewHolder>(){
 
     override fun getLayout(): Int {
         return R.layout.row_text_message_to
+    }
+}
+
+class FirstMessage(val message: ChatMessage): Item<ViewHolder>(){
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+
+        val textViewFirstMessageHour = viewHolder.itemView.textViewFirstMessageHour
+
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.row_first_message
     }
 }

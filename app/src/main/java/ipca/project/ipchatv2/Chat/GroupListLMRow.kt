@@ -29,6 +29,8 @@ class GroupListLMRow(val messageGroup: MessageGroup): Item<ViewHolder>(){
             .collection("messages")
             .document(messageGroup.messageId.toString())
 
+        println("messageId = " + messageGroup.messageId.toString())
+
         val textViewChatNameLM = viewHolder.itemView.textViewChatNameLM
         val textViewMessageLM = viewHolder.itemView.textViewMessageLM
         val textViewHourLM = viewHolder.itemView.textViewHourLM
@@ -52,7 +54,9 @@ class GroupListLMRow(val messageGroup: MessageGroup): Item<ViewHolder>(){
 
             val message = result.toObject(ChatMessage::class.java)
 
-            if(message!!.senderId == currentUser)
+            if(message!!.type == "firstMessage")
+                textViewMessageLM.text = "Grupo Novo"
+            else if(message.senderId == currentUser)
                 textViewMessageLM.text = "Tu: ${message.text}"
             else{
 

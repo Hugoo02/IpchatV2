@@ -5,46 +5,75 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Chat.ChatActivity"
-    android:background="@color/white">
-
-    <EditText
-        android:id="@+id/editTextMessage"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:ems="10"
-        android:background="@color/white"
-        android:paddingLeft="16dp"
-        android:hint="Enter Message"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonSend"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <android.widget.Button
-        android:id="@+id/buttonSend"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginEnd="10dp"
-        android:text="Send"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:background="@drawable/button_rounded"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextMessage"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextMessage" />
+    android:background="@color/main_color">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewChat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="10dp"
-        android:background="#9ABF70"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/editTextMessage"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <EditText
+            android:id="@+id/editTextMessage"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/edit_text_rounded"
+            android:ems="10"
+            android:hint="Enter Message"
+            android:inputType="textPersonName"
+            android:paddingLeft="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/buttonSend"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.widget.Button
+            android:id="@+id/buttonSend"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="@drawable/button_rounded"
+            android:text="Send"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/editTextMessage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/editTextMessage" />
+
+        <ImageView
+            android:id="@+id/imageViewCamera"
+            android:layout_width="70px"
+            android:layout_height="70px"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/editTextMessage"
+            app:layout_constraintEnd_toStartOf="@+id/editTextMessage"
+            app:layout_constraintTop_toTopOf="@+id/editTextMessage"
+            app:srcCompat="@drawable/camera" />
+
+        <ImageView
+            android:id="@+id/imageViewFile"
+            android:layout_width="70px"
+            android:layout_height="70px"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewCamera"
+            app:layout_constraintEnd_toStartOf="@+id/imageViewCamera"
+            app:layout_constraintTop_toTopOf="@+id/imageViewCamera"
+            app:srcCompat="@drawable/file" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

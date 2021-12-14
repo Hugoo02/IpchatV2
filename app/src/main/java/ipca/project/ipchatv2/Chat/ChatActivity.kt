@@ -2,6 +2,7 @@ package ipca.project.ipchatv2.Chat
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Message
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -36,7 +37,7 @@ class ChatActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.recyclerViewChat.adapter = adapter
-        binding.recyclerViewChat.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        binding.recyclerViewChat.addItemDecoration(DividerItemDecoration(this, 0))
 
         groupId = intent.getStringExtra("groupId")
         channelType = intent.getStringExtra("channelType")
@@ -140,7 +141,9 @@ class ChatActivity : AppCompatActivity() {
 
                 messages.forEach {
 
-                    if (it.senderId == currentUser)
+                    if(it.senderId == null)
+                        adapter.add(FirstMessage(it))
+                    else if (it.senderId == currentUser)
                         adapter.add(ChatFromItem(it))
                     else
                         adapter.add(ChatToItem(it))

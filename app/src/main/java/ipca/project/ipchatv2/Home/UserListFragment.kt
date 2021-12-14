@@ -2,6 +2,8 @@ package ipca.project.ipchatv2.Home
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.ColorFilter
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,6 +19,7 @@ import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Chat.ChatActivity
 import ipca.project.ipchatv2.Chat.UserListLMRow
 import ipca.project.ipchatv2.Models.MessagePrivate
+import ipca.project.ipchatv2.R
 import ipca.project.ipchatv2.ShowUsersActivity
 import ipca.project.ipchatv2.databinding.FragmentUserListBinding
 import java.util.*
@@ -47,9 +50,12 @@ class UserListFragment : Fragment() {
 
         listenForLatestMessages()
 
+        binding.buttonNewMessage.setColorFilter(Color.WHITE)
+
         binding.buttonNewMessage.setOnClickListener {
 
             val intent = Intent(activity, ShowUsersActivity::class.java)
+            intent.putExtra("channelType", "private")
             startActivity(intent)
 
         }

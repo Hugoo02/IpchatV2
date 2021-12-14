@@ -19,19 +19,7 @@ import kotlinx.android.synthetic.main.fragment_home.view.*
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
-    val adapter = GroupAdapter<ViewHolder>()
 
-    val latestMessageMap = HashMap<String, ChatMessage>()
-
-    /*
-    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            // There are no request codes
-            val data: Intent? = result.data
-        }
-    }
-
-     */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +38,7 @@ class HomeFragment : Fragment() {
         val viewPager = binding.viewPager
 
         //tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.tab_layout_person))
-        tabLayout.addTab(tabLayout.newTab().setText("Pessoas"))
+        tabLayout.addTab(tabLayout.newTab().setText("Privados"))
         tabLayout.addTab(tabLayout.newTab().setText("Grupos"))
         //tabLayout.setBackgroundResource()
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL

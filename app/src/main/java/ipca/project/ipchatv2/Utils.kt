@@ -50,4 +50,19 @@ object Utils {
 
     }
 
+    fun formatDateToFistChat() : String {
+
+        val date = Calendar.getInstance().time
+        val calendar = Calendar.getInstance()
+
+        calendar.time = date
+
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val month = calendar.get(Calendar.MONTH)
+        val year = calendar.get(Calendar.YEAR)
+
+        return "$day/$month/$year"
+
+    }
+
 }
