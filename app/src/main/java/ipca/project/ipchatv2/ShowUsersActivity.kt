@@ -1,32 +1,22 @@
 package ipca.project.ipchatv2
 
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.core.view.isVisible
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.type.ColorOrBuilder
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Chat.ChatActivity
 import ipca.project.ipchatv2.Chat.CreateNewGroupActivity
-import ipca.project.ipchatv2.Chat.UserListLMRow
 import ipca.project.ipchatv2.Models.PrivateChannel
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.databinding.ActivityShowUsersBinding
-import kotlinx.android.synthetic.main.activity_show_users.*
 import kotlinx.android.synthetic.main.row_users.view.*
-import kotlinx.coroutines.channels.Channel
-import okhttp3.internal.Util
 
 class ShowUsersActivity : AppCompatActivity() {
 

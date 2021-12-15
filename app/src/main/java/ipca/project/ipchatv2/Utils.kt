@@ -50,7 +50,7 @@ object Utils {
 
     }
 
-    fun formatDateToFistChat() : String {
+    fun formatDateToFistChat(date: Date) : String {
 
         val date = Calendar.getInstance().time
         val calendar = Calendar.getInstance()

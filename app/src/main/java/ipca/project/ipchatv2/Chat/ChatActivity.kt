@@ -2,7 +2,6 @@ package ipca.project.ipchatv2.Chat
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Message
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -10,11 +9,18 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Models.ChatMessage
-import ipca.project.ipchatv2.Utils
 import ipca.project.ipchatv2.databinding.ActivityChatBinding
 import kotlinx.android.synthetic.main.activity_chat.*
 import java.util.*
 import kotlin.collections.ArrayList
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.widget.Toast
+import com.google.firebase.firestore.ktx.toObject
+import ipca.project.ipchatv2.R
+import java.io.IOException
+
 
 class ChatActivity : AppCompatActivity() {
 
@@ -43,6 +49,34 @@ class ChatActivity : AppCompatActivity() {
         channelType = intent.getStringExtra("channelType")
 
         listenForMessages()
+
+        adapter.setOnItemLongClickListener { item, view ->
+
+            var text: String? = null
+
+            if(item.layout == R.layout.row_text_message_to){
+
+                val row = item as ChatToItem
+                text = row.message.text
+
+            } else{
+
+                val row = item as ChatFromItem
+                text = row.message.text
+
+            }
+
+            println(text)
+
+            val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clipData = ClipData.newPlainText("text", item.toString())
+            clipboardManager.setPrimaryClip(clipData)
+
+            Toast.makeText(this, "Text copied to clipboard", Toast.LENGTH_LONG).show()
+
+            return@setOnItemLongClickListener true
+
+        }
 
         binding.buttonSend.setOnClickListener {
 
@@ -126,33 +160,33 @@ class ChatActivity : AppCompatActivity() {
 
         }
 
-            refMessages.addSnapshotListener{result, e ->
+        refMessages!!.addSnapshotListener{result, e ->
 
-                messages.clear()
-                adapter.clear()
+            messages.clear()
+            adapter.clear()
 
-                for (doc in result!!){
+            for (doc in result!!){
 
-                    messages.add(doc.toObject(ChatMessage::class.java))
-
-                }
-
-                messages.sortBy{it.time}
-
-                messages.forEach {
-
-                    if(it.senderId == null)
-                        adapter.add(FirstMessage(it))
-                    else if (it.senderId == currentUser)
-                        adapter.add(ChatFromItem(it))
-                    else
-                        adapter.add(ChatToItem(it))
-
-                }
-
-                recyclerViewChat.scrollToPosition(adapter.itemCount - 1)
+                messages.add(doc.toObject(ChatMessage::class.java))
 
             }
+
+            messages.sortBy{it.time}
+
+            messages.forEach {
+
+                if(it.senderId == null)
+                    adapter.add(FirstMessage(it))
+                else if (it.senderId == currentUser)
+                    adapter.add(ChatFromItem(it))
+                else
+                    adapter.add(ChatToItem(it))
+
+            }
+
+            recyclerViewChat.scrollToPosition(adapter.itemCount - 1)
+
+        }
 
     }
 }

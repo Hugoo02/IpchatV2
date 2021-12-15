@@ -46,22 +46,22 @@ class CreateNewGroupActivity : AppCompatActivity() {
         val editTextGroupName = binding.editTextGroupName
         val buttonCreateGroup = binding.buttonCreateGroup
 
-        supportActionBar?.title = "Novo Chat"
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val bundle = intent.extras
         val userIds = bundle!!.getStringArrayList("userIds")
 
         val length: Int = editTextGroupName.text.length
-        textViewLenght.text = "$length/100"
+        textViewLenght.text = "$length/40"
 
         editTextGroupName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
                 val length: Int = editTextGroupName.length()
                 textViewLenght.text = "${length.toShort()}/40"
 
-                if(length > 100)
+                if(length > 40)
                     textViewLenght.setTextColor(Color.RED)
+                else if(length <= 40)
+                    textViewLenght.setTextColor(Color.BLACK)
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}

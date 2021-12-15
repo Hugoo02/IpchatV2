@@ -7,9 +7,11 @@ import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Models.ChatMessage
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.R
+import ipca.project.ipchatv2.Utils
 import kotlinx.android.synthetic.main.row_first_message.view.*
 import kotlinx.android.synthetic.main.row_text_message_from.view.*
 import kotlinx.android.synthetic.main.row_text_message_to.view.*
+import okhttp3.internal.Util
 
 
 class ChatFromItem(val message: ChatMessage): Item<ViewHolder>(){
@@ -60,6 +62,7 @@ class FirstMessage(val message: ChatMessage): Item<ViewHolder>(){
     override fun bind(viewHolder: ViewHolder, position: Int) {
 
         val textViewFirstMessageHour = viewHolder.itemView.textViewFirstMessageHour
+        textViewFirstMessageHour.text = Utils.formatDateToFistChat(message.time!!)
 
     }
 
