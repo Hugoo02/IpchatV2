@@ -6,7 +6,7 @@ import java.util.*
 import kotlin.collections.HashMap
 
 @Parcelize
-class Calendar (
+class CalendarModel (
     var date                      : Date? = null,
     var name                      : String? = null,
     var description               : String? = null): Parcelable{
@@ -22,8 +22,8 @@ class Calendar (
     }
 
     companion object{
-        fun fromHash(hashMap: HashMap<String,Any?>) : Calendar {
-            val item = Calendar(
+        fun fromHash(hashMap: HashMap<String,Any?>) : CalendarModel {
+            val item = CalendarModel(
                 hashMap["date"] as Date,
                 hashMap["name"].toString(),
                 hashMap["description"].toString(),

@@ -4,21 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CalendarView
+import com.applandeo.materialcalendarview.CalendarView
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
-import ipca.project.ipchatv2.Models.Calendar
-import ipca.project.ipchatv2.Utils
 import java.util.*
 import android.R
-import android.annotation.SuppressLint
 import android.widget.ImageButton
 import com.applandeo.materialcalendarview.EventDay
-import com.applandeo.materialcalendarview.utils.calendar
+import com.applandeo.materialcalendarview.listeners.OnDayClickListener
+import ipca.project.ipchatv2.Models.CalendarModel
 import ipca.project.ipchatv2.databinding.FragmentCalendarBinding
 
 class CalendarFragment : Fragment() {
@@ -27,33 +25,54 @@ class CalendarFragment : Fragment() {
     lateinit var binding: FragmentCalendarBinding
     lateinit var calendarView : CalendarView
     val adapter = GroupAdapter<ViewHolder>()
-    val dates: ArrayList<String> = ArrayList()
+    val dateList: ArrayList<CalendarModel> = ArrayList()
     val events: MutableList<EventDay> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
 
         //Get Layout
         binding = FragmentCalendarBinding.inflate(layoutInflater)
-        imageButtonAdd = binding.imageButtonAdd
+
+        imageButtonAdd = binding.buttonAdd
         imageButtonAdd.bringToFront()
         calendarView = binding.calendarView
 
-
         binding.recyclerView.adapter = adapter
 
-        getCurrentCalendar()
-        getEventAndDisplayIt()
+        displayEventIcons()
 
-        adapter.notifyDataSetChanged()
+        calendarView.setOnDayClickListener(object : OnDayClickListener {
+            override fun onDayClick(eventDay: EventDay) {
+                val clickedDayCalendar = eventDay.calendar
+                addEventRows(clickedDayCalendar)
+            }
+        })
 
         return binding.root
     }
 
+    private fun displayEventIcons() {
+
+        dateList.forEach {
+
+            val calendar = Calendar.getInstance()
+            calendar.time = it.date!!
+            events.add(EventDay(calendar, R.drawable.presence_online))
+
+        }
+
+        calendarView.setEvents(events)
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        getCurrentCalendar()
+    }
 
     fun getCurrentCalendar(){
 
@@ -61,64 +80,45 @@ class CalendarFragment : Fragment() {
         val ref = Firebase.firestore.collection("Calendar").document(uid!!)
             .collection("Meetings")
 
+        ref.addSnapshotListener { value, error ->
 
-        ref.get().addOnSuccessListener { documents ->
+            for (document in value!!.documents){
 
+                val calendar = document.toObject(CalendarModel::class.java)
 
-            for (document in documents)
-            {
-                val calendar = document.toObject(Calendar::class.java)
-
-                adapter.add(CalendarRow(calendar))
-
-                var timeStampToDate =  Utils.receiveDateFromDatabaseToCalendar(calendar.date as Date)
-
-
-                getEventAndDisplayIt()
-            }
-
-        }
-    }
-
-    fun addEventOnCalendar(){
-        val uid = FirebaseAuth.getInstance().uid
-        val ref = Firebase.firestore.collection("Calendar").document(uid!!)
-            .collection("Meetings")
-
-        ref.get().addOnSuccessListener { documents ->
-
-
-            for (document in documents)
-            {
-                val calendar = document.toObject(Calendar::class.java)
-
-                adapter.add(CalendarRow(calendar))
-
+                dateList.add(calendar!!)
 
             }
 
-        }
-    }
-
-    private fun getEventAndDisplayIt(){
-
-        for (date in dates) {
-            val calendarEvent: java.util.Calendar = java.util.Calendar.getInstance() // calendar must be here
-            val items1 = date.split("-").toTypedArray()
-            val year = items1[0].toInt()
-            val month = items1[1].toInt()
-            val day = items1[2].toInt()
-            calendarEvent.set(year, month, day)
-            events.add(EventDay(calendarEvent, R.drawable.ic_dialog_email))
+            displayEventIcons()
 
         }
+    }
 
-        //calendarView.setEvents(events)
+    fun addEventRows(date: Calendar){
+
+        adapter.clear()
+
+        dateList.forEach {
+
+            val calendarDate = Calendar.getInstance()
+            calendarDate.time = it.date!!
+
+            val dayFirebase = calendarDate.get(Calendar.DAY_OF_MONTH)
+            val monthFirebase = calendarDate.get(Calendar.MONTH)
+            val yearFirebase = calendarDate.get(Calendar.YEAR)
+
+            val dayCalendar = date.get(Calendar.DAY_OF_MONTH)
+            val monthCalendar = date.get(Calendar.MONTH)
+            val yearCalendar = date.get(Calendar.YEAR)
+
+            if(dayFirebase == dayCalendar && monthFirebase == monthCalendar
+                && yearFirebase == yearCalendar)
+                adapter.add(CalendarRow(it))
+
+        }
 
     }
 
-    companion object {
-        val FIREBASEURL = "https://messenger-28931-default-rtdb.europe-west1.firebasedatabase.app/"
-    }
 
 }

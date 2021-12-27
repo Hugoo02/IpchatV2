@@ -12,7 +12,6 @@
        android:layout_height="wrap_content"
        android:layout_marginLeft="30dp"
        android:layout_marginTop="15dp"
-       android:fontFamily="@font/mark_pro_bold"
        android:text="Calendário"
        android:textColor="@color/white"
        android:textSize="24dp"
@@ -37,30 +36,28 @@
        app:layout_constraintTop_toTopOf="parent">
 
 
-      <CalendarView
+      <com.applandeo.materialcalendarview.CalendarView
           android:id="@+id/calendarView"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="5dp"
-          android:background="#0F4F33"
+          app:headerColor="#0F4F33"
           app:layout_constraintTop_toTopOf="parent"
           android:theme="@style/CalenderViewCustom"
           android:dateTextAppearance="@style/CalenderViewDateCustomText"
-          android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"
-          />
+          android:weekDayTextAppearance="@style/CalenderViewWeekCustomText" />
 
-
-      <ImageButton
-          android:id="@+id/imageButtonAdd"
-          android:layout_width="40dp"
-          android:layout_height="40dp"
+      <com.google.android.material.floatingactionbutton.FloatingActionButton
+          android:id="@+id/buttonAdd"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
           android:layout_marginRight="15dp"
           android:layout_marginBottom="10dp"
-          android:background="@drawable/ic_add_calendar"
+          android:src="@drawable/ic_add_calendar"
+          app:tint="@color/white"
           android:backgroundTint="#0F4F33"
           app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintEnd_toEndOf="parent" />
-
+          app:layout_constraintEnd_toEndOf="parent"/>
 
       <androidx.recyclerview.widget.RecyclerView
           android:id="@+id/recyclerView"

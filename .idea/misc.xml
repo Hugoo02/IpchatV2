@@ -28,7 +28,7 @@
         <entry key="app/src/main/res/drawable/ic_sem_wi_fi.xml" value="0.228125" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.12" />
-        <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.14855072463768115" />
+        <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/popwindow_alertinternet.xml" value="0.14855072463768115" />
