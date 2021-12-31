@@ -11,7 +11,7 @@ import ipca.project.ipchatv2.Models.ChatMessage
 import ipca.project.ipchatv2.Models.MessagePrivate
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.R
-import ipca.project.ipchatv2.Utils
+import ipca.project.ipchatv2.Utils.Utils
 import kotlinx.android.synthetic.main.row_last_messages.view.*
 
 class UserListLMRow(val message: MessagePrivate): Item<ViewHolder>(){
@@ -55,10 +55,14 @@ class UserListLMRow(val message: MessagePrivate): Item<ViewHolder>(){
 
                 Picasso.get().load(otherUser!!.imageURL).into(circleImageLM)
 
-                if(message!!.senderId == currentUser)
+                if(message!!.senderId == currentUser && message!!.type == "TEXT")
                     textViewMessageLM.text = "Tu: ${message!!.text}"
-                else
+                else if(message!!.type == "TEXT")
                     textViewMessageLM.text = "${otherUser!!.username}: ${message!!.text}"
+                else if(message!!.senderId == currentUser && message!!.type == "IMAGE")
+                    textViewMessageLM.text = "Tu enviaste uma fotografia"
+                else if(message!!.type == "IMAGE")
+                    textViewMessageLM.text = "${otherUser!!.username} enviou uma fotografia"
 
             }
 

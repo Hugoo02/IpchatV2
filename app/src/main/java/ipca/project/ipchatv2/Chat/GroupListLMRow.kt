@@ -9,7 +9,7 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Models.*
 import ipca.project.ipchatv2.R
-import ipca.project.ipchatv2.Utils
+import ipca.project.ipchatv2.Utils.Utils
 import kotlinx.android.synthetic.main.row_last_messages.view.*
 
 class GroupListLMRow(val messageGroup: MessageGroup): Item<ViewHolder>(){
@@ -47,7 +47,6 @@ class GroupListLMRow(val messageGroup: MessageGroup): Item<ViewHolder>(){
 
             Picasso.get().load(group.groupImageURL).into(circleImageLM)
 
-
         }
 
         refMessage.get().addOnSuccessListener { result ->
@@ -55,9 +54,11 @@ class GroupListLMRow(val messageGroup: MessageGroup): Item<ViewHolder>(){
             val message = result.toObject(ChatMessage::class.java)
 
             if(message!!.type == "firstMessage")
-                textViewMessageLM.text = "Grupo Novo"
-            else if(message.senderId == currentUser)
+                textViewMessageLM.text = "Novo Grupo"
+            else if(message.senderId == currentUser && message.type == "TEXT")
                 textViewMessageLM.text = "Tu: ${message.text}"
+            else if(message.senderId == currentUser && message.type == "IMAGE")
+                textViewMessageLM.text = "Tu enviaste uma fotografia"
             else{
 
                 val refSenderUser = db.collection("User")
@@ -67,7 +68,10 @@ class GroupListLMRow(val messageGroup: MessageGroup): Item<ViewHolder>(){
 
                     val senderUser = result.toObject(User::class.java)
 
-                    textViewMessageLM.text = "${senderUser!!.username}: ${message.text}"
+                    if(message.type == "TEXT")
+                        textViewMessageLM.text = "${senderUser!!.username}: ${message.text}"
+                    else
+                        textViewMessageLM.text = "${senderUser!!.username} enviou uma fotografia"
                 }
 
             }

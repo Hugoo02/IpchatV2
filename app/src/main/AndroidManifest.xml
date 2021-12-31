@@ -10,15 +10,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IpchatV2">
         <activity
+            android:name=".Chat.GroupMembersActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Chat.ChatMoreDetailsActivity"
+            android:exported="true" />
+        <activity
             android:name=".Chat.CreateNewGroupActivity"
             android:exported="true" />
         <activity
             android:name=".Chat.ChatActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ShowUsersActivity"
             android:exported="true"
             android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".ShowUsersActivity"
+            android:exported="true" />
         <activity
             android:name=".Authentication.LoginActivity"
             android:exported="true" />

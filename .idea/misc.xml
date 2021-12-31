@@ -3,44 +3,67 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="../../../../layout/custom_preview.xml" value="0.19322916666666667" />
-        <entry key="app/src/main/res/drawable-v24/rounded_rectangle_message_from.xml" value="0.27291666666666664" />
-        <entry key="app/src/main/res/drawable-v24/rounded_rectangle_message_to.xml" value="0.27291666666666664" />
-        <entry key="app/src/main/res/drawable/back_select.xml" value="0.1574074074074074" />
-        <entry key="app/src/main/res/drawable/back_tabs.xml" value="0.1" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/drawable-v24/profile_layout.xml" value="0.2188034188034188" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/drawable/ic_add_calendar.xml" value="0.3141025641025641" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/drawable/ic_baseline_calendar_today_24.xml" value="0.22179487179487178" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/drawable/linear_layout_style.xml" value="0.22179487179487178" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/drawable/pop_up_style.xml" value="0.22179487179487178" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/drawable/profile_style_view.xml" value="0.14635416666666667" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/drawable/text_input_edit_text_style.xml" value="0.2189873417721519" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/drawable/text_view_layout.xml" value="0.2189873417721519" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/layout/activity_edit_profile.xml" value="0.176" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/layout/activity_login.xml" value="0.20854700854700856" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/layout/activity_main.xml" value="0.20854700854700856" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/layout/fragment_calendar.xml" value="0.18" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/layout/fragment_edit_profile.xml" value="0.10854700854700855" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/layout/fragment_profile.xml" value="0.2" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/layout/pop_up_logout.xml" value="0.20854700854700856" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/layout/popwindow_alertinternet.xml" value="0.29891304347826086" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/layout/row_calendar.xml" value="0.20854700854700856" />
+        <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/menu/menu_user.xml" value="0.1076923076923077" />
+        <entry key="app/src/main/res/drawable-v24/ic_insert_emoticon_black_24dp.xml" value="0.228125" />
+        <entry key="app/src/main/res/drawable/admin_text_view.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/button_rounded.xml" value="0.228125" />
+        <entry key="app/src/main/res/drawable/button_toolbar.xml" value="0.17592592592592593" />
         <entry key="app/src/main/res/drawable/buttonwhite.xml" value="0.228125" />
-        <entry key="app/src/main/res/drawable/constraint_background.xml" value="0.21296296296296297" />
+        <entry key="app/src/main/res/drawable/constraint_background.xml" value="0.2246153846153846" />
+        <entry key="app/src/main/res/drawable/dialog_background.xml" value="0.228125" />
         <entry key="app/src/main/res/drawable/edit_text_rounded.xml" value="0.228125" />
         <entry key="app/src/main/res/drawable/formulariologin.xml" value="0.228125" />
-        <entry key="app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.2246153846153846" />
+        <entry key="app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.20555555555555555" />
+        <entry key="app/src/main/res/drawable/ic_baseline_calendar_month_24.xml" value="0.20555555555555555" />
+        <entry key="app/src/main/res/drawable/ic_baseline_calendar_month_40.xml" value="0.1925925925925926" />
+        <entry key="app/src/main/res/drawable/ic_baseline_calendar_today_24.xml" value="0.20555555555555555" />
+        <entry key="app/src/main/res/drawable/ic_baseline_calendar_today_40.xml" value="0.19722222222222222" />
+        <entry key="app/src/main/res/drawable/ic_baseline_photo_camera_24.xml" value="0.10989583333333333" />
+        <entry key="app/src/main/res/drawable/ic_baseline_points_24.xml" value="0.20555555555555555" />
+        <entry key="app/src/main/res/drawable/ic_baseline_points_40.xml" value="0.19722222222222222" />
+        <entry key="app/src/main/res/drawable/ic_baseline_send_24.xml" value="0.2175925925925926" />
         <entry key="app/src/main/res/drawable/ic_sem_wi_fi.xml" value="0.228125" />
-        <entry key="app/src/main/res/drawable/tab_indicator.xml" value="0.2246153846153846" />
-        <entry key="app/src/main/res/drawable/tab_layout.xml" value="0.26666666666666666" />
-        <entry key="app/src/main/res/drawable/tab_layout_text_style.xml" value="0.15208333333333332" />
-        <entry key="app/src/main/res/drawable/tablayout.xml" value="0.26666666666666666" />
-        <entry key="app/src/main/res/layout/activity_chat.xml" value="0.3648148148148148" />
-        <entry key="app/src/main/res/layout/activity_create_new_group.xml" value="0.18" />
+        <entry key="app/src/main/res/drawable/rounded_select_photo.xml" value="0.228125" />
+        <entry key="app/src/main/res/drawable/tab_indicator.xml" value="0.228125" />
+        <entry key="app/src/main/res/drawable/tab_layout.xml" value="0.228125" />
+        <entry key="app/src/main/res/drawable/toolbar_background.xml" value="0.228125" />
+        <entry key="app/src/main/res/layout/activity_chat.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/activity_chat_more_details.xml" value="0.28191489361702127" />
+        <entry key="app/src/main/res/layout/activity_create_new_group.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/activity_group_members.xml" value="0.11367753623188406" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.12" />
-        <entry key="app/src/main/res/layout/activity_show_users.xml" value="0.2663115845539281" />
-        <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.14855072463768115" />
-        <entry key="app/src/main/res/layout/fragment_group_list.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_show_users.xml" value="0.1793478260869565" />
+        <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/fragment_choose_image.xml" value="0.18840579710144928" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.14855072463768115" />
-        <entry key="app/src/main/res/layout/fragment_user_list.xml" value="0.16" />
-        <entry key="app/src/main/res/layout/main_toolbar.xml" value="0.16802536231884058" />
+        <entry key="app/src/main/res/layout/fragment_show_group_users.xml" value="0.18" />
         <entry key="app/src/main/res/layout/popwindow_alertinternet.xml" value="0.14855072463768115" />
-        <entry key="app/src/main/res/layout/row_first_message.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/row_image_message_from.xml" value="0.25677083333333334" />
-        <entry key="app/src/main/res/layout/row_image_message_to.xml" value="0.25677083333333334" />
-        <entry key="app/src/main/res/layout/row_last_messages.xml" value="0.3265625" />
-        <entry key="app/src/main/res/layout/row_new_chat.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/row_text_message_from.xml" value="0.25677083333333334" />
-        <entry key="app/src/main/res/layout/row_text_message_to.xml" value="0.25677083333333334" />
-        <entry key="app/src/main/res/layout/row_users.xml" value="0.2242152466367713" />
-        <entry key="app/src/main/res/layout/tab_layout.xml" value="0.3265625" />
-        <entry key="app/src/main/res/layout/tal_layout.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/row_image_message_from.xml" value="1.1" />
+        <entry key="app/src/main/res/layout/row_image_message_to.xml" value="0.75" />
+        <entry key="app/src/main/res/layout/row_text_message_from.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/row_text_message_to.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/row_users.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/send_message_view.xml" value="0.1793478260869565" />
+        <entry key="app/src/main/res/layout/teste.xml" value="0.11510416666666666" />
         <entry key="app/src/main/res/menu/menu_user.xml" value="0.21197916666666666" />
       </map>
     </option>

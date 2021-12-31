@@ -83,6 +83,8 @@ class UserListFragment : Fragment() {
             .document("$currentUserId")
             .collection("privateChannel")
 
+        println("currentUser = $currentUserId")
+
         //Referencia responsável por resgatar todos os grupos do user em questão
 
         refIdGroups.addSnapshotListener { documents, e ->
@@ -149,9 +151,6 @@ class UserListFragment : Fragment() {
                             }
 
                         refreshAdapter()
-
-                        //Não está a ordenar direito
-                            println("3. otherUserId = $otherUserId")
 
                         }
 

@@ -5,7 +5,7 @@
     <item
         android:id="@+id/calendarFragment"
         android:title="Calendar"
-        android:icon="@drawable/ic_baseline_calendar_today_24"/>
+        android:icon="@drawable/ic_baseline_calendar_today_40"/>
 
     <item
         android:id="@+id/homeFragment"

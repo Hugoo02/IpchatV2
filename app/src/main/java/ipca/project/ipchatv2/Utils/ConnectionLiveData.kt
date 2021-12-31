@@ -1,4 +1,4 @@
-package ipca.project.ipchatv2
+package ipca.project.ipchatv2.Utils
 
 import android.content.Context
 import android.content.Context.CONNECTIVITY_SERVICE

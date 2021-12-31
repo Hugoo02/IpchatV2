@@ -15,8 +15,13 @@ import ipca.project.ipchatv2.Chat.ChatActivity
 import ipca.project.ipchatv2.Chat.CreateNewGroupActivity
 import ipca.project.ipchatv2.Models.PrivateChannel
 import ipca.project.ipchatv2.Models.User
+import ipca.project.ipchatv2.RowConfigurations.UserItem
 import ipca.project.ipchatv2.databinding.ActivityShowUsersBinding
 import kotlinx.android.synthetic.main.row_users.view.*
+import android.app.Activity
+
+
+
 
 class ShowUsersActivity : AppCompatActivity() {
 
@@ -32,10 +37,15 @@ class ShowUsersActivity : AppCompatActivity() {
         binding = ActivityShowUsersBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = "Novo Chat"
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.hide()
 
         val channelType = intent.getStringExtra("channelType")
+
+        binding.buttonBack.setOnClickListener {
+
+            finish()
+
+        }
 
         fetchUsers()
 
@@ -105,9 +115,7 @@ class ShowUsersActivity : AppCompatActivity() {
         else
         {
 
-            binding.button.visibility = View.VISIBLE
-
-            binding.button.setOnClickListener {
+            binding.imageButtonNext.setOnClickListener {
 
                 if(userIds.size < 2)
                     Toast.makeText(this, "O grupo tem que ter pelo menos 3 membros!", Toast.LENGTH_SHORT).show()
@@ -134,15 +142,19 @@ class ShowUsersActivity : AppCompatActivity() {
                 if(view.isSelected){
 
                     userIds.add(row.user.id!!)
+                    if(userIds.size >= 2)
+                        binding.imageButtonNext.visibility = View.VISIBLE
 
                 }
                 else{
 
                     userIds.remove(row.user.id)
+                    if(userIds.size < 2)
+                        binding.imageButtonNext.visibility = View.INVISIBLE
 
                 }
-                adapter.notifyDataSetChanged()
 
+                adapter.notifyDataSetChanged()
 
             }
         }
@@ -170,7 +182,7 @@ class ShowUsersActivity : AppCompatActivity() {
                     if(user.id != currentUser.uid)
                     {
 
-                        adapter.add(UserItem(user))
+                        adapter.add(UserItem(user, false))
 
                     }
 
@@ -181,34 +193,11 @@ class ShowUsersActivity : AppCompatActivity() {
             }
     }
 
-}
+    fun closeActivity(){
 
-class UserItem(val user: User): Item<ViewHolder>() {
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-
-        val textViewUserName = viewHolder.itemView.textViewUserName
-        val circleImagePhoto = viewHolder.itemView.circleImagePhoto
-
-        textViewUserName.text = user.username
-
-
-        if(viewHolder.itemView.isSelected)
-        {
-
-            viewHolder.itemView.circleImagePhoto.setImageResource(R.drawable.selected)
-
-        }
-        else
-        {
-
-            Picasso.get().load(user.imageURL).resize(100, 100).centerCrop().into(circleImagePhoto)
-
-        }
-
+        finish()
 
     }
 
-    override fun getLayout(): Int {
-        return R.layout.row_users
-    }
 }
+

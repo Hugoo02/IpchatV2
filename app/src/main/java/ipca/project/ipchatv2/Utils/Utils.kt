@@ -1,13 +1,10 @@
-package ipca.project.ipchatv2
+package ipca.project.ipchatv2.Utils
 
 import android.app.AlertDialog
 import android.content.Context
 import androidx.lifecycle.LifecycleOwner
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
+import ipca.project.ipchatv2.R
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.system.exitProcess
 
 object Utils {

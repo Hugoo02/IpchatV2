@@ -1,32 +1,25 @@
 package ipca.project.ipchatv2.Chat
 
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import androidx.core.widget.doOnTextChanged
 import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Models.User
-import ipca.project.ipchatv2.R
-import ipca.project.ipchatv2.ShowUsersActivity
-import ipca.project.ipchatv2.UserItem
-import ipca.project.ipchatv2.databinding.ActivityCreateNewGroupBinding
-import ipca.project.ipchatv2.databinding.ActivityShowUsersBinding
 import java.util.*
 import kotlin.collections.ArrayList
-import android.text.Editable
-
-import android.text.TextWatcher
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import ipca.project.ipchatv2.CustomDialogs.ChooseImageFragment
 import ipca.project.ipchatv2.Models.ChatMessage
 import ipca.project.ipchatv2.Models.GroupChannel
-import ipca.project.ipchatv2.Models.PrivateChannel
-import ipca.project.ipchatv2.Utils
-import okhttp3.internal.Util
+import ipca.project.ipchatv2.RowConfigurations.UserItem
+import ipca.project.ipchatv2.databinding.ActivityCreateNewGroupBinding
+import android.content.DialogInterface
+
+
+
 
 
 class CreateNewGroupActivity : AppCompatActivity() {
@@ -41,38 +34,26 @@ class CreateNewGroupActivity : AppCompatActivity() {
         binding = ActivityCreateNewGroupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val recyclerViewShowGroupUser = binding.recyclerViewShowGroupUser
-        val textViewLenght = binding.textViewLenght
-        val editTextGroupName = binding.editTextGroupName
-        val buttonCreateGroup = binding.buttonCreateGroup
+        supportActionBar!!.hide()
 
+        val recyclerViewShowGroupUser = binding.recyclerViewShowGroupUser
+        val editTextGroupName = binding.editTextGroupName
+        val imageButtonFinish = binding.imageButtonFinish
 
         val bundle = intent.extras
         val userIds = bundle!!.getStringArrayList("userIds")
 
-        val length: Int = editTextGroupName.text.length
-        textViewLenght.text = "$length/40"
+        binding.buttonBack.setOnClickListener {
 
-        editTextGroupName.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                val length: Int = editTextGroupName.length()
-                textViewLenght.text = "${length.toShort()}/40"
+            finish()
 
-                if(length > 40)
-                    textViewLenght.setTextColor(Color.RED)
-                else if(length <= 40)
-                    textViewLenght.setTextColor(Color.BLACK)
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable) {}
-        })
+        }
 
         addUsersToAdapter(userIds)
 
         recyclerViewShowGroupUser.adapter = adapter
 
-        buttonCreateGroup.setOnClickListener {
+        imageButtonFinish.setOnClickListener {
 
             if(editTextGroupName.text.isEmpty() || editTextGroupName.text.length > 40)
                 Toast.makeText(this, "Introduza um nome válido!", Toast.LENGTH_SHORT).show()
@@ -81,8 +62,7 @@ class CreateNewGroupActivity : AppCompatActivity() {
 
                 userIds!!.add(currentUser.uid)
                 val groupName = editTextGroupName.text.toString()
-                val groupImage = "https://firebasestorage.googleapis.com/v0/b/ipchat-29feb.appspot.com/o/group.png?alt=media&token=3fdbb878-1b0c-435a-b667-c155c6aecf36"
-                val groupChannel = GroupChannel(groupName, userIds, groupImage)
+                val groupChannel = GroupChannel(groupName, userIds, null)
 
                     db.collection("groupChannels")
                         .add(groupChannel)
@@ -133,7 +113,12 @@ class CreateNewGroupActivity : AppCompatActivity() {
 
 
                                 if(index == (userIds.size - 1))
-                                    startChatActivity(it.id)
+                                {
+
+                                    chooseGroupImage(it.id)
+
+                                }
+
 
                             }
                         }
@@ -144,13 +129,14 @@ class CreateNewGroupActivity : AppCompatActivity() {
 
     }
 
-    private fun startChatActivity(channelId: String){
+    private fun chooseGroupImage(groupId: String) {
 
-        val intent = Intent(this, ChatActivity::class.java)
-        intent.putExtra("groupId", channelId)
-        intent.putExtra("channelType", "group")
-        startActivity(intent)
-        finish()
+        val bundle = Bundle()
+        bundle.putString("groupId", groupId)
+        val dialog = ChooseImageFragment()
+        dialog.arguments = bundle
+
+        dialog.show(supportFragmentManager, "customDialog")
 
     }
 
@@ -167,7 +153,7 @@ class CreateNewGroupActivity : AppCompatActivity() {
 
                     val user = result.toObject(User::class.java)
 
-                    adapter.add(UserItem(user!!))
+                    adapter.add(UserItem(user!!, false))
 
                 }
 

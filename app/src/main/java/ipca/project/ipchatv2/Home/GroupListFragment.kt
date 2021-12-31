@@ -47,7 +47,7 @@ class GroupListFragment : Fragment() {
         binding.buttonNewMessage.setOnClickListener {
 
             val intent = Intent(activity, ShowUsersActivity::class.java)
-            intent.putExtra("channelType", "public")
+            intent.putExtra("channelType", "group")
             startActivity(intent)
 
         }
@@ -100,8 +100,6 @@ class GroupListFragment : Fragment() {
                             groupList[message.groupId!!] = message
                         }
 
-                        //MELHOR AQUI SECALHAR, TESTAR QUANDO EXISTIREM MAIS GRUPOS
-                        //groupList.values.sortedByDescending { it.time }
                         refreshAdapter()
 
                     }
