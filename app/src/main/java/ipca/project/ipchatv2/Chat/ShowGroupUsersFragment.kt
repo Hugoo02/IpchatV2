@@ -1,16 +1,24 @@
 package ipca.project.ipchatv2.Chat
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import ipca.project.ipchatv2.CustomDialogs.ChooseImageFragment
+import ipca.project.ipchatv2.CustomDialogs.ProfileDelaisFragment
 import ipca.project.ipchatv2.Models.GroupChannel
 import ipca.project.ipchatv2.Models.User
+import ipca.project.ipchatv2.R
 import ipca.project.ipchatv2.RowConfigurations.UserItem
 import ipca.project.ipchatv2.databinding.FragmentShowGroupUsersBinding
 
@@ -113,6 +121,19 @@ class ShowGroupUsersFragment : Fragment() {
                     }
 
                 }
+
+        }
+
+        adapter.setOnItemClickListener{ item, view ->
+
+            val row = item as UserItem
+
+            val bundle = Bundle()
+            bundle.putString("userId", row.user.id)
+            val dialog = ProfileDelaisFragment()
+            dialog.arguments = bundle
+
+            dialog.show(parentFragmentManager, "customDialog")
 
         }
 

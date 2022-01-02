@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Chat.GroupMembersActivity">
+    tools:context=".Chat.ShowFilesActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="Membros"
+                android:text="Ficheiros"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"

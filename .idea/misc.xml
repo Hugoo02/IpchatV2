@@ -35,6 +35,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_calendar_month_40.xml" value="0.1925925925925926" />
         <entry key="app/src/main/res/drawable/ic_baseline_calendar_today_24.xml" value="0.20555555555555555" />
         <entry key="app/src/main/res/drawable/ic_baseline_calendar_today_40.xml" value="0.19722222222222222" />
+        <entry key="app/src/main/res/drawable/ic_baseline_clear_24.xml" value="0.16041666666666668" />
         <entry key="app/src/main/res/drawable/ic_baseline_photo_camera_24.xml" value="0.10989583333333333" />
         <entry key="app/src/main/res/drawable/ic_baseline_points_24.xml" value="0.20555555555555555" />
         <entry key="app/src/main/res/drawable/ic_baseline_points_40.xml" value="0.19722222222222222" />
@@ -50,12 +51,16 @@
         <entry key="app/src/main/res/layout/activity_group_members.xml" value="0.11367753623188406" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.12" />
+        <entry key="app/src/main/res/layout/activity_show_files.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/layout/activity_show_users.xml" value="0.1793478260869565" />
         <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_choose_image.xml" value="0.18840579710144928" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.14855072463768115" />
+        <entry key="app/src/main/res/layout/fragment_profile_delais.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_show_docs.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/layout/fragment_show_group_users.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/fragment_show_photos.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/layout/popwindow_alertinternet.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/row_image_message_from.xml" value="1.1" />
         <entry key="app/src/main/res/layout/row_image_message_to.xml" value="0.75" />

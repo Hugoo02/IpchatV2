@@ -2,22 +2,19 @@ package ipca.project.ipchatv2.Chat
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.FragmentManager
 import com.google.android.material.tabs.TabLayout
-import ipca.project.ipchatv2.Home.HomeAdapter
-import ipca.project.ipchatv2.R
-import ipca.project.ipchatv2.databinding.ActivityChatMoreDetailsBinding
 import ipca.project.ipchatv2.databinding.ActivityGroupMembersBinding
+import ipca.project.ipchatv2.databinding.ActivityShowFilesBinding
 
-class GroupMembersActivity : AppCompatActivity() {
+class ShowFilesActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityGroupMembersBinding
+    private lateinit var binding: ActivityShowFilesBinding
 
     var groupId : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityGroupMembersBinding.inflate(layoutInflater)
+        binding = ActivityShowFilesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         supportActionBar!!.hide()
@@ -58,6 +55,5 @@ class GroupMembersActivity : AppCompatActivity() {
 
             }
         })
-
     }
 }

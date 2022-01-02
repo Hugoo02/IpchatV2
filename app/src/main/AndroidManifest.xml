@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IpchatV2">
         <activity
+            android:name=".Chat.ShowFilesActivity"
+            android:exported="true" />
+        <activity
             android:name=".Chat.GroupMembersActivity"
             android:exported="true" />
         <activity
