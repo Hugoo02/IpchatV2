@@ -17,7 +17,7 @@ class CalendarRow(val calendar: CalendarModel): Item<ViewHolder>() {
         val textViewDescription = viewHolder.itemView.findViewById<TextView>(R.id.textViewDescription)
 
         textViewDate.text = Utils.receiveDateFromDatabaseToCalendar(calendar.date!!)
-        textViewName.text = calendar.name
+        textViewName.text = calendar.title
         textViewDescription.text = calendar.description
     }
 

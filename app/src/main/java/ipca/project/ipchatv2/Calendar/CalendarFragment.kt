@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.applandeo.materialcalendarview.CalendarView
 import androidx.fragment.app.Fragment
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import java.util.*
 import android.R
+import android.content.Intent
 import android.widget.ImageButton
 import com.applandeo.materialcalendarview.EventDay
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener
@@ -28,6 +28,10 @@ class CalendarFragment : Fragment() {
     val dateList: ArrayList<CalendarModel> = ArrayList()
     val events: MutableList<EventDay> = ArrayList()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,6 +41,8 @@ class CalendarFragment : Fragment() {
         //Get Layout
         binding = FragmentCalendarBinding.inflate(layoutInflater)
 
+        getCurrentCalendar()
+
         imageButtonAdd = binding.buttonAdd
         imageButtonAdd.bringToFront()
         calendarView = binding.calendarView
@@ -44,6 +50,13 @@ class CalendarFragment : Fragment() {
         binding.recyclerView.adapter = adapter
 
         displayEventIcons()
+
+        binding.buttonAdd.setOnClickListener {
+
+            val intent = Intent(requireContext(), NewEventActivity::class.java)
+            startActivity(intent)
+
+        }
 
         calendarView.setOnDayClickListener(object : OnDayClickListener {
             override fun onDayClick(eventDay: EventDay) {
@@ -69,15 +82,11 @@ class CalendarFragment : Fragment() {
 
     }
 
-    override fun onStart() {
-        super.onStart()
-        getCurrentCalendar()
-    }
-
     fun getCurrentCalendar(){
 
-        val uid = FirebaseAuth.getInstance().uid
-        val ref = Firebase.firestore.collection("Calendar").document(uid!!)
+        //val uid = FirebaseAuth.getInstance().uid
+        val uid = "PNRsmOMiaQZYgstQh01GijHmENm1"
+        val ref = Firebase.firestore.collection("Calendar").document(uid)
             .collection("Meetings")
 
         ref.addSnapshotListener { value, error ->

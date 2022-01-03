@@ -8,16 +8,18 @@ import kotlin.collections.HashMap
 @Parcelize
 class CalendarModel (
     var date                      : Date? = null,
-    var name                      : String? = null,
+    var title                     : String? = null,
+    var createdBy                   : String? = null,
     var description               : String? = null): Parcelable{
 
     constructor() : this(null,null,null)
 
     fun toHashMap() : HashMap<String?, Any?>{
         val hashMap = HashMap<String?, Any?>()
-        hashMap["name"]                  = name
-        hashMap["description"]           = description
-        hashMap["date"]                  = date
+        hashMap["title"]                    = title
+        hashMap["description"]              = description
+        hashMap["createdBy"]                = createdBy
+        hashMap["date"]                     = date
         return hashMap
     }
 
@@ -25,8 +27,9 @@ class CalendarModel (
         fun fromHash(hashMap: HashMap<String,Any?>) : CalendarModel {
             val item = CalendarModel(
                 hashMap["date"] as Date,
-                hashMap["name"].toString(),
-                hashMap["description"].toString(),
+                hashMap["title"].toString(),
+                hashMap["createdBy"].toString(),
+                hashMap["description"].toString()
 
             )
             return item
