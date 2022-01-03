@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.applandeo.materialcalendarview.CalendarView
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -12,25 +11,35 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import java.util.*
 import android.R
+import android.content.Context
 import android.content.Intent
+import android.util.TypedValue
 import android.widget.ImageButton
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.view.marginStart
+import com.applandeo.materialcalendarview.CalendarView
 import com.applandeo.materialcalendarview.EventDay
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.FirebaseFirestoreKtxRegistrar
 import ipca.project.ipchatv2.Models.CalendarModel
 import ipca.project.ipchatv2.databinding.FragmentCalendarBinding
 
 class CalendarFragment : Fragment() {
 
     lateinit var imageButtonAdd: ImageButton
+    val db = FirebaseFirestore.getInstance()
     lateinit var binding: FragmentCalendarBinding
     lateinit var calendarView : CalendarView
     val adapter = GroupAdapter<ViewHolder>()
     val dateList: ArrayList<CalendarModel> = ArrayList()
     val events: MutableList<EventDay> = ArrayList()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    val currentUser = FirebaseAuth.getInstance()
+
+    var calendarId : String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,11 +50,28 @@ class CalendarFragment : Fragment() {
         //Get Layout
         binding = FragmentCalendarBinding.inflate(layoutInflater)
 
-        getCurrentCalendar()
+        if(calendarId == null){
+            calendarId = currentUser.uid
+            binding.buttonBack.visibility = View.GONE
+
+            val layoutParams = binding.textViewCalendar.layoutParams as ConstraintLayout.LayoutParams
+            layoutParams.marginStart = 20.toDp(requireContext())
+            binding.textViewCalendar.layoutParams = layoutParams
+
+        }
 
         imageButtonAdd = binding.buttonAdd
         imageButtonAdd.bringToFront()
         calendarView = binding.calendarView
+
+        val calendarMinDate = Calendar.getInstance()
+        calendarMinDate.set(Calendar.YEAR, calendarMinDate.get(Calendar.YEAR) - 5)
+
+        val calendarMaxDate = Calendar.getInstance()
+        calendarMaxDate.set(Calendar.YEAR, calendarMaxDate.get(Calendar.YEAR) + 5)
+
+        calendarView.setMinimumDate(calendarMinDate)
+        calendarView.setMaximumDate(calendarMaxDate)
 
         binding.recyclerView.adapter = adapter
 
@@ -55,8 +81,10 @@ class CalendarFragment : Fragment() {
 
             val intent = Intent(requireContext(), NewEventActivity::class.java)
             startActivity(intent)
+            getCurrentCalendar()
 
         }
+
 
         calendarView.setOnDayClickListener(object : OnDayClickListener {
             override fun onDayClick(eventDay: EventDay) {
@@ -66,6 +94,11 @@ class CalendarFragment : Fragment() {
         })
 
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        getCurrentCalendar()
     }
 
     private fun displayEventIcons() {
@@ -84,9 +117,14 @@ class CalendarFragment : Fragment() {
 
     fun getCurrentCalendar(){
 
-        //val uid = FirebaseAuth.getInstance().uid
-        val uid = "PNRsmOMiaQZYgstQh01GijHmENm1"
-        val ref = Firebase.firestore.collection("Calendar").document(uid)
+        adapter.clear()
+
+        val uid = FirebaseAuth.getInstance().uid
+
+        if(calendarId == null)
+            calendarId = uid
+
+        val ref = db.collection("Calendar").document(uid!!)
             .collection("Meetings")
 
         ref.addSnapshotListener { value, error ->
@@ -129,5 +167,8 @@ class CalendarFragment : Fragment() {
 
     }
 
+    fun Int.toDp(context: Context):Int = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,this.toFloat(),context.resources.displayMetrics
+    ).toInt()
 
 }
