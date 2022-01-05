@@ -70,7 +70,8 @@ class NewEventActivity : AppCompatActivity() {
             }else{
 
                 val calendar = CalendarModel(time, editTextTitle.text.toString(),
-                                            currentUser.uid, editTextDescription.text.toString())
+                                            currentUser.uid, editTextDescription.text.toString(),
+                                            editTextLocal.text.toString())
 
                 db.collection("Calendar")
                     .document(calendarId!!)

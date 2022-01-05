@@ -56,10 +56,22 @@
              android:layout_height="wrap_content"
              android:layout_marginEnd="20dp"
              android:backgroundTint="@color/primary_color"
-             app:layout_constraintBottom_toBottomOf="@+id/textView"
+             app:layout_constraintBottom_toBottomOf="@+id/textViewCalendar"
              app:layout_constraintEnd_toEndOf="parent"
-             app:layout_constraintTop_toTopOf="@+id/textView"
+             app:layout_constraintTop_toTopOf="@+id/textViewCalendar"
              app:srcCompat="@drawable/ic_baseline_settings_24" />
+
+         <ImageButton
+             android:id="@+id/imageButtonAdd"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginEnd="10dp"
+             android:backgroundTint="@color/primary_color"
+             app:tint="@color/white"
+             android:src="@drawable/ic_add_calendar"
+             app:layout_constraintBottom_toBottomOf="@+id/textViewCalendar"
+             app:layout_constraintEnd_toStartOf="@+id/imageButtonSettings"
+             app:layout_constraintTop_toTopOf="@+id/textViewCalendar" />
 
       </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -78,7 +90,7 @@
       <com.applandeo.materialcalendarview.CalendarView
           android:id="@+id/calendarView"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+          android:layout_height="450dp"
           android:dateTextAppearance="@style/CalenderViewDateCustomText"
           android:theme="@style/CalenderViewCustom"
           android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"
@@ -91,17 +103,15 @@
           app:selectionColor="@color/black"
           app:todayLabelColor="@color/black" />
 
-      <com.google.android.material.floatingactionbutton.FloatingActionButton
-          android:id="@+id/buttonAdd"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginRight="15dp"
-          android:layout_marginBottom="10dp"
-          android:backgroundTint="#0F4F33"
-          android:src="@drawable/ic_add_calendar"
-          app:layout_constraintBottom_toBottomOf="parent"
+      <ImageView
+          android:id="@+id/imageViewResizeCalendar"
+          android:layout_width="100dp"
+          android:layout_height="10dp"
+          android:layout_marginBottom="5dp"
+          app:layout_constraintBottom_toBottomOf="@+id/calendarView"
           app:layout_constraintEnd_toEndOf="parent"
-          app:tint="@color/white" />
+          app:layout_constraintStart_toStartOf="parent"
+          app:srcCompat="@drawable/ic_resizer" />
 
       <androidx.recyclerview.widget.RecyclerView
           android:id="@+id/recyclerView"

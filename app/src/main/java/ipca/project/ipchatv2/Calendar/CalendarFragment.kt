@@ -11,9 +11,11 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import java.util.*
 import android.R
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.util.TypedValue
+import android.view.MotionEvent
 import android.widget.ImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -26,6 +28,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.FirebaseFirestoreKtxRegistrar
 import ipca.project.ipchatv2.Models.CalendarModel
 import ipca.project.ipchatv2.databinding.FragmentCalendarBinding
+import android.widget.RelativeLayout
+
+
+
 
 class CalendarFragment : Fragment() {
 
@@ -41,6 +47,11 @@ class CalendarFragment : Fragment() {
 
     var calendarId : String? = null
 
+    var yDown = 0f
+
+    var initialY = 0f
+
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,9 +71,10 @@ class CalendarFragment : Fragment() {
 
         }
 
-        imageButtonAdd = binding.buttonAdd
+        imageButtonAdd = binding.imageButtonAdd
         imageButtonAdd.bringToFront()
         calendarView = binding.calendarView
+        val imageViewResizeCalendar = binding.imageViewResizeCalendar
 
         val calendarMinDate = Calendar.getInstance()
         calendarMinDate.set(Calendar.YEAR, calendarMinDate.get(Calendar.YEAR) - 5)
@@ -77,9 +89,10 @@ class CalendarFragment : Fragment() {
 
         displayEventIcons()
 
-        binding.buttonAdd.setOnClickListener {
+        imageButtonAdd.setOnClickListener {
 
             val intent = Intent(requireContext(), NewEventActivity::class.java)
+            intent.putExtra("calendarId", calendarId)
             startActivity(intent)
             getCurrentCalendar()
 
@@ -90,6 +103,61 @@ class CalendarFragment : Fragment() {
             override fun onDayClick(eventDay: EventDay) {
                 val clickedDayCalendar = eventDay.calendar
                 addEventRows(clickedDayCalendar)
+            }
+        })
+
+        println("calendar.y = " + calendarView.y)
+        println("height = " + calendarView.height)
+        imageViewResizeCalendar.y = 0f
+        println("top " + calendarView.top)
+        println("top " + imageViewResizeCalendar.top)
+        println("calendar height = ${calendarView.top + calendarView.bottom}")
+        println("calendar height = ${calendarView.height}")
+
+        var initialCalendarHeight = 1800
+        var initialCalendarY = calendarView.y
+        var initialImageViewY = imageViewResizeCalendar.y
+
+        imageViewResizeCalendar.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+
+                when (event?.action) {
+                    MotionEvent.ACTION_DOWN -> {
+
+                        yDown = event.y
+                        println("yDown = " + yDown)
+
+                    }
+
+                    MotionEvent.ACTION_MOVE ->{
+
+                        val yMoved = event.y
+
+                        println("yMoved = " + yMoved)
+
+                        val distanceY = yMoved - yDown
+
+                        println(imageViewResizeCalendar.y)
+
+                        imageViewResizeCalendar.y = imageViewResizeCalendar.y + distanceY
+
+                        val params = calendarView.layoutParams
+
+                        val heightt = (params.height * yMoved) / yDown
+                        initialCalendarHeight -= (distanceY * 4).toInt()
+
+                        initialCalendarHeight += distanceY.toInt()
+                        println("calendar height = $initialCalendarHeight")
+
+                        //params.height -= ((imageViewResizeCalendar.y + distanceY)).toInt().toDp(requireContext())
+                        //params.height = 200 * 4
+                        //params.height = height.toInt()
+                        //calendarView.layoutParams = params
+
+                    }
+                }
+
+                return true
             }
         })
 
@@ -117,7 +185,7 @@ class CalendarFragment : Fragment() {
 
     fun getCurrentCalendar(){
 
-        adapter.clear()
+        dateList.clear()
 
         val uid = FirebaseAuth.getInstance().uid
 

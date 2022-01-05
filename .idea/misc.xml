@@ -27,6 +27,7 @@
         <entry key="app/src/main/res/drawable/button_toolbar.xml" value="0.17592592592592593" />
         <entry key="app/src/main/res/drawable/buttonwhite.xml" value="0.228125" />
         <entry key="app/src/main/res/drawable/constraint_background.xml" value="0.2246153846153846" />
+        <entry key="app/src/main/res/drawable/constraint_calendar_row.xml" value="0.20092592592592592" />
         <entry key="app/src/main/res/drawable/dialog_background.xml" value="0.228125" />
         <entry key="app/src/main/res/drawable/edit_text_rounded.xml" value="0.228125" />
         <entry key="app/src/main/res/drawable/formulariologin.xml" value="0.228125" />
@@ -36,6 +37,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_calendar_today_24.xml" value="0.20555555555555555" />
         <entry key="app/src/main/res/drawable/ic_baseline_calendar_today_40.xml" value="0.19722222222222222" />
         <entry key="app/src/main/res/drawable/ic_baseline_clear_24.xml" value="0.16041666666666668" />
+        <entry key="app/src/main/res/drawable/ic_baseline_keyboard_arrow_up_24.xml" value="0.2234375" />
         <entry key="app/src/main/res/drawable/ic_baseline_photo_camera_24.xml" value="0.10989583333333333" />
         <entry key="app/src/main/res/drawable/ic_baseline_points_24.xml" value="0.20555555555555555" />
         <entry key="app/src/main/res/drawable/ic_baseline_points_40.xml" value="0.19722222222222222" />
@@ -56,7 +58,7 @@
         <entry key="app/src/main/res/layout/activity_new_event.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_show_files.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/layout/activity_show_users.xml" value="0.1793478260869565" />
-        <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_choose_image.xml" value="0.18840579710144928" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.14855072463768115" />
@@ -66,7 +68,7 @@
         <entry key="app/src/main/res/layout/fragment_show_group_users.xml" value="0.18" />
         <entry key="app/src/main/res/layout/fragment_show_photos.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/layout/popwindow_alertinternet.xml" value="0.14855072463768115" />
-        <entry key="app/src/main/res/layout/row_calendar.xml" value="0.12907608695652173" />
+        <entry key="app/src/main/res/layout/row_calendar.xml" value="0.3067961165048544" />
         <entry key="app/src/main/res/layout/row_image_message_from.xml" value="1.1" />
         <entry key="app/src/main/res/layout/row_image_message_to.xml" value="0.75" />
         <entry key="app/src/main/res/layout/row_text_message_from.xml" value="0.5" />

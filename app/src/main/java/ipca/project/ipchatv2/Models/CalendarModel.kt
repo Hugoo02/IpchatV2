@@ -9,8 +9,9 @@ import kotlin.collections.HashMap
 class CalendarModel (
     var date                      : Date? = null,
     var title                     : String? = null,
-    var createdBy                   : String? = null,
-    var description               : String? = null): Parcelable{
+    var createdBy                 : String? = null,
+    var description               : String? = null,
+    var local                     : String? = null): Parcelable{
 
     constructor() : this(null,null,null)
 
@@ -20,6 +21,7 @@ class CalendarModel (
         hashMap["description"]              = description
         hashMap["createdBy"]                = createdBy
         hashMap["date"]                     = date
+        hashMap["local"]                    = local
         return hashMap
     }
 
@@ -29,7 +31,8 @@ class CalendarModel (
                 hashMap["date"] as Date,
                 hashMap["title"].toString(),
                 hashMap["createdBy"].toString(),
-                hashMap["description"].toString()
+                hashMap["description"].toString(),
+                hashMap["local"].toString()
 
             )
             return item
