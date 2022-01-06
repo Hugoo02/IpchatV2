@@ -89,8 +89,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/circleImageViewGroup"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="40dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

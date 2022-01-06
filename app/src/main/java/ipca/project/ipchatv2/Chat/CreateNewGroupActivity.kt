@@ -69,7 +69,7 @@ class CreateNewGroupActivity : AppCompatActivity() {
                         .addOnSuccessListener {
 
                             val date = Calendar.getInstance().time
-                            val firstMessage = ChatMessage(null, null, date, "firstMessage")
+                            val firstMessage = ChatMessage(currentUser.uid, null, date, "firstMessage")
 
                             val refSendMessage = db.collection("groupChannels")
                                 .document(it.id)

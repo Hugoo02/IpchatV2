@@ -11,6 +11,7 @@ class ShowFilesActivity : AppCompatActivity() {
     private lateinit var binding: ActivityShowFilesBinding
 
     var groupId : String? = null
+    var channelType : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +21,7 @@ class ShowFilesActivity : AppCompatActivity() {
         supportActionBar!!.hide()
 
         groupId = intent.getStringExtra("groupId")
+        channelType = intent.getStringExtra("channelType")
 
         binding.buttonBack.setOnClickListener {
 
@@ -30,12 +32,13 @@ class ShowFilesActivity : AppCompatActivity() {
         val tabLayout = binding.tabLayout
         val viewPager = binding.viewPager
 
-        tabLayout.addTab(tabLayout.newTab().setText("Todos"))
-        tabLayout.addTab(tabLayout.newTab().setText("Admins"))
+        tabLayout.addTab(tabLayout.newTab().setText("Fotos"))
+        tabLayout.addTab(tabLayout.newTab().setText("Docs"))
+        tabLayout.addTab(tabLayout.newTab().setText("Ligações"))
         tabLayout.tabGravity = TabLayout.GRAVITY_FILL
 
-        val adapter = ShowGroupUsersAdapter(supportFragmentManager , this,
-            tabLayout.tabCount, groupId!!)
+        val adapter = ShowFilesAdapter(supportFragmentManager , this,
+            tabLayout.tabCount, groupId!!, channelType!!)
         viewPager.adapter = adapter
 
 

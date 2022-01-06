@@ -1,6 +1,8 @@
 package ipca.project.ipchatv2.Chat
 
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -106,9 +108,30 @@ class ImageToItem(val message: ChatMessage): Item<ViewHolder>(){
 
 class FirstMessage(val message: ChatMessage): Item<ViewHolder>(){
 
+    val currentUserId = FirebaseAuth.getInstance().uid
+    val db = FirebaseFirestore.getInstance()
+
     override fun bind(viewHolder: ViewHolder, position: Int) {
 
         val textViewFirstMessageHour = viewHolder.itemView.textViewFirstMessageHour
+        val textViewFirstMessage = viewHolder.itemView.textViewFirstMessage
+
+        if(message.senderId == currentUserId)
+            textViewFirstMessage.text = "Tu criaste o grupo"
+        else {
+
+            db.collection("User")
+                .document(message.senderId!!)
+                .get()
+                .addOnSuccessListener { result ->
+
+                    val user = result.toObject(User::class.java)
+
+                    textViewFirstMessage.text = "${user!!.username} criou o grupo"
+
+                }
+        }
+
         textViewFirstMessageHour.text = Utils.formatDateToFistChat(message.time!!)
 
     }

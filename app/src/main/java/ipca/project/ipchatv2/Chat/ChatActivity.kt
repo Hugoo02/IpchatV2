@@ -67,12 +67,6 @@ class ChatActivity : AppCompatActivity() {
         configureToolbar()
         listenForMessages()
 
-        binding.editTextMessage.setOnClickListener {
-
-            
-
-        }
-
         binding.imageButtonDetails.setOnClickListener {
 
             val intent = Intent(this, ChatMoreDetailsActivity::class.java)
@@ -349,7 +343,7 @@ class ChatActivity : AppCompatActivity() {
 
             messages.forEach {
 
-                if(it.senderId == null)
+                if(it.type == "firstMessage")
                     adapter.add(FirstMessage(it))
                 else if (it.senderId == currentUser && it.type == "TEXT")
                     adapter.add(ChatFromItem(it))

@@ -6,7 +6,7 @@ import androidx.fragment.app.*
 
 
 class ShowFilesAdapter(fm: FragmentManager, private val context: Context, var totalTabs: Int,
-                       val groupId : String) :
+                       val groupId : String, val channelType: String) :
     FragmentStatePagerAdapter(fm) {
 
     override fun getCount(): Int {
@@ -18,40 +18,57 @@ class ShowFilesAdapter(fm: FragmentManager, private val context: Context, var to
         when (position) {
             0 -> {
 
-                val showGroupUsersFragment = ShowGroupUsersFragment()
+                val ShowPhotosFragment = ShowPhotosFragment()
                 val bundle = Bundle()
 
                 bundle.putString("groupId", groupId)
+                bundle.putString("channelType", channelType)
 
-                showGroupUsersFragment.arguments = bundle
+                ShowPhotosFragment.arguments = bundle
 
-                return showGroupUsersFragment
+                return ShowPhotosFragment
 
             }
 
             1 -> {
 
-                val showGroupUsersFragment = ShowGroupUsersFragment()
+                val showDocsFragment = ShowDocsFragment()
                 val bundle = Bundle()
 
                 bundle.putString("groupId", groupId)
+                bundle.putString("channelType", channelType)
 
-                showGroupUsersFragment.arguments = bundle
+                showDocsFragment.arguments = bundle
 
-                return showGroupUsersFragment
+                return showDocsFragment
+
+            }
+
+            2-> {
+
+                val showLinksFragment = ShowLinksFragment()
+                val bundle = Bundle()
+
+                bundle.putString("groupId", groupId)
+                bundle.putString("channelType", channelType)
+
+                showLinksFragment.arguments = bundle
+
+                return showLinksFragment
 
             }
 
             else -> {
 
-                val showGroupUsersFragment = ShowGroupUsersFragment()
+                val ShowPhotosFragment = ShowPhotosFragment()
                 val bundle = Bundle()
 
                 bundle.putString("groupId", groupId)
+                bundle.putString("channelType", channelType)
 
-                showGroupUsersFragment.arguments = bundle
+                ShowPhotosFragment.arguments = bundle
 
-                return showGroupUsersFragment
+                return ShowPhotosFragment
 
             }
 
