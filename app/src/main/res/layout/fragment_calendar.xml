@@ -78,6 +78,7 @@
    </androidx.appcompat.widget.Toolbar>
 
    <androidx.constraintlayout.widget.ConstraintLayout
+       android:id="@+id/constraintTeste"
        android:layout_width="match_parent"
        android:layout_height="match_parent"
        android:layout_marginTop="80dp"
@@ -90,7 +91,7 @@
       <com.applandeo.materialcalendarview.CalendarView
           android:id="@+id/calendarView"
           android:layout_width="match_parent"
-          android:layout_height="450dp"
+          android:layout_height="wrap_content"
           android:dateTextAppearance="@style/CalenderViewDateCustomText"
           android:theme="@style/CalenderViewCustom"
           android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"
@@ -106,7 +107,7 @@
       <ImageView
           android:id="@+id/imageViewResizeCalendar"
           android:layout_width="100dp"
-          android:layout_height="10dp"
+          android:layout_height="20dp"
           android:layout_marginBottom="5dp"
           app:layout_constraintBottom_toBottomOf="@+id/calendarView"
           app:layout_constraintEnd_toEndOf="parent"

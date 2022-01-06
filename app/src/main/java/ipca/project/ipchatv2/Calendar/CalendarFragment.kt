@@ -29,6 +29,10 @@ import com.google.firebase.firestore.ktx.FirebaseFirestoreKtxRegistrar
 import ipca.project.ipchatv2.Models.CalendarModel
 import ipca.project.ipchatv2.databinding.FragmentCalendarBinding
 import android.widget.RelativeLayout
+import android.graphics.RectF
+
+
+
 
 
 
@@ -48,8 +52,6 @@ class CalendarFragment : Fragment() {
     var calendarId : String? = null
 
     var yDown = 0f
-
-    var initialY = 0f
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
@@ -98,6 +100,10 @@ class CalendarFragment : Fragment() {
 
         }
 
+        println("imageY = "+ imageViewResizeCalendar.y )
+        println("recyclerViewY = "+ binding.recyclerView.y )
+        println("binding.recyclerView.bottom = " + binding.recyclerView.bottom)
+
 
         calendarView.setOnDayClickListener(object : OnDayClickListener {
             override fun onDayClick(eventDay: EventDay) {
@@ -106,18 +112,6 @@ class CalendarFragment : Fragment() {
             }
         })
 
-        println("calendar.y = " + calendarView.y)
-        println("height = " + calendarView.height)
-        imageViewResizeCalendar.y = 0f
-        println("top " + calendarView.top)
-        println("top " + imageViewResizeCalendar.top)
-        println("calendar height = ${calendarView.top + calendarView.bottom}")
-        println("calendar height = ${calendarView.height}")
-
-        var initialCalendarHeight = 1800
-        var initialCalendarY = calendarView.y
-        var initialImageViewY = imageViewResizeCalendar.y
-
         imageViewResizeCalendar.setOnTouchListener(object : View.OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
 
@@ -125,34 +119,40 @@ class CalendarFragment : Fragment() {
                     MotionEvent.ACTION_DOWN -> {
 
                         yDown = event.y
-                        println("yDown = " + yDown)
 
                     }
 
                     MotionEvent.ACTION_MOVE ->{
 
-                        val yMoved = event.y
 
-                        println("yMoved = " + yMoved)
+                        val yMoved = event.y
 
                         val distanceY = yMoved - yDown
 
-                        println(imageViewResizeCalendar.y)
+                        if(imageViewResizeCalendar.y + distanceY < 0)
+                            imageViewResizeCalendar.y = 0f
+                        else if (imageViewResizeCalendar.y + distanceY > calendarView.height - (imageViewResizeCalendar.height + 20f))
+                            imageViewResizeCalendar.y = calendarView.height - (imageViewResizeCalendar.height + 20f)
+                        else
+                            imageViewResizeCalendar.y = imageViewResizeCalendar.y + distanceY
 
-                        imageViewResizeCalendar.y = imageViewResizeCalendar.y + distanceY
+                        calendarView.y = imageViewResizeCalendar.y - (calendarView.height -
+                                (imageViewResizeCalendar.height + 20))
 
-                        val params = calendarView.layoutParams
+                        binding.recyclerView.y = calendarView.y + (calendarView.height + 5)
 
-                        val heightt = (params.height * yMoved) / yDown
-                        initialCalendarHeight -= (distanceY * 4).toInt()
+                        val params = binding.recyclerView.layoutParams
 
-                        initialCalendarHeight += distanceY.toInt()
-                        println("calendar height = $initialCalendarHeight")
+                        val oneRect = calculateRectOnScreen(binding.recyclerView)
+                        val otherRect = calculateRectOnScreen(binding.constraintTeste)
 
-                        //params.height -= ((imageViewResizeCalendar.y + distanceY)).toInt().toDp(requireContext())
-                        //params.height = 200 * 4
-                        //params.height = height.toInt()
-                        //calendarView.layoutParams = params
+                        val distance = Math.abs(otherRect.bottom - oneRect.top)
+
+                        params.height = distance.toInt()
+
+                        binding.recyclerView.layoutParams = params
+
+
 
                     }
                 }
@@ -167,6 +167,17 @@ class CalendarFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         getCurrentCalendar()
+    }
+
+    fun calculateRectOnScreen(view: View): RectF {
+        val location = IntArray(2)
+        view.getLocationOnScreen(location)
+        return RectF(
+            location[0].toFloat(),
+            location[1].toFloat(),
+            (location[0] + view.measuredWidth).toFloat(),
+            (location[1] + view.measuredHeight).toFloat()
+        )
     }
 
     private fun displayEventIcons() {
