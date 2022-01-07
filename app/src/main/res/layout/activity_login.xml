@@ -4,85 +4,111 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#8BC34A"
+    android:background="#0F4F33"
     tools:context=".Authentication.LoginActivity">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="500px"
-        android:layout_height="500px"
+        android:layout_width="122dp"
+        android:layout_height="27dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="110dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="110dp"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="187dp"
+        android:layout_marginEnd="124dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ipchat" />
+
+    <TextView
+        android:id="@+id/textInstructions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView"
+        android:layout_marginStart="95dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="95dp"
+        android:text="Para iniciar sessão insira as credenciais de acesso da plataforma moodle"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/textEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textInstructions"
+        android:layout_marginStart="63dp"
+        android:layout_marginTop="92dp"
+        android:layout_marginEnd="63dp"
+        android:text="Email Institucional"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editTextEmail"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@+id/imageView"
+        android:layout_height="40dp"
+        android:layout_below="@+id/textEmail"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginStart="63dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="63dp"
         android:background="@drawable/edit_text_rounded"
         android:ems="10"
-        android:hint="Email"
+        android:hint="e-mail"
         android:inputType="textEmailAddress"
         android:paddingLeft="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
+    <TextView
+        android:id="@+id/textPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextEmail"
+        android:layout_marginStart="63dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="63dp"
+        android:text="Palavra Passe"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
+
     <EditText
         android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@+id/editTextEmail"
-        android:layout_marginTop="10dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/textPass"
+        android:layout_marginStart="63dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="63dp"
         android:background="@drawable/edit_text_rounded"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
         android:ems="10"
-        android:hint="Password"
+        android:hint="palavra-passe"
         android:inputType="textPassword"
         android:paddingLeft="20dp"
         app:layout_constraintEnd_toEndOf="@+id/editTextEmail"
         app:layout_constraintStart_toStartOf="@+id/editTextEmail"
         app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
 
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextPassword"
-        android:layout_marginTop="10dp"
-        android:buttonTint="@color/white"
-        android:text="Show Password"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
-
     <android.widget.Button
         android:id="@+id/buttonLogin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/checkBox"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/button_rounded"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:text="Login"
-        android:textColor="@color/white"
-        android:textStyle="bold"
+        android:layout_height="46dp"
+        android:layout_below="@+id/editTextPassword"
+        android:layout_marginStart="122dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="122dp"
+        android:background="@drawable/buttonwhite"
+        android:text="Iniciar Sessão"
+        android:textColor="#000000"
+        android:textStyle="normal|bold"
         app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
         app:layout_constraintStart_toStartOf="@+id/editTextPassword"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
     <ProgressBar
         android:id="@+id/loginProgressBar"
