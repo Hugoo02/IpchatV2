@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IpchatV2">
         <activity
+            android:name=".EditProfileActivity"
+            android:exported="true" />
+        <activity
             android:name=".Authentication.LoginActivity"
             android:exported="true" />
         <activity
