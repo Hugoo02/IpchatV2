@@ -10,10 +10,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IpchatV2">
         <activity
+
             android:name=".Calendar.NewEventActivity"
             android:exported="true" />
         <activity
             android:name=".Calendar.NewCalendarEventActivity"
+
+            android:name=".EditProfileActivity"
+
             android:exported="true" />
         <activity
             android:name=".Authentication.LoginActivity"

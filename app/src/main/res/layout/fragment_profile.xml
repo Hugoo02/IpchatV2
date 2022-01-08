@@ -4,16 +4,230 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileFragment">
+    tools:context=".ProfileFragment"
+    android:id="@+id/fragment_container_profile"
+    android:background="#0F4F33">
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Profile Fragment"
-        android:textSize="40sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:text="Perfil"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:padding="1dp"/>
+
+    <ImageButton
+        android:id="@+id/buttonLogout"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/ic_logout_profile"
+        android:backgroundTint="@color/black"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/profile_layout">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/circleImageViewLogo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp" />
+
+
+    <TextView
+        android:id="@+id/textViewUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:paddingTop="5dp"
+        android:paddingStart="5dp"
+        android:textColor="@color/black"
+        android:textAlignment="center"
+        android:textSize="26dp"
+        android:textStyle="bold"
+        android:fontFamily="@font/mark_pro"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/circleImageViewLogo"/>
+
+        <Button
+            android:id="@+id/buttonEditActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Editar Perfil"
+            android:textSize="12dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:fontFamily="@font/mark_pro_bold"
+            android:background="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewUserName" />
+
+        <TextView
+            android:id="@+id/textViewBio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/buttonEditActivity"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            android:text="Biografia:"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/mark_pro_bold"/>
+
+        <TextView
+            android:id="@+id/textViewBiography"
+            android:layout_width="290dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="50dp"
+            android:textSize="14dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/mark_pro"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewBio"/>
+
+
+        <TextView
+            android:id="@+id/textViewContact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/textViewBiography"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            android:text="Contactos:"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/mark_pro_bold"/>
+
+    <ImageView
+        android:id="@+id/imageViewEmail"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="50dp"
+        android:background="@drawable/ic_email_profile"
+        android:backgroundTint="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/textViewContact"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/textViewEmail"
+        android:layout_width="260dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="14dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/mark_pro"
+        app:layout_constraintLeft_toRightOf="@+id/imageViewEmail"
+        app:layout_constraintTop_toBottomOf="@+id/textViewContact"/>
+
+
+
+    <ImageView
+        android:id="@+id/imageViewStudentNumber"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="50dp"
+        android:background="@drawable/icon_person"
+        android:backgroundTint="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/textViewEmail"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/textViewStudentNumber"
+        android:layout_width="260dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="14dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/mark_pro"
+        app:layout_constraintLeft_toRightOf="@+id/imageViewStudentNumber"
+        app:layout_constraintTop_toBottomOf="@+id/textViewEmail"/>
+
+
+    <ImageView
+        android:id="@+id/imageViewAddress"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="50dp"
+        android:background="@drawable/ic_address_profile"
+        android:backgroundTint="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/textViewStudentNumber"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/textViewAddress"
+        android:layout_width="260dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="14dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/mark_pro"
+        app:layout_constraintLeft_toRightOf="@id/imageViewAddress"
+        app:layout_constraintTop_toBottomOf="@+id/textViewStudentNumber"/>
+
+    <TextView
+        android:id="@+id/textViewCourseText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/textViewAddress"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="20dp"
+        android:text="Curso:"
+        android:textSize="16dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/mark_pro_bold"/>
+
+    <ImageView
+        android:id="@+id/imageViewCourse"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="50dp"
+        android:background="@drawable/ic_school_profile"
+        android:backgroundTint="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/textViewCourseText"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/textViewCourse"
+        android:layout_width="260dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/mark_pro"
+        app:layout_constraintLeft_toRightOf="@+id/imageViewCourse"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCourseText"/>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
