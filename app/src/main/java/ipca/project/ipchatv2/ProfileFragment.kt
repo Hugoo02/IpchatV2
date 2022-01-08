@@ -30,8 +30,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile)  {
     //Variables
     lateinit var binding: FragmentProfileBinding
     lateinit var circleImageView: CircleImageView
-    lateinit var buttonSaveChanges: Button
-    lateinit var buttonEditImage: Button
     lateinit var buttonEditProfile: Button
     lateinit var username : TextView
     lateinit var course : TextView
@@ -40,14 +38,13 @@ class ProfileFragment : Fragment(R.layout.fragment_profile)  {
     lateinit var studentNumber: TextView
     lateinit var biography: TextView
     lateinit var logout: ImageButton
-    private var imageUri: Uri? = null
     private lateinit var mAuth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         mAuth = FirebaseAuth.getInstance()
         //Get Layout
         binding = FragmentProfileBinding.inflate(layoutInflater)
@@ -61,16 +58,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile)  {
         biography = binding.textViewBiography
         logout = binding.buttonLogout
 
-        //Get User By Id
         getCurrentUser()
-
-        //Load Image
-        val getImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-
-            imageUri = it.data?.data
-            circleImageView.setImageURI(imageUri)
-
-        }
 
         logout.setOnClickListener {
 
@@ -103,42 +91,24 @@ class ProfileFragment : Fragment(R.layout.fragment_profile)  {
     }
 
 
-
-    private fun saveUserToFireStore(imageURL: String) {
-
-        val uid = FirebaseAuth.getInstance().uid
-        val ref = Firebase.firestore.collection("User").document(uid!!)
-        val imageMap = hashMapOf<String, Any>(
-            "imageURL" to imageURL
-        )
-        ref.update(imageMap)
-    }
-
-
-
     private fun getCurrentUser(){
 
         val uid = FirebaseAuth.getInstance().uid
         val ref = Firebase.firestore.collection("User").document(uid!!)
 
-        ref.get().addOnSuccessListener { result ->
+        ref.addSnapshotListener { value, error ->
 
-            val user = result.toObject(User::class.java)
+            val user = value!!.toObject(User::class.java)
 
             Picasso.get().load(user!!.imageURL).into(circleImageView)
-            username.setText(user.username)
+            username.text = user.username
             course.text = user.course
-            address.setText(user.address)
-            email.setText(user.email)
-            studentNumber.setText(user.student_number)
-            biography.setText(user.biography)
+            address.text = user.address
+            email.text = user.email
+            studentNumber.text = user.student_number
+            biography.text = user.biography
 
         }
-    }
-
-
-    companion object {
-        val FIREBASEURL = "https://messenger-28931-default-rtdb.europe-west1.firebasedatabase.app/"
     }
 
 }

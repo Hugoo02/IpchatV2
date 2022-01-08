@@ -7,8 +7,10 @@ import android.net.Uri
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
@@ -18,6 +20,9 @@ import java.util.*
 
 
 class EditProfileActivity : AppCompatActivity() {
+
+    val db = FirebaseFirestore.getInstance()
+    val currentUserId = FirebaseAuth.getInstance().uid
 
     lateinit var circleImageView: CircleImageView
     lateinit var buttonGoBack: Button
@@ -42,22 +47,21 @@ class EditProfileActivity : AppCompatActivity() {
         if(mAuth == FirebaseAuth.getInstance()){
 
             getCurrentUser()
-        }
-        else{
+
         }
 
         supportActionBar!!.hide()
 
-         buttonGoBack = findViewById<Button>(R.id.buttonEditProfile)
-         circleImageView = findViewById<CircleImageView>(R.id.circleImageViewLogo)
-         buttonEditImage = findViewById<ImageButton>(R.id.buttonEditImage)
-         buttonEditProfile = findViewById<Button>(R.id.buttonEditProfile)
-         username = findViewById<TextView>(R.id.textViewUserName)
-         course  = findViewById<TextView>(R.id.textViewCourse)
-         address = findViewById<EditText>(R.id.editTextAddress)
-         email = findViewById<TextView>(R.id.textViewEmail)
-         studentNumber = findViewById<TextView>(R.id.textViewStudentNumber)
-         biography = findViewById<EditText>(R.id.editTextBiography)
+         buttonGoBack = findViewById(R.id.buttonEditProfile)
+         circleImageView = findViewById(R.id.circleImageViewLogo)
+         buttonEditImage = findViewById(R.id.buttonEditImage)
+         buttonEditProfile = findViewById(R.id.buttonEditProfile)
+         username = findViewById(R.id.textViewUserName)
+         course  = findViewById(R.id.textViewCourse)
+         address = findViewById(R.id.editTextAddress)
+         email = findViewById(R.id.textViewEmail)
+         studentNumber = findViewById(R.id.textViewStudentNumber)
+         biography = findViewById(R.id.editTextBiography)
 
 
 
@@ -84,11 +88,22 @@ class EditProfileActivity : AppCompatActivity() {
 
     }
 
-
-
     private fun uploadImageToFirebaseStorage(){
 
         if(imageUri == null) return
+
+        db.collection("User")
+            .document(currentUserId!!)
+            .get()
+            .addOnSuccessListener { result ->
+
+                val user = result.toObject(User::class.java)
+
+                val imageRef = FirebaseStorage.getInstance().getReferenceFromUrl(user!!.imageURL!!)
+
+                imageRef.delete()
+
+            }
 
         val filename = UUID.randomUUID().toString()
         val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
@@ -122,8 +137,6 @@ class EditProfileActivity : AppCompatActivity() {
         ref.update(imageMap)
     }
 
-
-
     private fun getCurrentUser(){
 
         val uid = FirebaseAuth.getInstance().uid
@@ -146,8 +159,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     private fun editCurrentUser(){
 
-        val uid = FirebaseAuth.getInstance().uid
-        val ref = Firebase.firestore.collection("User").document(uid!!)
+        val ref = Firebase.firestore.collection("User").document(currentUserId!!)
 
         ref.get().addOnSuccessListener { result ->
 
@@ -158,17 +170,7 @@ class EditProfileActivity : AppCompatActivity() {
                 "address" to address.text.toString()
             )
 
-            Firebase.firestore.collection("User").document(uid!!).set(userEdit, SetOptions.merge())
-
-
-            /*Picasso.get().load(user!!.imageURL).into(circleImageView)
-            user!!.username
-            user!!.course = course.toString()
-            user!!.email = email.toString()
-            user!!.student_number = studentNumber.toString()
-            user!!.id = user.id
-            user!!.year = user.year
-            user!!.gender = user.gender*/
+            Firebase.firestore.collection("User").document(currentUserId!!).set(userEdit, SetOptions.merge())
 
         }
     }
