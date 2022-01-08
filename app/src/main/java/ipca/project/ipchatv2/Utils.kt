@@ -2,8 +2,17 @@ package ipca.project.ipchatv2
 
 import android.app.AlertDialog
 import android.content.Context
+import android.text.format.DateFormat
 import androidx.lifecycle.LifecycleOwner
+import com.google.firebase.Timestamp
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.system.exitProcess
+import androidx.core.content.ContextCompat.startActivity
+
+import android.content.Intent
+import androidx.core.content.ContextCompat
+
 
 object Utils {
 
@@ -31,5 +40,18 @@ object Utils {
             }
         })
     }
+
+    fun receiveDateFromDatabaseToCalendar(date: Date): String {
+
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val month = calendar.get(Calendar.MONTH)
+        val year = calendar.get(Calendar.YEAR)
+
+        return "$day/$month/$year"
+    }
+
 
 }
