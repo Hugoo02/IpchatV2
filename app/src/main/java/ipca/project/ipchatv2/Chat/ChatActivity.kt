@@ -1,19 +1,31 @@
 package ipca.project.ipchatv2.Chat
 
+import android.content.ContentValues
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.gson.Gson
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Models.ChatMessage
-import ipca.project.ipchatv2.Utils
+import ipca.project.ipchatv2.Models.User
+import ipca.project.ipchatv2.Notifications.NotificationData
+import ipca.project.ipchatv2.Notifications.PushNotification
+import ipca.project.ipchatv2.Notifications.RetrofitInstance
 import ipca.project.ipchatv2.databinding.ActivityChatBinding
 import kotlinx.android.synthetic.main.activity_chat.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
+
+const val TOPIC = "/topics/myTopic2"
 
 class ChatActivity : AppCompatActivity() {
 
@@ -23,6 +35,7 @@ class ChatActivity : AppCompatActivity() {
 
     var groupId : String? = null
     var channelType: String? = null
+    //var otherUserToken: String? = null
 
     val db = FirebaseFirestore.getInstance()
 
@@ -38,14 +51,48 @@ class ChatActivity : AppCompatActivity() {
         binding.recyclerViewChat.adapter = adapter
         binding.recyclerViewChat.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
+        var otherUserToken = "AAAAAA"
+
         groupId = intent.getStringExtra("groupId")
         channelType = intent.getStringExtra("channelType")
+        otherUserToken = intent.getStringExtra("token").toString()
+
+
+        println(otherUserToken)
 
         listenForMessages()
 
+        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
+
         binding.buttonSend.setOnClickListener {
 
-            performSendMessage()
+            db.collection("User")
+                .document(currentUser!!)
+                .get()
+                .addOnSuccessListener { result->
+
+                    val user = result.toObject(User::class.java)
+                    val title = "teste"
+                    val groupImage = user!!.imageURL.toString()
+
+                    println(user!!.imageURL)
+                    val message = editTextMessage.text.toString()
+                    val recipientToken = otherUserToken
+                    if(title.isNotEmpty() && message.isNotEmpty() && recipientToken!!.isNotEmpty()) {
+                        PushNotification(
+                            NotificationData(title, message, groupImage),
+                            recipientToken
+                        ).also {
+                            sendNotification(it)
+                        }
+                    }
+                    performSendMessage()
+                }
+
+
+
+
+
 
         }
 
@@ -151,5 +198,18 @@ class ChatActivity : AppCompatActivity() {
 
             }
 
+    }
+
+    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val response = RetrofitInstance.api.postNotification(notification)
+            if(response.isSuccessful) {
+                Log.d(ContentValues.TAG, "Response: ${Gson().toJson(response)}")
+            } else {
+                Log.e(ContentValues.TAG, response.errorBody().toString())
+            }
+        } catch(e: Exception) {
+            Log.e(ContentValues.TAG, e.toString())
+        }
     }
 }

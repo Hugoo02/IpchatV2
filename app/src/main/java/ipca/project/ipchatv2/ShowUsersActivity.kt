@@ -46,7 +46,6 @@ class ShowUsersActivity : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener { result ->
 
-                    currentUser.currentUser!!.getIdToken()
                     guestUserId = result.toObject(User::class.java)!!.id
 
                     println("guestUserId = $guestUserId")

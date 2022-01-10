@@ -17,7 +17,9 @@ import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Chat.ChatActivity
 import ipca.project.ipchatv2.Chat.UserListLMRow
 import ipca.project.ipchatv2.Models.MessagePrivate
+import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.ShowUsersActivity
+import ipca.project.ipchatv2.UserItem
 import ipca.project.ipchatv2.databinding.FragmentUserListBinding
 import java.util.*
 import kotlin.collections.HashMap
@@ -59,10 +61,25 @@ class UserListFragment : Fragment() {
 
             val row = item as UserListLMRow
 
-            val intent = Intent(requireContext(), ChatActivity::class.java)
-            intent.putExtra("groupId", row.message.groupId)
-            intent.putExtra("channelType", "private")
-            startActivity(intent)
+            val db = FirebaseFirestore.getInstance()
+
+            db.collection("User")
+                .document(row.message.otherUserId!!)
+                .get()
+                .addOnSuccessListener { result ->
+
+                    val user = result.toObject(User::class.java)
+
+
+                    val intent = Intent(requireContext(), ChatActivity::class.java)
+                    intent.putExtra("groupId", row.message.groupId)
+                    intent.putExtra("channelType", "private")
+                    intent.putExtra("token", user!!.token)
+
+                    println(user.id)
+                    startActivity(intent)
+
+                }
 
         }
 
