@@ -5,29 +5,32 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 class User (
-    var address             : String? = null,
+    var id                  : String? = null,
+    var username            : String? = null,
     var course              : String? = null,
     var email               : String? = null,
-    var gender              : String? = null,
-    var id                  : String? = null,
+    var address             : String? = null,
     var imageURL            : String? = null,
-    var username            : String? = null,
-    //var year      : Int? = null,
-    var student_number      : String? = null): Parcelable{
+    var student_number      : String? = null,
+    var year                : String? = null,
+    var gender              : String? = null,
+    var biography           : String? = null)
+: Parcelable {
 
-    constructor() : this(null, null, null, null, null,
-        null, null, null)
+    constructor() : this("", "", "", "", "", "","","","","")
 
     fun toHashMap() : HashMap<String, Any?>{
         val hashMap = HashMap<String, Any?>()
-        hashMap["address"]          = address
+        hashMap["id"]               = id
+        hashMap["username"]         = username
         hashMap["course"]           = course
         hashMap["email"]            = email
-        hashMap["gender"]           = gender
-        hashMap["id"]               = id
+        hashMap["address"]          = address
         hashMap["imageURL"]         = imageURL
-        hashMap["username"]         = username
         hashMap["student_number"]   = student_number
+        hashMap["year"]             = year
+        hashMap["gender"]           = gender
+        hashMap["biography"]           = biography
 
         return hashMap
     }
@@ -35,14 +38,16 @@ class User (
     companion object{
         fun fromHash(hashMap:  HashMap<String, Any?>) : User {
             val item = User(
-                hashMap["address"].toString(),
+                hashMap["id"].toString(),
+                hashMap["username"].toString(),
                 hashMap["course"].toString(),
                 hashMap["email"].toString(),
-                hashMap["gender"].toString(),
-                hashMap["id"].toString(),
+                hashMap["address"].toString(),
                 hashMap["imageURL"].toString(),
-                hashMap["username"].toString(),
-                hashMap["student_number"].toString()
+                hashMap["student_number"].toString(),
+                hashMap["year"].toString(),
+                hashMap["gender"].toString(),
+                hashMap["biography"].toString()
             )
             return item
         }

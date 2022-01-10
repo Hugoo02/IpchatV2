@@ -9,15 +9,21 @@
         android:id="@+id/homeFragment"
         android:name="ipca.project.ipchatv2.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="ipca.project.ipchatv2.ProfileFragment"
-        android:label="fragment_profile"
+        android:label="Página De Perfil"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/calendarFragment"
-        android:name="ipca.project.ipchatv2.CalendarFragment"
+        android:name="ipca.project.ipchatv2.Calendar.CalendarFragment"
         android:label="fragment_calendar"
-        tools:layout="@layout/fragment_calendar" />
+        tools:layout="@layout/fragment_calendar" >
+        <argument
+            android:name="calendarId"
+            app:argType="string"
+            android:defaultValue="null" />
+    </fragment>
 </navigation>
