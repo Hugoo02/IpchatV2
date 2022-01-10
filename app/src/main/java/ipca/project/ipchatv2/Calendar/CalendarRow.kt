@@ -16,7 +16,7 @@ import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Models.CalendarModel
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.R
-import ipca.project.ipchatv2.Utils
+import ipca.project.ipchatv2.Utils.Utils
 
 class CalendarRow(val calendar: CalendarModel): Item<ViewHolder>() {
 

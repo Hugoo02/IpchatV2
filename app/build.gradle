@@ -1,10 +1,13 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-parcelize'
+    //id 'kotlin-parcelize'
     id 'com.google.gms.google-services'
 }
 
+apply plugin: 'kotlin-android-extensions'
+
+//provavel não precisar
 apply plugin: 'kotlin-android'
 
 android {
@@ -50,32 +53,27 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.1'
     implementation 'com.google.firebase:firebase-firestore-ktx:24.0.0'
+
+    //provavel não precisar
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
+    implementation 'com.google.firebase:firebase-storage:20.0.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    
-    implementation 'com.google.firebase:firebase-storage-ktx:20.0.0'
-    implementation 'com.google.firebase:firebase-database-ktx:20.0.2'
-    
-    //Material Calendar
-    implementation 'com.applandeo:material-calendar-view:1.8.0-rc01'
 
-    //CircleImageView
-    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    //Material Calendar
+    implementation 'com.applandeo:material-calendar-view:1.9.0-rc03'
 
     //Groupie
-    implementation 'com.xwray:groupie:2.1.0'
-
-    //CalendarView
-    implementation 'com.applandeo:material-calendar-view:1.9.0-rc03'
+    implementation 'com.xwray:groupie:2.3.0'
 
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+    //Circle Image
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
 }
-
-

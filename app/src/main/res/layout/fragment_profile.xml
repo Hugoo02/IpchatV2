@@ -30,13 +30,16 @@
         android:layout_marginTop="30dp"
         android:layout_marginRight="30dp"
         android:background="@drawable/ic_logout_profile"
-        android:backgroundTint="@color/black"/>
+        android:backgroundTint="@color/white"/>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="80dp"
         android:background="@drawable/profile_layout">
+
+
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/circleImageViewLogo"
@@ -226,8 +229,8 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewCourseText"/>
 
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
