@@ -16,6 +16,9 @@
         <activity
             android:name=".Calendar.NewCalendarEventActivity"
 
+            android:exported="true" />
+        <activity
+
             android:name=".EditProfileActivity"
 
             android:exported="true" />
