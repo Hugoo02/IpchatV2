@@ -83,7 +83,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="80dp"
         android:layout_marginBottom="70dp"
-        android:background="@drawable/constraint_background"
+        android:background="@drawable/constraint_background_chat"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -116,18 +116,17 @@
             android:layout_height="50dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="40dp"
-            android:layout_marginEnd="12dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/edit_text_rounded"
             android:ems="10"
             android:hint="Enter Message"
             android:inputType="textPersonName"
-            android:paddingRight="16dp"
             android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageButtonSendMessage"
             app:layout_constraintStart_toEndOf="@+id/imageButtonCamera"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -153,7 +152,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imageButtonCamera"
             app:tint="@color/white"
-            app:srcCompat="@drawable/ic_baseline_attach_file_24" />
+            app:srcCompat="@drawable/ic_baseline_attach_file_24"
+            android:visibility="gone"/>
 
         <ImageButton
             android:id="@+id/imageButtonEmoji"
@@ -167,18 +167,17 @@
             app:layout_constraintVertical_bias="0.518"
             android:src="@drawable/emoji" />
 
+
         <ImageButton
             android:id="@+id/imageButtonSendMessage"
-            android:layout_width="40dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:backgroundTint="@color/black"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/editTextMessage"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/editTextMessage"
             app:srcCompat="@drawable/ic_baseline_send_24"
-            app:tint="@color/white" />
+            android:backgroundTint="@color/black"
+            app:tint="@color/white"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -35,20 +35,7 @@ class LoginActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        binding.checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
-
-            if (isChecked) {
-
-                binding.editTextPassword.transformationMethod =
-                    HideReturnsTransformationMethod.getInstance()
-
-            } else {
-
-                binding.editTextPassword.transformationMethod =
-                    PasswordTransformationMethod.getInstance()
-
-            }
-        }
+        supportActionBar?.hide()
 
         binding.buttonLogin.setOnClickListener {
 
