@@ -24,7 +24,9 @@ import ipca.project.ipchatv2.Models.PrivateChannel
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.R
 import com.google.firebase.storage.FirebaseStorage
+import ipca.project.ipchatv2.MainActivity
 import ipca.project.ipchatv2.databinding.ActivityChatBinding
+import kotlinx.coroutines.MainScope
 
 class ChatActivity : AppCompatActivity() {
 
@@ -78,6 +80,8 @@ class ChatActivity : AppCompatActivity() {
 
         binding.buttonBack.setOnClickListener {
 
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
             finish()
 
         }

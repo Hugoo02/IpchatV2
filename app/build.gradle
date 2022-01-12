@@ -7,8 +7,6 @@ plugins {
 
 apply plugin: 'kotlin-android-extensions'
 
-//provavel não precisar
-apply plugin: 'kotlin-android'
 
 android {
     compileSdk 31
