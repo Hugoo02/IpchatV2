@@ -21,6 +21,7 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
 
     var groupId : String? = null
     var channelType: String? = null
+    var admin : Boolean? = null
 
     val db = FirebaseFirestore.getInstance()
 
@@ -34,6 +35,8 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
         groupId = intent.getStringExtra("groupId")
         channelType = intent.getStringExtra("channelType")
 
+        checkIfAdmin()
+
         configureActivity()
 
         binding.buttonBack.setOnClickListener {
@@ -46,6 +49,7 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
 
             val intent = Intent(this, GroupMembersActivity::class.java)
             intent.putExtra("groupId", groupId)
+            intent.putExtra("admin", admin)
             startActivity(intent)
 
         }
@@ -58,6 +62,21 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
             startActivity(intent)
 
         }
+
+    }
+
+    private fun checkIfAdmin() {
+
+        db.collection("User")
+            .document(currentUserId!!)
+            .collection("groupChannels")
+            .document(groupId!!)
+            .get()
+            .addOnSuccessListener {
+
+                admin = it.getBoolean("admin")
+
+            }
 
     }
 

@@ -122,6 +122,8 @@ class ShowGroupUsersFragment : Fragment() {
 
             val bundle = Bundle()
             bundle.putString("userId", row.user.id)
+            bundle.putBoolean("admin", row.admin)
+            bundle.putString("groupId", groupId)
             val dialog = ProfileDelaisFragment()
             dialog.arguments = bundle
 

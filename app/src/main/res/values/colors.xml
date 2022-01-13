@@ -15,4 +15,5 @@
     <color name="primary_color">#0F4F33</color>
 
     <color name="main_color">#F0F1F5</color>
+    <color name="red">#FF0000</color>
 </resources>
