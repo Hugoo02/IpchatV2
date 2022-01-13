@@ -57,7 +57,7 @@
         <entry key="app/src/main/res/layout/activity_chat.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_chat_more_details.xml" value="0.28191489361702127" />
         <entry key="app/src/main/res/layout/activity_create_new_group.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/activity_group_members.xml" value="0.11367753623188406" />
+        <entry key="app/src/main/res/layout/activity_group_members.xml" value="0.21" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.12" />
         <entry key="app/src/main/res/layout/activity_new_calendar_event.xml" value="0.22" />
