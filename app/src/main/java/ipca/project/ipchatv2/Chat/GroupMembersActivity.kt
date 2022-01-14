@@ -102,10 +102,9 @@ class GroupMembersActivity : AppCompatActivity() {
     private fun getGroupMembers() {
         db.collection("groupChannels")
             .document(groupId!!)
-            .get()
-            .addOnSuccessListener {
+            .addSnapshotListener { value, error ->
 
-                val channel = it.toObject(GroupChannel::class.java)
+                val channel = value!!.toObject(GroupChannel::class.java)
 
                 userIds = channel!!.userIds
 

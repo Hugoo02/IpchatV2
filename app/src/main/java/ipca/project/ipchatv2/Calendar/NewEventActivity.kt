@@ -6,8 +6,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import ipca.project.ipchatv2.Models.CalendarModel
+import ipca.project.ipchatv2.Models.GroupChannel
+import ipca.project.ipchatv2.Models.PrivateChannel
 import ipca.project.ipchatv2.databinding.ActivityNewEventBinding
 import java.util.*
 
@@ -26,7 +29,9 @@ class NewEventActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        var calendarId = intent.getStringExtra("calendarId")
+        val calendarId = intent.getStringExtra("calendarId")
+        val channelType = intent.getStringExtra("channelType")
+
 
         binding.buttonBack.setOnClickListener {
 
@@ -73,6 +78,67 @@ class NewEventActivity : AppCompatActivity() {
                                             currentUser.uid, editTextDescription.text.toString(),
                                             editTextLocal.text.toString())
 
+                if(channelType != null){
+
+                    if(channelType == "group"){
+
+                        db.collection("groupChannels")
+                            .document(calendarId!!)
+                            .get()
+                            .addOnSuccessListener { result ->
+
+                                val channel = result.toObject(GroupChannel::class.java)
+
+                                val userIds = channel!!.userIds
+
+                                userIds!!.forEachIndexed { index, id ->
+
+                                    db.collection("Calendar")
+                                        .document(id)
+                                        .collection("Meetings")
+                                        .add(calendar)
+                                        .addOnSuccessListener {
+
+                                            if(index == (userIds.size - 1))
+                                                finish()
+
+                                        }
+
+                                }
+
+                            }
+
+                    }else{
+
+                        db.collection("privateChannels")
+                            .document(calendarId!!)
+                            .get()
+                            .addOnSuccessListener { result ->
+
+                                val channel = result.toObject(PrivateChannel::class.java)
+
+                                val userIds = channel!!.userIds
+
+                                userIds!!.forEachIndexed { index, id ->
+
+                                    db.collection("Calendar")
+                                        .document(id)
+                                        .collection("Meetings")
+                                        .add(calendar)
+                                        .addOnSuccessListener {
+
+                                            if(index == (userIds!!.size - 1))
+                                                finish()
+
+                                        }
+
+                                }
+
+                            }
+
+                    }
+                }
+
                 db.collection("Calendar")
                     .document(calendarId!!)
                     .collection("Meetings")
@@ -80,7 +146,8 @@ class NewEventActivity : AppCompatActivity() {
                     .addOnSuccessListener {
 
                         Toast.makeText(this, "Evento adicionado com sucesso", Toast.LENGTH_SHORT).show()
-                        finish()
+                        if(channelType == null)
+                            finish()
 
                     }.addOnFailureListener { error ->
 

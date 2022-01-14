@@ -19,6 +19,7 @@ import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Chat.ChatActivity
 import ipca.project.ipchatv2.Chat.UserListLMRow
 import ipca.project.ipchatv2.Models.MessagePrivate
+import ipca.project.ipchatv2.Models.PrivateChannel
 import ipca.project.ipchatv2.R
 import ipca.project.ipchatv2.ShowUsersActivity
 import ipca.project.ipchatv2.databinding.FragmentUserListBinding
@@ -96,7 +97,6 @@ class UserListFragment : Fragment() {
                 it.data!!.values.forEach{
 
                     groupId = it.toString()
-                    println("userList groupId = $groupId")
 
                 }
 
@@ -109,19 +109,18 @@ class UserListFragment : Fragment() {
 
                 refMembers.get().addOnSuccessListener { result ->
 
-                    result.data!!.forEach{ result ->
+                    println(result.data)
 
-                        usersList = result.value as MutableList<String>
+                    val channel = PrivateChannel.fromHash(result.data as HashMap<String, Any?>)
+                    usersList = channel.userIds!!
 
-                        //Se o grupo tiver 2 membros, ou seja grupos individuais
+                    //Se o grupo tiver 2 membros, ou seja grupos individuais
 
-                        if(usersList[0] == currentUserId)
-                            otherUserId = usersList[1]
-                        else
-                            otherUserId = usersList[0]
+                    if(usersList[0] == currentUserId)
+                        otherUserId = usersList[1]
+                    else
+                        otherUserId = usersList[0]
 
-
-                    }
 
                 val refLastMessageId = db.collection("privateChannels").document(groupId!!)
                     .collection("lastMessage")

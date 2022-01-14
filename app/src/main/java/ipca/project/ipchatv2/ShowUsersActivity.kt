@@ -93,8 +93,7 @@ class ShowUsersActivity : AppCompatActivity() {
                                 else
                                 {
 
-                                    db.collection("privateChannels")
-                                        .add(PrivateChannel(mutableListOf(currentUser.uid!!, guestUserId!!)))
+                                    db.collection("privateChannels").add(PrivateChannel(mutableListOf(currentUser.uid!!, guestUserId!!)))
                                         .addOnSuccessListener {
 
                                             db.collection("User")
@@ -112,7 +111,7 @@ class ShowUsersActivity : AppCompatActivity() {
                                             channelId = it.id
                                             startChatActivity(channelId!!)
 
-                                    }
+                                        }
                                 }
                         }
                     }
@@ -197,10 +196,6 @@ class ShowUsersActivity : AppCompatActivity() {
 
                             refGroup.update("userIds", channelMembers).addOnSuccessListener {
 
-                                val intent = Intent(this, ChatActivity::class.java)
-                                intent.putExtra("channelType", "group")
-                                intent.putExtra("groupId", groupId)
-                                startActivity(intent)
                                 finish()
 
                             }
@@ -233,9 +228,9 @@ class ShowUsersActivity : AppCompatActivity() {
     private fun fetchUsers(){
 
         db.collection("User")
-            .get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
+            .addSnapshotListener { documents, error ->
+
+                for (document in documents!!) {
                     val user = document.toObject(User::class.java)
 
                     if(channelMemberList != null){
@@ -251,9 +246,6 @@ class ShowUsersActivity : AppCompatActivity() {
                     }
 
                 }
-            }
-            .addOnFailureListener { exception ->
-                println("Erro")
             }
     }
 

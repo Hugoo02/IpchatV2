@@ -54,6 +54,7 @@
         <entry key="app/src/main/res/drawable/tab_indicator.xml" value="0.228125" />
         <entry key="app/src/main/res/drawable/tab_layout.xml" value="0.228125" />
         <entry key="app/src/main/res/drawable/toolbar_background.xml" value="0.228125" />
+        <entry key="app/src/main/res/layout/activity_calendar.xml" value="0.11458333333333333" />
         <entry key="app/src/main/res/layout/activity_chat.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_chat_more_details.xml" value="0.28191489361702127" />
         <entry key="app/src/main/res/layout/activity_create_new_group.xml" value="0.22" />

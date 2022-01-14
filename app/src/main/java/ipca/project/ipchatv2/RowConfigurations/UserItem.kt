@@ -17,6 +17,8 @@ class UserItem(val user: User, val admin: Boolean): Item<ViewHolder>() {
 
         if(admin)
             textViewAdmin.visibility = View.VISIBLE
+        else
+            textViewAdmin.visibility = View.INVISIBLE
 
         textViewUserName.text = user.username
 

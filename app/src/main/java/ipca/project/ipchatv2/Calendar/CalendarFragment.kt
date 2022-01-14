@@ -31,12 +31,6 @@ import ipca.project.ipchatv2.databinding.FragmentCalendarBinding
 import android.widget.RelativeLayout
 import android.graphics.RectF
 
-
-
-
-
-
-
 class CalendarFragment : Fragment() {
 
     lateinit var imageButtonAdd: ImageButton
@@ -50,8 +44,17 @@ class CalendarFragment : Fragment() {
     val currentUser = FirebaseAuth.getInstance()
 
     var calendarId : String? = null
+    var channelType : String? = null
 
     var yDown = 0f
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            calendarId = it.getString("calendarId")
+            channelType = it.getString("channelType")
+        }
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
@@ -63,7 +66,7 @@ class CalendarFragment : Fragment() {
         //Get Layout
         binding = FragmentCalendarBinding.inflate(layoutInflater)
 
-        if(calendarId == null){
+        if(channelType == null){
             calendarId = currentUser.uid
             binding.buttonBack.visibility = View.GONE
 
@@ -95,15 +98,11 @@ class CalendarFragment : Fragment() {
 
             val intent = Intent(requireContext(), NewEventActivity::class.java)
             intent.putExtra("calendarId", calendarId)
+            intent.putExtra("channelType", channelType)
             startActivity(intent)
             getCurrentCalendar()
 
         }
-
-        println("imageY = "+ imageViewResizeCalendar.y )
-        println("recyclerViewY = "+ binding.recyclerView.y )
-        println("binding.recyclerView.bottom = " + binding.recyclerView.bottom)
-
 
         calendarView.setOnDayClickListener(object : OnDayClickListener {
             override fun onDayClick(eventDay: EventDay) {
@@ -198,12 +197,7 @@ class CalendarFragment : Fragment() {
 
         dateList.clear()
 
-        val uid = FirebaseAuth.getInstance().uid
-
-        if(calendarId == null)
-            calendarId = uid
-
-        val ref = db.collection("Calendar").document(uid!!)
+        val ref = db.collection("Calendar").document(calendarId!!)
             .collection("Meetings")
 
         ref.addSnapshotListener { value, error ->

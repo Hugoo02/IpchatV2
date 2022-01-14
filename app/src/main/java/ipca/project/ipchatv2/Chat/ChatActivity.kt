@@ -17,15 +17,20 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.print.PrinterCapabilitiesInfo
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.firebase.firestore.ktx.toObject
 import ipca.project.ipchatv2.Models.GroupChannel
 import ipca.project.ipchatv2.Models.PrivateChannel
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.R
 import com.google.firebase.storage.FirebaseStorage
+import ipca.project.ipchatv2.Calendar.CalendarActivity
+import ipca.project.ipchatv2.Calendar.CalendarFragment
 import ipca.project.ipchatv2.MainActivity
 import ipca.project.ipchatv2.databinding.ActivityChatBinding
+import kotlinx.android.synthetic.main.fragment_calendar.*
 import kotlinx.coroutines.MainScope
 
 class ChatActivity : AppCompatActivity() {
@@ -68,6 +73,15 @@ class ChatActivity : AppCompatActivity() {
 
         configureToolbar()
         listenForMessages()
+
+        binding.imageButtonCalendar.setOnClickListener {
+
+            val intent = Intent(this, CalendarActivity::class.java)
+            intent.putExtra("calendarId", groupId)
+            intent.putExtra("channelType", channelType)
+            startActivity(intent)
+
+        }
 
         binding.imageButtonDetails.setOnClickListener {
 

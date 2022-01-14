@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -21,9 +22,13 @@ class ShowGroupUsersFragment : Fragment() {
     private var groupId: String? = null
     private var userType: String? = null
 
+    var passou = false
+
     val db = FirebaseFirestore.getInstance()
 
     val adapter = GroupAdapter<ViewHolder>()
+
+    val adapterList : MutableList<UserItem> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,33 +50,82 @@ class ShowGroupUsersFragment : Fragment() {
 
             db.collection("groupChannels")
                 .document(groupId!!)
-                .get().addOnSuccessListener { result ->
+                .addSnapshotListener { result, error ->
 
-                    val group = result.toObject(GroupChannel::class.java)
+                    adapter.clear()
+                    adapterList.clear()
 
-                    group!!.userIds!!.forEach {
+                    val group = result!!.toObject(GroupChannel::class.java)
+
+                    group!!.userIds!!.forEachIndexed { index, id ->
 
                         db.collection("User")
-                            .document(it)
+                            .document(id)
                             .collection("groupChannels")
                             .document(groupId!!)
-                            .get()
-                            .addOnSuccessListener { groupObject ->
+                            .addSnapshotListener { groupObject, error ->
 
-                                val admin = groupObject["admin"] as Boolean
+                                if(groupObject!!["admin"] != null)
+                                {
 
-                                db.collection("User")
-                                    .document(it)
-                                    .get()
-                                    .addOnSuccessListener { userObject ->
+                                    val admin = groupObject["admin"] as Boolean
 
-                                        val user = userObject.toObject(User::class.java)
+                                    db.collection("User")
+                                        .document(id)
+                                        .get()
+                                        .addOnSuccessListener { userObject ->
 
-                                        adapter.add(UserItem(user!!, admin))
+                                            val user = userObject.toObject(User::class.java)
+
+                                            var passed = false
+
+                                            adapterList.forEachIndexed { index, userItem ->
+
+                                                if ((user!!.id == userItem.user.id && !admin == userItem.admin))
+                                                {
+                                                    val newElement = UserItem(userItem.user, admin)
+
+                                                    adapterList[index] = newElement
+                                                    passed = true
+
+                                                }else if ((userItem.user.id!! !in group.userIds!!)){
+
+                                                    adapterList.removeAt(index)
+                                                    passed = true
+
+                                                }
+                                                else if ((user.id == userItem.user.id && admin == userItem.admin)){
+
+                                                    passed = true
+
+                                                }
+
+                                            }
+
+                                            if(!passed)
+                                            {
+
+                                                adapterList.add(UserItem(user!!, admin))
+
+                                            }
+
+                                            refreshAdapter()
+                                        }
+
+                                }else{
+
+                                    adapterList.forEachIndexed { index, userItem ->
+
+                                        if(userItem.user.id == id)
+                                            adapterList.removeAt(index)
+
                                     }
 
-                            }
+                                    refreshAdapter()
 
+                                }
+
+                            }
                     }
 
                 }
@@ -80,32 +134,91 @@ class ShowGroupUsersFragment : Fragment() {
 
             db.collection("groupChannels")
                 .document(groupId!!)
-                .get().addOnSuccessListener { result ->
+                .addSnapshotListener { result, error ->
 
-                    val group = result.toObject(GroupChannel::class.java)
+                    adapter.clear()
+                    adapterList.clear()
 
-                    group!!.userIds!!.forEach {
+                    val group = result!!.toObject(GroupChannel::class.java)
+
+                    group!!.userIds!!.forEachIndexed { index, id ->
 
                         db.collection("User")
-                            .document(it)
+                            .document(id)
                             .collection("groupChannels")
                             .document(groupId!!)
-                            .get()
-                            .addOnSuccessListener { groupObject ->
+                            .addSnapshotListener { groupObject, error ->
 
-                                val admin = groupObject["admin"] as Boolean
+                                if(groupObject!!["admin"] != null)
+                                {
 
-                                if(admin){
+                                    val admin = groupObject["admin"] as Boolean
 
-                                    db.collection("User")
-                                        .document(it)
-                                        .get()
-                                        .addOnSuccessListener { userObject ->
+                                    if(admin){
 
-                                            val user = userObject.toObject(User::class.java)
+                                        db.collection("User")
+                                            .document(id)
+                                            .get()
+                                            .addOnSuccessListener { userObject ->
 
-                                            adapter.add(UserItem(user!!, admin))
+                                                val user = userObject.toObject(User::class.java)
+
+                                                var passed = false
+
+                                                adapterList.forEachIndexed { index, userItem ->
+
+                                                    if ((userItem.user.id!! !in group.userIds!!)){
+
+                                                        adapterList.removeAt(index)
+                                                        passed = true
+
+                                                    }else if(user!!.id == userItem.user.id && admin == userItem.admin)
+                                                        passed = true
+
+                                                }
+
+                                                if(!passed){
+
+                                                    adapterList.add(UserItem(user!!, admin))
+
+                                                }
+
+                                                refreshAdapter()
+
+                                            }
+
+                                    }else{
+
+                                        adapterList.forEachIndexed { index, userItem ->
+
+                                            println("id = $id")
+                                            println("userItem.user.id = ${userItem.user.id}")
+
+                                            if(id == userItem.user.id)
+                                            {
+
+                                                println("passou aqui")
+                                                adapterList.removeAt(index)
+
+                                            }
+
+
                                         }
+
+                                        refreshAdapter()
+
+                                    }
+
+                                }else{
+
+                                    adapterList.forEachIndexed { index, userItem ->
+
+                                        if(userItem.user.id == id)
+                                            adapterList.removeAt(index)
+
+                                    }
+
+                                    refreshAdapter()
 
                                 }
 
@@ -132,5 +245,20 @@ class ShowGroupUsersFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun refreshAdapter() {
+
+        adapter.clear()
+
+        adapterList.forEach {
+
+            println("it.user.id = " + it.user.id)
+            println("it.admin = " + it.admin)
+
+            adapter.add(it)
+
+        }
+
     }
 }
