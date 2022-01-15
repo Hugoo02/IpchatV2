@@ -1,8 +1,8 @@
 package ipca.project.ipchatv2.Chat
 
+import android.view.View
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.row_image_message_from.view.*
 import kotlinx.android.synthetic.main.row_image_message_to.view.*
 import kotlinx.android.synthetic.main.row_text_message_from.view.*
 import kotlinx.android.synthetic.main.row_text_message_to.view.*
+import java.util.*
 
 
 class ChatFromItem(val message: ChatMessage): Item<ViewHolder>(){
@@ -32,7 +33,7 @@ class ChatFromItem(val message: ChatMessage): Item<ViewHolder>(){
     }
 }
 
-class ChatToItem(val message: ChatMessage): Item<ViewHolder>(){
+class ChatToItem(val message: ChatMessage, val details: Boolean): Item<ViewHolder>(){
 
     val db = FirebaseFirestore.getInstance()
 
@@ -42,17 +43,26 @@ class ChatToItem(val message: ChatMessage): Item<ViewHolder>(){
         val imageViewPhotoTo = viewHolder.itemView.imageViewPhotoTo
         val textViewName = viewHolder.itemView.textViewName
 
-        textViewChatMessageTo.text = message.text
-
         val refUser = db.collection("User")
             .document(message.senderId!!)
 
         refUser.get().addOnSuccessListener { result ->
             val user = result.toObject(User::class.java)
 
-            textViewName.text = user!!.username
+            textViewChatMessageTo.text = message.text
 
-            Picasso.get().load(user.imageURL).into(imageViewPhotoTo)
+            if(!details){
+
+                textViewName.visibility = View.INVISIBLE
+                imageViewPhotoTo.visibility = View.INVISIBLE
+
+            }else{
+
+                textViewName.text = user!!.username
+
+                Picasso.get().load(user.imageURL).into(imageViewPhotoTo)
+
+            }
 
         }
     }
@@ -113,7 +123,7 @@ class FirstMessage(val message: ChatMessage): Item<ViewHolder>(){
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
 
-        val textViewFirstMessageHour = viewHolder.itemView.textViewFirstMessageHour
+        val textViewFirstMessageHour = viewHolder.itemView.textViewHour
         val textViewFirstMessage = viewHolder.itemView.textViewFirstMessage
 
         if(message.senderId == currentUserId)
@@ -132,11 +142,81 @@ class FirstMessage(val message: ChatMessage): Item<ViewHolder>(){
                 }
         }
 
-        textViewFirstMessageHour.text = Utils.formatDateToFistChat(message.time!!)
+        textViewFirstMessageHour.text = Utils.getMessageDate(message.time!!)
 
     }
 
     override fun getLayout(): Int {
         return R.layout.row_first_message
+    }
+}
+
+class ChatFromRemoved(val message: ChatMessage): Item<ViewHolder>(){
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+
+        val textViewChatMessageFrom = viewHolder.itemView.textViewChatMessageFrom
+
+        textViewChatMessageFrom.text = "Você removeu esta mensagem"
+
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.row_removed_message_from
+    }
+}
+
+class ChatToRemoved(val message: ChatMessage, val details: Boolean): Item<ViewHolder>(){
+
+    val db = FirebaseFirestore.getInstance()
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+
+        val textViewChatMessageTo = viewHolder.itemView.textViewChatMessageTo
+        val textViewName = viewHolder.itemView.textViewName
+        val imageViewPhotoTo = viewHolder.itemView.imageViewPhotoTo
+
+        db.collection("User")
+            .document(message.senderId!!)
+            .get()
+            .addOnSuccessListener { result ->
+
+                val user = result.toObject(User::class.java)
+
+                if(!details){
+
+                    textViewName.visibility = View.INVISIBLE
+                    imageViewPhotoTo.visibility = View.INVISIBLE
+
+                }else{
+
+                    textViewName.text = user!!.username
+
+                    Picasso.get().load(user.imageURL).into(imageViewPhotoTo)
+
+                }
+
+                textViewChatMessageTo.text = "${user!!.username} removeu esta mensagem"
+
+            }
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.row_removed_message_to
+    }
+}
+
+class HourItem(val date: Date): Item<ViewHolder>(){
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+
+        val textViewHour = viewHolder.itemView.textViewHour
+
+        textViewHour.text = Utils.getMessageDate(date)
+
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.row_hour_message
     }
 }

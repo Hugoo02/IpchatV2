@@ -32,6 +32,14 @@ import ipca.project.ipchatv2.MainActivity
 import ipca.project.ipchatv2.databinding.ActivityChatBinding
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import kotlinx.coroutines.MainScope
+import android.os.Environment
+import android.util.Log
+import android.view.View
+import ipca.project.ipchatv2.RowConfigurations.UserItem
+import ipca.project.ipchatv2.Utils.Utils
+import kotlinx.android.synthetic.main.row_calendar.*
+import java.io.File
+
 
 class ChatActivity : AppCompatActivity() {
 
@@ -47,12 +55,19 @@ class ChatActivity : AppCompatActivity() {
     val currentUser = FirebaseAuth.getInstance().uid
 
     val messages : MutableList<ChatMessage> = ArrayList()
+    val messageIdList : MutableList<String> = ArrayList()
 
     val getImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
 
         val selectedPhotoUri = it.data?.data
 
         uploadImageToFirebaseStorage(selectedPhotoUri!!)
+
+    }
+
+    val getFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+
+        println(it.data?.data)
 
     }
 
@@ -106,27 +121,128 @@ class ChatActivity : AppCompatActivity() {
 
         }
 
-        adapter.setOnItemLongClickListener { item, view ->
+        binding.imageButtonFile.setOnClickListener {
 
-            var text: String? = null
+            selectFile()
 
-            if(item.layout == R.layout.row_text_message_to){
+        }
 
-                val row = item as ChatToItem
-                text = row.message.text
+        adapter.setOnItemClickListener { item, view ->
 
-            } else{
+            if(binding.constraintMessage.visibility == View.INVISIBLE){
 
-                val row = item as ChatFromItem
-                text = row.message.text
+                binding.constraintMessage.visibility = View.VISIBLE
+
+                binding.linearLayoutHoldMessage.visibility = View.INVISIBLE
 
             }
 
-            val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clipData = ClipData.newPlainText("text", text)
-            clipboardManager.setPrimaryClip(clipData)
+        }
 
-            Toast.makeText(this, "Text copied to clipboard", Toast.LENGTH_LONG).show()
+        adapter.setOnItemLongClickListener { item, view ->
+
+            if(item.layout == R.layout.row_removed_message_to || item.layout == R.layout.row_removed_message_from)
+            {
+
+                binding.constraintMessage.visibility = View.VISIBLE
+
+                binding.linearLayoutHoldMessage.visibility = View.INVISIBLE
+
+            }else{
+
+                binding.constraintMessage.visibility = View.INVISIBLE
+
+                binding.linearLayoutHoldMessage.visibility = View.VISIBLE
+
+            }
+
+            if(item.layout == R.layout.row_text_message_to)
+                binding.linearLayoutRemove.visibility = View.GONE
+            else
+                binding.linearLayoutRemove.visibility = View.VISIBLE
+
+            binding.linearLayoutCopy.setOnClickListener {
+
+                var text: String? = null
+
+                if(item.layout == R.layout.row_text_message_to){
+
+                    val row = item as ChatToItem
+                    text = row.message.text
+
+                } else{
+
+                    val row = item as ChatFromItem
+                    text = row.message.text
+
+                }
+
+                val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clipData = ClipData.newPlainText("text", text)
+                clipboardManager.setPrimaryClip(clipData)
+
+                Toast.makeText(this, "Copiado", Toast.LENGTH_LONG).show()
+
+                binding.constraintMessage.visibility = View.VISIBLE
+
+                binding.linearLayoutHoldMessage.visibility = View.INVISIBLE
+
+            }
+
+            binding.linearLayoutRemove.setOnClickListener {
+
+                val row = item as ChatFromItem
+
+                messages.forEachIndexed { index, chatMessage ->
+
+                    if (row.message == chatMessage) {
+                        if (channelType == "group") {
+
+                            if (index == (messages.size - 1)) {
+
+                                db.collection("groupChannels")
+                                    .document(groupId!!)
+                                    .collection("lastMessage")
+                                    .document(chatMessage.messageId!!)
+                                    .update(mapOf("type" to "REMOVED"))
+
+                            }
+
+                            db.collection("groupChannels")
+                                .document(groupId!!)
+                                .collection("messages")
+                                .document(chatMessage.messageId!!)
+                                .update(mapOf("type" to "REMOVED"))
+
+                        } else {
+
+                            if (index == (messages.size - 1)) {
+
+                                db.collection("privateChannels")
+                                    .document(groupId!!)
+                                    .collection("lastMessage")
+                                    .document(chatMessage.messageId!!)
+                                    .update(mapOf("type" to "REMOVED"))
+
+                            }
+
+                            db.collection("privateChannels")
+                                .document(groupId!!)
+                                .collection("messages")
+                                .document(chatMessage.messageId!!)
+                                .update(mapOf("type" to "REMOVED"))
+
+                        }
+                    }
+
+                    adapter.notifyDataSetChanged()
+
+                    binding.constraintMessage.visibility = View.VISIBLE
+
+                    binding.linearLayoutHoldMessage.visibility = View.INVISIBLE
+
+                }
+            }
 
             return@setOnItemLongClickListener true
 
@@ -137,6 +253,23 @@ class ChatActivity : AppCompatActivity() {
             performSendMessage()
 
         }
+    }
+
+    private fun selectFile() {
+
+        val path = Environment.getExternalStorageDirectory().toString() + "/Pictures"
+        Log.d("Files", "Path: $path")
+        val directory = File(path)
+        val files: Array<File> = directory.listFiles()
+        Log.d("Files", "Size: " + files.size)
+        for (i in files.indices) {
+            Log.d("Files", "FileName:" + files[i].getName())
+        }
+
+        //val intent = Intent(Intent.ACTION_PICK)
+        //intent.type = "file/*"
+        //getFile.launch(intent)
+
     }
 
     private fun selectImage() {
@@ -317,6 +450,10 @@ class ChatActivity : AppCompatActivity() {
 
             refSendMessage.add(message).addOnSuccessListener {
 
+                refSendMessage.document(it.id).update(mapOf("messageId" to it.id))
+
+                message.messageId = it.id
+
                 binding.editTextMessage.text.clear()
                 binding.recyclerViewChat.scrollToPosition(adapter.itemCount - 1)
 
@@ -349,28 +486,82 @@ class ChatActivity : AppCompatActivity() {
         refMessages.addSnapshotListener{result, e ->
 
             messages.clear()
+            messageIdList.clear()
             adapter.clear()
 
             for (doc in result!!){
 
                 messages.add(doc.toObject(ChatMessage::class.java))
+                messageIdList.add(doc.id)
 
             }
 
             messages.sortBy{it.time}
 
-            messages.forEach {
+            var messageDate = false
 
-                if(it.type == "firstMessage")
-                    adapter.add(FirstMessage(it))
-                else if (it.senderId == currentUser && it.type == "TEXT")
-                    adapter.add(ChatFromItem(it))
-                else if (it.type == "TEXT")
-                    adapter.add(ChatToItem(it))
-                else if (it.senderId == currentUser && it.type == "IMAGE")
-                    adapter.add(ImageFromItem(it))
+            messages.forEachIndexed { index, chatMessage ->
+
+                var details = true
+
+                if(index == 0){
+
+                    adapter.add(HourItem(chatMessage.time!!))
+                    messageDate = true
+
+                }else{
+
+                    val previousMessageDate = Utils.dateToCalenar(messages[index - 1].time!!)
+                    val currentMessageDate = Utils.dateToCalenar(chatMessage.time!!)
+
+                    val previousMessageYear = previousMessageDate.get(Calendar.YEAR)
+                    val previousMessageMonth = previousMessageDate.get(Calendar.MONTH)
+                    val previousMessageDay = previousMessageDate.get(Calendar.DAY_OF_MONTH)
+                    val previousMessageHour = previousMessageDate.get(Calendar.HOUR)
+                    val previousMessageMinutes = previousMessageDate.get(Calendar.MINUTE)
+
+                    val currentMessageYear = currentMessageDate.get(Calendar.YEAR)
+                    val currentMessageMonth = currentMessageDate.get(Calendar.MONTH)
+                    val currentMessageDay = currentMessageDate.get(Calendar.DAY_OF_MONTH)
+                    val currentMessageHour = currentMessageDate.get(Calendar.HOUR)
+                    val currentMessageMinutes = currentMessageDate.get(Calendar.MINUTE)
+
+                    if(!(previousMessageYear == currentMessageYear && previousMessageMonth == currentMessageMonth
+                        && previousMessageDay == currentMessageDay && previousMessageHour == currentMessageHour
+                        && previousMessageMinutes >= (currentMessageMinutes - 5)))
+                    {
+
+                        adapter.add(HourItem(chatMessage.time!!))
+                        messageDate = true
+
+                    }
+                    else
+                        messageDate = false
+
+                }
+
+                println("messageDate = $messageDate")
+
+                if(index > 0 && chatMessage.senderId!! == messages[index - 1].senderId && !messageDate)
+                    details = false
+
+                println("details = $details")
+
+                if(chatMessage.type == "firstMessage")
+                    adapter.add(FirstMessage(chatMessage))
+                else if (chatMessage.senderId == currentUser && chatMessage.type == "TEXT")
+                    adapter.add(ChatFromItem(chatMessage))
+                else if (chatMessage.type == "TEXT")
+                    adapter.add(ChatToItem(chatMessage, details))
+                else if (chatMessage.senderId == currentUser && chatMessage.type == "IMAGE")
+                    adapter.add(ImageFromItem(chatMessage))
+                else if ((chatMessage.senderId != currentUser && chatMessage.type == "IMAGE"))
+                    adapter.add(ImageToItem(chatMessage))
+                else if (chatMessage.senderId == currentUser && chatMessage.type == "REMOVED")
+                    adapter.add(ChatFromRemoved(chatMessage))
                 else
-                    adapter.add(ImageToItem(it))
+                    adapter.add(ChatToRemoved(chatMessage, details))
+
 
             }
 

@@ -110,76 +110,166 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent">
 
-        <EditText
-            android:id="@+id/editTextMessage"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/edit_text_rounded"
-            android:ems="10"
-            android:hint="Enter Message"
-            android:inputType="textPersonName"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageButtonSendMessage"
-            app:layout_constraintStart_toEndOf="@+id/imageButtonCamera"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/imageButtonCamera"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="12dp"
-            android:backgroundTint="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/editTextMessage"
-            app:layout_constraintStart_toEndOf="@+id/imageButtonFile"
-            app:layout_constraintTop_toTopOf="@+id/editTextMessage"
-            app:srcCompat="@drawable/ic_baseline_photo_camera_24"
-            app:tint="@color/white" />
-
-        <ImageButton
-            android:id="@+id/imageButtonFile"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="12dp"
-            android:backgroundTint="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/imageButtonCamera"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageButtonCamera"
-            app:tint="@color/white"
-            app:srcCompat="@drawable/ic_baseline_attach_file_24"
-            android:visibility="gone"/>
-
-        <ImageButton
-            android:id="@+id/imageButtonEmoji"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:backgroundTint="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/editTextMessage"
-            app:layout_constraintEnd_toEndOf="@+id/editTextMessage"
-            app:layout_constraintTop_toTopOf="@+id/editTextMessage"
-            app:layout_constraintVertical_bias="0.518"
-            android:src="@drawable/emoji" />
-
-
-        <ImageButton
-            android:id="@+id/imageButtonSendMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/editTextMessage"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/editTextMessage"
-            app:srcCompat="@drawable/ic_baseline_send_24"
-            android:backgroundTint="@color/black"
-            app:tint="@color/white"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" >
+
+            <EditText
+                android:id="@+id/editTextMessage"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/edit_text_rounded"
+                android:ems="10"
+                android:hint="Enter Message"
+                android:inputType="textPersonName"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/imageButtonSendMessage"
+                app:layout_constraintStart_toEndOf="@+id/imageButtonCamera"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/imageButtonCamera"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="12dp"
+                android:backgroundTint="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/editTextMessage"
+                app:layout_constraintStart_toEndOf="@+id/imageButtonFile"
+                app:layout_constraintTop_toTopOf="@+id/editTextMessage"
+                app:srcCompat="@drawable/ic_baseline_photo_camera_24"
+                app:tint="@color/white" />
+
+            <ImageButton
+                android:id="@+id/imageButtonFile"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="12dp"
+                android:backgroundTint="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/imageButtonCamera"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/imageButtonCamera"
+                app:tint="@color/white"
+                app:srcCompat="@drawable/ic_baseline_attach_file_24"/>
+
+            <ImageButton
+                android:id="@+id/imageButtonEmoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/editTextMessage"
+                app:layout_constraintEnd_toEndOf="@+id/editTextMessage"
+                app:layout_constraintTop_toTopOf="@+id/editTextMessage"
+                app:layout_constraintVertical_bias="0.518"
+                android:src="@drawable/emoji" />
+
+
+            <ImageButton
+                android:id="@+id/imageButtonSendMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/editTextMessage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/editTextMessage"
+                app:srcCompat="@drawable/ic_baseline_send_24"
+                android:backgroundTint="@color/black"
+                app:tint="@color/white"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutHoldMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:id="@+id/linearLayoutReply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_baseline_reply_24"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Responder"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayoutCopy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_baseline_file_copy_24"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Copiar"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayoutRemove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_baseline_delete_24"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Remover"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

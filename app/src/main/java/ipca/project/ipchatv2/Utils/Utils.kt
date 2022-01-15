@@ -48,20 +48,6 @@ object Utils {
 
     }
 
-    fun formatDateToFistChat(date: Date) : String {
-
-        val calendar = Calendar.getInstance()
-
-        calendar.time = date
-
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-        val month = calendar.get(Calendar.MONTH) + 1
-        val year = calendar.get(Calendar.YEAR)
-
-        return "$day/$month/$year"
-
-    }
-
     fun getRoundedCornerBitmap(bitmap: Bitmap, pixels: Int): Bitmap? {
         val output = Bitmap.createBitmap(
             bitmap.width, bitmap
@@ -92,6 +78,39 @@ object Utils {
         val year = calendar.get(Calendar.YEAR)
 
         return "$day/$month/$year"
+    }
+
+    fun dateToCalenar(time: Date): Calendar{
+
+        val calendar = Calendar.getInstance()
+        calendar.time = time
+
+        return calendar
+
+    }
+
+    fun getMessageDate(time: Date) : String{
+
+        val currentCalenar = Calendar.getInstance()
+        val messageCalendar = Calendar.getInstance()
+        messageCalendar.time = time
+
+        val messageYear = messageCalendar.get(Calendar.YEAR)
+        val messageMonth = messageCalendar.get(Calendar.MONTH)
+        val messageDay = messageCalendar.get(Calendar.DAY_OF_MONTH)
+        val messageHour = messageCalendar.get(Calendar.HOUR_OF_DAY)
+        val messageMinutes = messageCalendar.get(Calendar.MINUTE)
+
+        val currentYear = currentCalenar.get(Calendar.YEAR)
+        val currentMonth = currentCalenar.get(Calendar.MONTH)
+        val currentDay = currentCalenar.get(Calendar.DAY_OF_MONTH)
+
+        if(currentYear == messageYear && currentMonth == messageMonth
+            && currentDay == messageDay)
+                return "${messageHour}:${messageMinutes}"
+        else
+            return "${messageDay}/${messageMonth + 1}/${messageYear} ${messageHour}:${messageMinutes}"
+
     }
 
 }
