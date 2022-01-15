@@ -26,6 +26,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     lateinit var circleImageView: CircleImageView
     lateinit var buttonGoBack: Button
+    lateinit var settings: ImageButton
     lateinit var buttonEditImage: ImageButton
     lateinit var buttonEditProfile: Button
     lateinit var username : TextView
@@ -48,6 +49,11 @@ class EditProfileActivity : AppCompatActivity() {
 
             getCurrentUser()
 
+        }
+
+        settings.setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
         }
 
         supportActionBar!!.hide()

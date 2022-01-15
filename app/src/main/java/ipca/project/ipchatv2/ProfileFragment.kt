@@ -29,6 +29,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile)  {
 
     //Variables
     lateinit var binding: FragmentProfileBinding
+    lateinit var settings: ImageButton
     lateinit var circleImageView: CircleImageView
     lateinit var buttonEditProfile: Button
     lateinit var username : TextView
@@ -56,36 +57,19 @@ class ProfileFragment : Fragment(R.layout.fragment_profile)  {
         email = binding.textViewEmail
         studentNumber = binding.textViewStudentNumber
         biography = binding.textViewBiography
-        logout = binding.buttonLogout
+        settings = binding.buttonSettings
 
         getCurrentUser()
 
-        logout.setOnClickListener {
-
-            var builder = AlertDialog.Builder(activity)
-            builder.setTitle(getString(R.string.cancel))
-            builder.setTitle(getString(R.string.logout))
-            builder.setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener{ dialog, id ->
-
-                mAuth.signOut()
-                val intent = Intent(activity, LoginActivity::class.java)
-                startActivity(intent)
-
-            })
-            builder.setNegativeButton(getString(R.string.no), DialogInterface.OnClickListener{ dialog, id ->
-
-
-            })
-            var alert = builder.create()
-            alert.show()
-
+        settings.setOnClickListener {
+            val intent = Intent(activity, SettingsActivity::class.java)
+            startActivity(intent)
         }
 
         buttonEditProfile.setOnClickListener {
             val intent = Intent(activity, EditProfileActivity::class.java)
             startActivity(intent)
         }
-
 
         return binding.root
     }
