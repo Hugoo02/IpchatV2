@@ -68,8 +68,6 @@ class ShowPhotosFragment : Fragment() {
 
         listenForPhotos()
 
-
-
         return binding.root
     }
 

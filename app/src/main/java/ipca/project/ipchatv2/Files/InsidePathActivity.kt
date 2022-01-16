@@ -101,7 +101,7 @@ class InsidePathActivity : AppCompatActivity() {
 
         files.forEach{
 
-            adapter.add(FileItem(it))
+            adapter.add(FileItem(it, false))
 
         }
 
@@ -131,7 +131,7 @@ class InsidePathActivity : AppCompatActivity() {
             val pathFile = "$path/${file.name}"
             Toast.makeText(this, pathFile, Toast.LENGTH_SHORT).show()
 
-            adapter.add(FileItem(FileModel(file.name, sizeInMb, pathFile, type)))
+            adapter.add(FileItem(FileModel(file.name, sizeInMb, pathFile, type), false))
         }
 
     }
