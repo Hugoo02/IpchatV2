@@ -17,25 +17,22 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.print.PrinterCapabilitiesInfo
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import com.google.firebase.firestore.ktx.toObject
 import ipca.project.ipchatv2.Models.GroupChannel
 import ipca.project.ipchatv2.Models.PrivateChannel
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.R
 import com.google.firebase.storage.FirebaseStorage
 import ipca.project.ipchatv2.Calendar.CalendarActivity
-import ipca.project.ipchatv2.Calendar.CalendarFragment
 import ipca.project.ipchatv2.MainActivity
 import ipca.project.ipchatv2.databinding.ActivityChatBinding
 import kotlinx.android.synthetic.main.fragment_calendar.*
-import kotlinx.coroutines.MainScope
 import android.os.Environment
 import android.util.Log
 import android.view.View
-import ipca.project.ipchatv2.RowConfigurations.UserItem
+import ipca.project.ipchatv2.Files.InsidePathActivity
+import ipca.project.ipchatv2.Files.SelectPathActivity
 import ipca.project.ipchatv2.Utils.Utils
 import kotlinx.android.synthetic.main.row_calendar.*
 import java.io.File
@@ -62,12 +59,6 @@ class ChatActivity : AppCompatActivity() {
         val selectedPhotoUri = it.data?.data
 
         uploadImageToFirebaseStorage(selectedPhotoUri!!)
-
-    }
-
-    val getFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-
-        println(it.data?.data)
 
     }
 
@@ -123,6 +114,17 @@ class ChatActivity : AppCompatActivity() {
 
         binding.imageButtonFile.setOnClickListener {
 
+            val path = Environment.getExternalStorageDirectory().absolutePath.toString()
+
+            println("path = $path")
+
+            val intent = Intent(this, InsidePathActivity::class.java)
+            intent.putExtra("requestPath", path)
+            intent.putExtra("channelType", channelType)
+            intent.putExtra("groupId", groupId)
+            startActivity(intent)
+
+            listenForMessages()
             selectFile()
 
         }
@@ -257,7 +259,7 @@ class ChatActivity : AppCompatActivity() {
 
     private fun selectFile() {
 
-        val path = Environment.getExternalStorageDirectory().toString() + "/Pictures"
+        val path = Environment.getExternalStorageDirectory().toString()
         Log.d("Files", "Path: $path")
         val directory = File(path)
         val files: Array<File> = directory.listFiles()
@@ -265,10 +267,6 @@ class ChatActivity : AppCompatActivity() {
         for (i in files.indices) {
             Log.d("Files", "FileName:" + files[i].getName())
         }
-
-        //val intent = Intent(Intent.ACTION_PICK)
-        //intent.type = "file/*"
-        //getFile.launch(intent)
 
     }
 
@@ -559,8 +557,12 @@ class ChatActivity : AppCompatActivity() {
                     adapter.add(ImageToItem(chatMessage))
                 else if (chatMessage.senderId == currentUser && chatMessage.type == "REMOVED")
                     adapter.add(ChatFromRemoved(chatMessage))
-                else
+                else if (chatMessage.senderId != currentUser && chatMessage.type == "REMOVED")
                     adapter.add(ChatToRemoved(chatMessage, details))
+                else if(chatMessage.senderId == currentUser && chatMessage.type == "FILE")
+                    adapter.add(FileItemFrom(chatMessage))
+                else
+                    adapter.add(FileItemTo(chatMessage, details))
 
 
             }

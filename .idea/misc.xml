@@ -63,10 +63,13 @@
         <entry key="app/src/main/res/layout/activity_chat_more_details.xml" value="0.28191489361702127" />
         <entry key="app/src/main/res/layout/activity_create_new_group.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_group_members.xml" value="0.21" />
+        <entry key="app/src/main/res/layout/activity_inside_path.xml" value="0.1203125" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.12" />
         <entry key="app/src/main/res/layout/activity_new_calendar_event.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_new_event.xml" value="0.151268115942029" />
+        <entry key="app/src/main/res/layout/activity_select_file.xml" value="0.16802536231884058" />
+        <entry key="app/src/main/res/layout/activity_select_path.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_show_files.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/layout/activity_show_photo_closer.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_show_users.xml" value="0.1793478260869565" />
@@ -86,6 +89,10 @@
         <entry key="app/src/main/res/layout/message_hold_settings.xml" value="0.33" />
         <entry key="app/src/main/res/layout/popwindow_alertinternet.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/row_calendar.xml" value="0.12907608695652173" />
+        <entry key="app/src/main/res/layout/row_download_file.xml" value="0.1203125" />
+        <entry key="app/src/main/res/layout/row_file.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/row_file_from.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/row_file_to.xml" value="0.5" />
         <entry key="app/src/main/res/layout/row_first_message.xml" value="0.33" />
         <entry key="app/src/main/res/layout/row_hour_message.xml" value="0.75" />
         <entry key="app/src/main/res/layout/row_image_message_from.xml" value="1.1" />

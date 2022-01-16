@@ -3,14 +3,19 @@ package ipca.project.ipchatv2.Chat
 import android.view.View
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Models.ChatMessage
+import ipca.project.ipchatv2.Models.FileModel
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.R
 import ipca.project.ipchatv2.Utils.Utils
+import kotlinx.android.synthetic.main.row_file_from.view.*
+import kotlinx.android.synthetic.main.row_file_to.view.*
 import kotlinx.android.synthetic.main.row_first_message.view.*
+import kotlinx.android.synthetic.main.row_first_message.view.textViewHour
 import kotlinx.android.synthetic.main.row_image_message_from.view.*
 import kotlinx.android.synthetic.main.row_image_message_to.view.*
 import kotlinx.android.synthetic.main.row_text_message_from.view.*
@@ -218,5 +223,84 @@ class HourItem(val date: Date): Item<ViewHolder>(){
 
     override fun getLayout(): Int {
         return R.layout.row_hour_message
+    }
+}
+
+class FileItemFrom(val message: ChatMessage): Item<ViewHolder>(){
+
+    val db = FirebaseFirestore.getInstance()
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+
+        val textViewFileNameFrom = viewHolder.itemView.textViewFileNameFrom
+        val textViewFileTypeFrom = viewHolder.itemView.textViewFileTypeFrom
+
+        db.collection("Files")
+            .document(message.text!!)
+            .get()
+            .addOnSuccessListener { fileObject ->
+
+                val file = fileObject.toObject(FileModel::class.java)
+
+                textViewFileNameFrom.text = file!!.name
+                textViewFileTypeFrom.text = file.extension
+
+            }
+
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.row_file_from
+    }
+}
+
+class FileItemTo(val message: ChatMessage, val details: Boolean): Item<ViewHolder>(){
+
+    val db = FirebaseFirestore.getInstance()
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+
+        val textViewFileNameTo = viewHolder.itemView.textViewFileNameTo
+        val textViewFileTypeTo = viewHolder.itemView.textViewFileTypeTo
+        val imageViewPhotoFileTo = viewHolder.itemView.imageViewPhotoFileTo
+        val textViewNameFileTo = viewHolder.itemView.textViewNameFileTo
+
+        val refUser = db.collection("User")
+            .document(message.senderId!!)
+
+        refUser.get().addOnSuccessListener { result ->
+            val user = result.toObject(User::class.java)
+
+            if(!details){
+
+                textViewNameFileTo.visibility = View.INVISIBLE
+                imageViewPhotoFileTo.visibility = View.INVISIBLE
+
+            }else{
+
+                textViewNameFileTo.text = user!!.username
+
+                Picasso.get().load(user.imageURL).into(imageViewPhotoFileTo)
+
+            }
+
+        }
+
+        db.collection("Files")
+            .document(message.text!!)
+            .get()
+            .addOnSuccessListener { fileObject ->
+
+                val file = fileObject.toObject(FileModel::class.java)
+
+                textViewFileNameTo.text = file!!.name
+                textViewFileTypeTo.text = file.extension
+
+            }
+
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.row_file_to
     }
 }
