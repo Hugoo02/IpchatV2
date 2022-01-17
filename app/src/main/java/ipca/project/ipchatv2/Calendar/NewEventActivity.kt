@@ -91,20 +91,34 @@ class NewEventActivity : AppCompatActivity() {
 
                                 val userIds = channel!!.userIds
 
-                                userIds!!.forEachIndexed { index, id ->
+                                db.collection("Calendar")
+                                    .document(calendarId)
+                                    .collection("Meetings")
+                                    .add(calendar)
+                                    .addOnSuccessListener { calendarObject ->
 
-                                    db.collection("Calendar")
-                                        .document(id)
-                                        .collection("Meetings")
-                                        .add(calendar)
-                                        .addOnSuccessListener {
+                                        Toast.makeText(this, "Evento adicionado com sucesso", Toast.LENGTH_SHORT).show()
 
-                                            if(index == (userIds.size - 1))
-                                                finish()
+                                        userIds!!.forEachIndexed { index, id ->
 
+                                            db.collection("Calendar")
+                                                .document(id)
+                                                .collection("Meetings")
+                                                .document(calendarObject.id)
+                                                .set(calendar)
+                                                .addOnSuccessListener {
+
+                                                    if(index == (userIds.size - 1))
+                                                        finish()
+
+                                                }
                                         }
 
-                                }
+                                    }.addOnFailureListener { error ->
+
+                                        Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
+
+                                    }
 
                             }
 
@@ -115,47 +129,42 @@ class NewEventActivity : AppCompatActivity() {
                             .get()
                             .addOnSuccessListener { result ->
 
-                                val channel = result.toObject(PrivateChannel::class.java)
+                                val channel = result.toObject(GroupChannel::class.java)
 
                                 val userIds = channel!!.userIds
 
-                                userIds!!.forEachIndexed { index, id ->
+                                db.collection("Calendar")
+                                    .document(calendarId)
+                                    .collection("Meetings")
+                                    .add(calendar)
+                                    .addOnSuccessListener { calendarObject ->
 
-                                    db.collection("Calendar")
-                                        .document(id)
-                                        .collection("Meetings")
-                                        .add(calendar)
-                                        .addOnSuccessListener {
+                                        Toast.makeText(this, "Evento adicionado com sucesso", Toast.LENGTH_SHORT).show()
 
-                                            if(index == (userIds!!.size - 1))
-                                                finish()
+                                        userIds!!.forEachIndexed { index, id ->
 
+                                            db.collection("Calendar")
+                                                .document(id)
+                                                .collection("Meetings")
+                                                .document(calendarObject.id)
+                                                .set(calendar)
+                                                .addOnSuccessListener {
+
+                                                    if(index == (userIds.size - 1))
+                                                        finish()
+
+                                                }
                                         }
 
-                                }
+                                    }.addOnFailureListener { error ->
 
+                                        Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
+
+                                    }
                             }
 
                     }
                 }
-
-                db.collection("Calendar")
-                    .document(calendarId!!)
-                    .collection("Meetings")
-                    .add(calendar)
-                    .addOnSuccessListener {
-
-                        Toast.makeText(this, "Evento adicionado com sucesso", Toast.LENGTH_SHORT).show()
-                        if(channelType == null)
-                            finish()
-
-                    }.addOnFailureListener { error ->
-
-                        Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
-
-                    }
-
-
             }
 
         }

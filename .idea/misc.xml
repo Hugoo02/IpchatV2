@@ -60,8 +60,9 @@
         <entry key="app/src/main/res/drawable/toolbar_background.xml" value="0.228125" />
         <entry key="app/src/main/res/layout/activity_calendar.xml" value="0.11458333333333333" />
         <entry key="app/src/main/res/layout/activity_chat.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/activity_chat_more_details.xml" value="0.28191489361702127" />
+        <entry key="app/src/main/res/layout/activity_chat_more_details.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_create_new_group.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/activity_edit_profile.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_group_members.xml" value="0.21" />
         <entry key="app/src/main/res/layout/activity_inside_path.xml" value="0.1203125" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.14855072463768115" />
@@ -95,7 +96,7 @@
         <entry key="app/src/main/res/layout/row_file_to.xml" value="0.5" />
         <entry key="app/src/main/res/layout/row_first_message.xml" value="0.33" />
         <entry key="app/src/main/res/layout/row_hour_message.xml" value="0.75" />
-        <entry key="app/src/main/res/layout/row_image_message_from.xml" value="1.1" />
+        <entry key="app/src/main/res/layout/row_image_message_from.xml" value="0.33" />
         <entry key="app/src/main/res/layout/row_image_message_to.xml" value="0.75" />
         <entry key="app/src/main/res/layout/row_last_messages.xml" value="0.18070652173913043" />
         <entry key="app/src/main/res/layout/row_removed_message_from.xml" value="0.21" />

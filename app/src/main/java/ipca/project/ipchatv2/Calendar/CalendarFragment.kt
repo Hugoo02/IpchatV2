@@ -30,6 +30,7 @@ import ipca.project.ipchatv2.Models.CalendarModel
 import ipca.project.ipchatv2.databinding.FragmentCalendarBinding
 import android.widget.RelativeLayout
 import android.graphics.RectF
+import kotlinx.android.synthetic.main.activity_create_new_group.*
 
 class CalendarFragment : Fragment() {
 
@@ -93,6 +94,12 @@ class CalendarFragment : Fragment() {
         binding.recyclerView.adapter = adapter
 
         displayEventIcons()
+
+        binding.buttonBack.setOnClickListener {
+
+            requireActivity().finish()
+
+        }
 
         imageButtonAdd.setOnClickListener {
 
@@ -185,7 +192,7 @@ class CalendarFragment : Fragment() {
 
             val calendar = Calendar.getInstance()
             calendar.time = it.date!!
-            events.add(EventDay(calendar, R.drawable.presence_online))
+            events.add(EventDay(calendar, R.drawable.ic_menu_my_calendar))
 
         }
 
