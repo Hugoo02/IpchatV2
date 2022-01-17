@@ -14,12 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IpchatV2" >
         <activity
-            android:name=".Files.InsidePathActivity"
-            android:exported="true" />
-        <activity
-            android:name=".Files.SelectPathActivity"
-            android:exported="true" />
-        <activity
             android:name=".Calendar.CalendarActivity"
             android:exported="true" />
         <activity

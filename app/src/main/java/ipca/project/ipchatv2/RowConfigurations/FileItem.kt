@@ -11,32 +11,18 @@ class FileItem(val file: FileModel, val details: Boolean): Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
 
         val textViewFileName = viewHolder.itemView.textViewFileName
-        val textViewFileSize = viewHolder.itemView.textViewFileSize
-        val imageViewFile = viewHolder.itemView.imageViewFile
         val imageViewDetails = viewHolder.itemView.imageViewDetails
+        val textViewFileExtension = viewHolder.itemView.textViewFileExtension
 
         textViewFileName.text = file.name
+
+        textViewFileExtension.text = file.extension
 
         if(details)
             imageViewDetails.visibility = View.VISIBLE
         else
             imageViewDetails.visibility = View.GONE
 
-
-        if(file.type == "FOLDER")
-        {
-
-            imageViewFile.setImageResource(R.drawable.folder)
-            textViewFileSize.text = "${file.subFiles} files"
-
-        }
-        else
-        {
-
-            imageViewFile.setImageResource(R.drawable.file)
-            textViewFileSize.text = "%.2f".format(file.size)
-
-        }
     }
 
     override fun getLayout(): Int {

@@ -22,7 +22,6 @@ class UserItem(val user: User, val admin: Boolean): Item<ViewHolder>() {
 
         textViewUserName.text = user.username
 
-
         if(viewHolder.itemView.isSelected)
         {
 
