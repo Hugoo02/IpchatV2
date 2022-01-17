@@ -111,10 +111,10 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
 
                 val userList = channel!!.userIds
 
-                if(checkIfMoreAdmins(userList!!))
+                if(admin!! || checkIfMoreAdmins(userList!!))
                 {
 
-                    userList.forEachIndexed { index, id ->
+                    userList!!.forEachIndexed { index, id ->
 
                         if(id == currentUserId)
                             userList.removeAt(index)
