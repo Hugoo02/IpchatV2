@@ -25,8 +25,7 @@ class EditProfileActivity : AppCompatActivity() {
     val currentUserId = FirebaseAuth.getInstance().uid
 
     lateinit var circleImageView: CircleImageView
-    lateinit var buttonGoBack: Button
-    lateinit var settings: ImageButton
+    lateinit var buttonBack: ImageButton
     lateinit var buttonEditImage: ImageButton
     lateinit var buttonEditProfile: Button
     lateinit var username : TextView
@@ -51,14 +50,9 @@ class EditProfileActivity : AppCompatActivity() {
 
         }
 
-        settings.setOnClickListener {
-            val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
-        }
-
         supportActionBar!!.hide()
 
-         buttonGoBack = findViewById(R.id.buttonEditProfile)
+         buttonBack = findViewById(R.id.buttonBack)
          circleImageView = findViewById(R.id.circleImageViewLogo)
          buttonEditImage = findViewById(R.id.buttonEditImage)
          buttonEditProfile = findViewById(R.id.buttonEditProfile)
@@ -78,12 +72,20 @@ class EditProfileActivity : AppCompatActivity() {
 
         }
 
+        buttonBack.setOnClickListener{
+            val intent = Intent(this, ProfileFragment::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         buttonEditProfile.setOnClickListener {
 
             editCurrentUser()
             uploadImageToFirebaseStorage()
             Toast.makeText(this, "Perfil editado com sucesso!", Toast.LENGTH_SHORT).show()
-
+            val intent = Intent(this, ProfileFragment::class.java)
+            startActivity(intent)
+            finish()
         }
 
         buttonEditImage.setOnClickListener {
@@ -91,7 +93,6 @@ class EditProfileActivity : AppCompatActivity() {
             intent.type = "image/*"
             getImage.launch(intent)
         }
-
     }
 
     private fun uploadImageToFirebaseStorage(){

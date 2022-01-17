@@ -29,8 +29,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile)  {
 
     //Variables
     lateinit var binding: FragmentProfileBinding
-    lateinit var settings: ImageButton
     lateinit var buttonEditProfile: Button
+    lateinit var settings: ImageButton
     lateinit var circleImageView: CircleImageView
     lateinit var username : TextView
     lateinit var course : TextView
@@ -60,10 +60,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile)  {
 
         getCurrentUser()
 
-
         settings.setOnClickListener {
-            val intent2 = Intent(activity, SettingsActivity::class.java)
-            startActivity(intent2)
+            val intent = Intent(activity, SettingsActivity::class.java)
+            startActivity(intent)
         }
 
         buttonEditProfile.setOnClickListener {

@@ -18,11 +18,32 @@ import com.google.firebase.auth.FirebaseAuth
 import ipca.project.ipchatv2.Authentication.LoginActivity
 import ipca.project.ipchatv2.Utils.Utils
 import ipca.project.ipchatv2.databinding.ActivityMainBinding
+import android.preference.PreferenceManager
+
+import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatDelegate
+
+
+
+
+
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
+
+    val IS_DARK = "IS_DARK"
+
+    override fun attachBaseContext(baseContext: Context?) {
+        super.attachBaseContext(baseContext)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
+        val isDark = prefs.getBoolean(IS_DARK, false)
+        if (isDark) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES) else AppCompatDelegate.setDefaultNightMode(
+            AppCompatDelegate.MODE_NIGHT_NO
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

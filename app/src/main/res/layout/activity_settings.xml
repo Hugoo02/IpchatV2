@@ -36,7 +36,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="80dp"
-        android:background="@drawable/profile_layout">
+        android:background="@drawable/profile_layout"
+        android:backgroundTint="@color/main_color">
 
         <Button
             android:id="@+id/buttonLogout"
@@ -44,16 +45,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Terminar Sessão"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonDarkMode" />
 
-        <Button
+        <Switch
             android:id="@+id/buttonDarkMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
-            android:text="Mudar Tema"
+            android:text="MUDAR TEMA"
+            android:textColor="@color/text_color"
+            android:outlineAmbientShadowColor="@color/primary_color"
+            android:outlineSpotShadowColor="@color/primary_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
