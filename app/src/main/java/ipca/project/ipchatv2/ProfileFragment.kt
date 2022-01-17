@@ -1,34 +1,43 @@
 package ipca.project.ipchatv2
 
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import ipca.project.ipchatv2.Authentication.LoginActivity
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.databinding.FragmentProfileBinding
-
+import java.util.*
 
 class ProfileFragment : Fragment(R.layout.fragment_profile)  {
 
     //Variables
     lateinit var binding: FragmentProfileBinding
-    lateinit var circleImageView: CircleImageView
+    lateinit var settings: ImageButton
     lateinit var buttonEditProfile: Button
+    lateinit var circleImageView: CircleImageView
     lateinit var username : TextView
     lateinit var course : TextView
     lateinit var address : TextView
     lateinit var email : TextView
     lateinit var studentNumber: TextView
     lateinit var biography: TextView
-    lateinit var settings: ImageButton
     private lateinit var mAuth: FirebaseAuth
 
     override fun onCreateView(
@@ -51,9 +60,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile)  {
 
         getCurrentUser()
 
-        settings.setOnClickListener() {
-            val intent = Intent(activity, SettingsActivity::class.java)
-            startActivity(intent)
+
+        settings.setOnClickListener {
+            val intent2 = Intent(activity, SettingsActivity::class.java)
+            startActivity(intent2)
         }
 
         buttonEditProfile.setOnClickListener {
@@ -84,5 +94,4 @@ class ProfileFragment : Fragment(R.layout.fragment_profile)  {
 
         }
     }
-
 }
