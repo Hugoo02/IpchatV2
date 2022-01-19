@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
-            android:text="MUDAR TEMA"
+            android:text="Mudar Tema"
             android:textColor="@color/text_color"
             android:outlineAmbientShadowColor="@color/primary_color"
             android:outlineSpotShadowColor="@color/primary_color"

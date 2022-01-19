@@ -36,6 +36,7 @@ class SettingsActivity: AppCompatActivity() {
 
     val IS_DARK = "IS_DARK"
 
+
     override fun attachBaseContext(baseContext: Context?) {
         super.attachBaseContext(baseContext)
         val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
@@ -67,40 +68,48 @@ class SettingsActivity: AppCompatActivity() {
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
+        val preferences = getPreferences(MODE_PRIVATE)
+        val switch = preferences.getBoolean("switch", false)
+        changeTheme.setChecked(switch)
 
         changeTheme.setOnCheckedChangeListener { compoundButton, onSwitch ->
             if (onSwitch) {
                 setDefaultNightMode(MODE_NIGHT_YES);
                 prefs.edit().putBoolean(IS_DARK, true).apply();
+                val editor = preferences.edit()
+                editor.putBoolean("switch", changeTheme.isChecked) // value to store
+                editor.commit()
             } else {
                 setDefaultNightMode(MODE_NIGHT_NO);
                 prefs.edit().putBoolean(IS_DARK, false).apply();
+
+                val editor = preferences.edit()
+                editor.putBoolean("switch", changeTheme.isChecked!!) // value to store
+                editor.commit()
             }
+        }
 
-            logout.setOnClickListener {
 
-                var builder = AlertDialog.Builder(this)
-                builder.setTitle(getString(R.string.cancel))
-                builder.setTitle(getString(R.string.logout))
-                builder.setPositiveButton(
-                    getString(R.string.yes),
-                    DialogInterface.OnClickListener { dialog, id ->
+        logout.setOnClickListener {
 
-                        mAuth.signOut()
-                        val intent = Intent(this, LoginActivity::class.java)
-                        startActivity(intent)
-
-                    })
+            var builder = AlertDialog.Builder(this)
+            builder.setTitle(getString(R.string.cancel))
+            builder.setTitle(getString(R.string.logout))
+            builder.setPositiveButton(
+                getString(R.string.yes),
+                DialogInterface.OnClickListener { dialog, id ->
+                    mAuth.signOut()
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                })
                 builder.setNegativeButton(
                     getString(R.string.no),
                     DialogInterface.OnClickListener { dialog, id ->
+                })
 
-
-                    })
-                var alert = builder.create()
-                alert.show()
-                finish()
-            }
+            var alert = builder.create()
+            alert.show()
+            finish()
         }
     }
 }
