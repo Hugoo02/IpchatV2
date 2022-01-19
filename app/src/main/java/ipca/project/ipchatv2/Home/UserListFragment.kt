@@ -47,7 +47,6 @@ class UserListFragment : Fragment() {
         binding = FragmentUserListBinding.inflate(layoutInflater)
 
         binding.recyclerViewUserLM.adapter = adapter
-        binding.recyclerViewUserLM.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
         listenForLatestMessages()
 

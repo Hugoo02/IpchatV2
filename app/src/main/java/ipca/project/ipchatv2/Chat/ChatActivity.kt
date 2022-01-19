@@ -63,7 +63,6 @@ class ChatActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.recyclerViewChat.adapter = adapter
-        binding.recyclerViewChat.addItemDecoration(DividerItemDecoration(this, 0))
 
         groupId = intent.getStringExtra("groupId")
         channelType = intent.getStringExtra("channelType")

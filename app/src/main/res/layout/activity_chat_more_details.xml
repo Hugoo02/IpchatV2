@@ -58,7 +58,9 @@
         android:layout_marginTop="80dp"
         android:background="@drawable/constraint_background"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:layout_editor_absoluteX="16dp">
 
         <TextView
             android:id="@+id/textViewFiles"
@@ -85,6 +87,29 @@
             app:layout_constraintEnd_toEndOf="@+id/textViewFiles"
             app:layout_constraintStart_toStartOf="@+id/textViewFiles"
             app:layout_constraintTop_toBottomOf="@+id/textViewGroupMembers" />
+
+        <TextView
+            android:id="@+id/textViewRemoveGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Remover Grupo"
+            android:textColor="@color/red"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@+id/textViewFiles"
+            app:layout_constraintStart_toStartOf="@+id/textViewFiles"
+            app:layout_constraintTop_toBottomOf="@+id/textViewLeaveGroup" />
+
+        <ImageView
+            android:id="@+id/imageViewRemoveGroup"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewRemoveGroup"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textViewRemoveGroup"
+            app:srcCompat="@drawable/ic_baseline_remove_circle_24"
+            app:tint="@color/red" />
 
         <TextView
             android:id="@+id/textView2"
@@ -114,8 +139,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="Projeto 1"
-            android:textSize="16sp"
             android:textColor="@color/black"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/circleImageViewGroup"
             app:layout_constraintStart_toStartOf="@+id/circleImageViewGroup"
@@ -152,11 +177,11 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="20dp"
-            app:tint="@color/red"
             app:layout_constraintBottom_toBottomOf="@+id/textViewLeaveGroup"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textViewLeaveGroup"
-            app:srcCompat="@drawable/ic_logout_profile" />
+            app:srcCompat="@drawable/ic_logout_profile"
+            app:tint="@color/red" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

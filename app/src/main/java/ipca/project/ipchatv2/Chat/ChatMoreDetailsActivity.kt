@@ -29,6 +29,8 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
     var channelType: String? = null
     var admin : Boolean? = null
 
+    val adminList : MutableList<String> = arrayListOf()
+
     val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +53,8 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
             binding.textViewGroupMembers.visibility = View.GONE
             binding.textViewLeaveGroup.visibility = View.GONE
             binding.imageViewLeaveGroup.visibility = View.GONE
+            binding.textViewRemoveGroup.visibility = View.GONE
+            binding.imageViewRemoveGroup.visibility = View.GONE
 
         }
 
@@ -80,6 +84,13 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
 
         binding.textViewLeaveGroup.setOnClickListener {
 
+            adminList()
+
+            adminList.forEach {
+
+                println("admin = $it")
+            }
+
             var builder = AlertDialog.Builder(this)
             builder.setTitle(getString(R.string.cancel))
             builder.setTitle("Tem a certeza que deseja sair do grupo?")
@@ -97,6 +108,65 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
 
         }
 
+        binding.textViewRemoveGroup.setOnClickListener {
+
+            var builder = AlertDialog.Builder(this)
+            builder.setTitle(getString(R.string.cancel))
+            builder.setTitle("Tem a certeza que deseja sair do grupo?")
+            builder.setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener{ dialog, id ->
+
+                removeGroup()
+
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+
+            })
+            builder.setNegativeButton(getString(R.string.no), DialogInterface.OnClickListener{ dialog, id ->
+
+
+            })
+            var alert = builder.create()
+            alert.show()
+
+        }
+
+    }
+
+    private fun adminList() {
+
+        val refGroup = db.collection("groupChannels")
+            .document(groupId!!)
+
+        refGroup.get()
+            .addOnSuccessListener {
+
+                adminList.clear()
+
+                val channel = it.toObject(GroupChannel::class.java)
+
+                val userList = channel!!.userIds
+
+                //Check if there is more admins
+                userList!!.forEachIndexed { index, id ->
+
+                    db.collection("User")
+                        .document(id)
+                        .collection("groupChannels")
+                        .document(groupId!!)
+                        .get()
+                        .addOnSuccessListener { result ->
+
+                            val admin = result.getBoolean("admin")
+
+                            if (admin!!) {
+                                adminList.add(id)
+                            }
+
+                        }
+
+                    }
+            }
     }
 
     private fun leftGroup() {
@@ -111,7 +181,8 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
 
                 val userList = channel!!.userIds
 
-                if(admin!! || checkIfMoreAdmins(userList!!))
+                //Se não for admin ou se existirem mais admins no grupo
+                if(!admin!! || adminList.size >= 2)
                 {
 
                     userList!!.forEachIndexed { index, id ->
@@ -121,14 +192,19 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
 
                     }
 
+                    db.collection("User")
+                        .document(currentUserId!!)
+                        .collection("groupChannels")
+                        .document(groupId!!)
+                        .delete()
+
                     refGroup.update(mapOf("userIds" to userList))
-                        .addOnSuccessListener {
 
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
+                    removeGroupEvents("individual")
 
-                        }
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
 
                 }else{
 
@@ -137,20 +213,14 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
                     builder.setTitle("Se sair o grupo será apagado. Deseja continuar?")
                     builder.setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener{ dialog, id ->
 
-                        userList.forEachIndexed { index, id ->
+                        removeGroup()
 
-                            if(id == currentUserId)
-                                userList.removeAt(index)
+                        removeGroupEvents("group")
 
-                        }
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
 
-                        refGroup.delete().addOnSuccessListener {
-
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
-
-                        }
 
                     })
                     builder.setNegativeButton(getString(R.string.no), DialogInterface.OnClickListener{ dialog, id ->
@@ -166,37 +236,150 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
 
     }
 
-    private fun checkIfMoreAdmins(userList: MutableList<String>): Boolean {
+    private fun removeGroup() {
 
-        var adminCheck = false
+        val refGroup = db.collection("groupChannels")
+            .document(groupId!!)
 
-        userList.forEachIndexed { index, id ->
+        refGroup.get()
+            .addOnSuccessListener {
 
-            db.collection("User")
-                .document(id)
-                .collection("groupChannels")
+                val channel = it.toObject(GroupChannel::class.java)
+
+                val userList = channel!!.userIds
+
+                removeGroupEvents("group")
+
+                userList!!.forEachIndexed { index, id ->
+
+                    db.collection("User")
+                        .document(id)
+                        .collection("groupChannels")
+                        .document(groupId!!)
+                        .delete()
+                        .addOnSuccessListener {
+
+                            if(index == (userList.size - 1))
+                            {
+
+                                refGroup.collection("lastMessage").get().addOnSuccessListener {
+
+                                    for(doc in it.documents)
+                                        refGroup.collection("lastMessage").document(doc.id).delete()
+
+                                }
+
+                                refGroup.collection("messages").get().addOnSuccessListener {
+
+                                    for(doc in it.documents)
+                                        refGroup.collection("messages").document(doc.id).delete()
+
+                                }
+                                refGroup.delete()
+
+                            }
+
+                        }
+
+                }
+
+            }
+
+    }
+
+    private fun removeGroupEvents(removeType: String) {
+
+        //Ainda não está a funcionar
+        if (removeType == "individual")
+        {
+
+            val userCalendarRef = db.collection("Calendar")
+                .document(currentUserId!!)
+                .collection("Meetings")
+
+            val groupCalendarRef = db.collection("Calendar")
                 .document(groupId!!)
-                .get()
-                .addOnSuccessListener { result ->
+                .collection("Meetings")
 
-                    val admin = result.getBoolean("admin")
+            userCalendarRef.get()
+                .addOnSuccessListener { userCalendar ->
 
-                    if(admin!!)
-                    {
+                    groupCalendarRef.get().addOnSuccessListener { groupCalendar ->
 
-                        adminCheck = true
-                        return@addOnSuccessListener
+                        for(groupDoc in groupCalendar.documents){
+
+                            for(userDoc in userCalendar.documents){
+
+                                if(userDoc.id == groupDoc.id)
+                                {
+
+                                    userCalendarRef.document(userDoc.id).delete()
+
+                                }
+
+                            }
+
+                        }
 
                     }
 
                 }
 
-            if(index == (userList.size - 1))
-                return adminCheck
+        }else{
+
+            val refGroup = db.collection("groupChannels")
+                .document(groupId!!)
+
+            refGroup.get().addOnSuccessListener { result ->
+
+                val channel = result.toObject(GroupChannel::class.java)
+
+                val groupCalendarRef = db.collection("Calendar")
+                    .document(groupId!!)
+                    .collection("Meetings")
+
+                val userList = channel!!.userIds
+
+                userList!!.forEachIndexed { index, id ->
+
+                    val userCalendarRef = db.collection("Calendar")
+                        .document(id)
+                        .collection("Meetings")
+
+                    userCalendarRef.get()
+                        .addOnSuccessListener { userCalendar ->
+
+                            groupCalendarRef.get().addOnSuccessListener { groupCalendar ->
+
+                                for(groupDoc in groupCalendar.documents){
+
+                                    for(userDoc in userCalendar.documents){
+
+                                        if(userDoc.id == groupDoc.id)
+                                        {
+
+                                            userCalendarRef.document(userDoc.id).delete()
+
+                                        }
+
+                                    }
+
+                                    groupCalendarRef.document(groupDoc.id).delete()
+
+                                }
+
+                            }
+
+                        }
+
+                }
+
+            }
+
 
         }
 
-        return  adminCheck
+
     }
 
     private fun checkIfAdmin() {
@@ -209,6 +392,9 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
             .addOnSuccessListener {
 
                 admin = it.getBoolean("admin")
+
+                if(admin!!)
+                    adminList()
 
             }
 

@@ -4,6 +4,7 @@ import android.view.View
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -20,7 +21,9 @@ import kotlinx.android.synthetic.main.row_image_message_from.view.*
 import kotlinx.android.synthetic.main.row_image_message_to.view.*
 import kotlinx.android.synthetic.main.row_text_message_from.view.*
 import kotlinx.android.synthetic.main.row_text_message_to.view.*
+import java.lang.Exception
 import java.util.*
+import java.util.concurrent.atomic.AtomicBoolean
 
 
 class ChatFromItem(val message: ChatMessage): Item<ViewHolder>(){
@@ -82,8 +85,20 @@ class ImageFromItem(val message: ChatMessage): Item<ViewHolder>(){
     override fun bind(viewHolder: ViewHolder, position: Int) {
 
         val imageViewFrom = viewHolder.itemView.imageViewFrom
+        val progressBarImageFrom = viewHolder.itemView.progressBarImageFrom
 
-        Picasso.get().load(message.text).into(imageViewFrom)
+        progressBarImageFrom.visibility = View.VISIBLE
+
+        Picasso.get().load(message.text).into(imageViewFrom, object : Callback {
+            override fun onSuccess() {
+
+                progressBarImageFrom.visibility = View.GONE
+
+            }
+            override fun onError(e: Exception?) {
+
+            }
+        })
 
     }
 
@@ -101,8 +116,20 @@ class ImageToItem(val message: ChatMessage): Item<ViewHolder>(){
         val textViewNameImageTo = viewHolder.itemView.textViewNameImageTo
         val imageViewContactPhotoTo = viewHolder.itemView.imageViewContactPhotoTo
         val imageViewMessageTo = viewHolder.itemView.imageViewMessageTo
+        val progressBarImageTo = viewHolder.itemView.progressBarImageTo
 
-        Picasso.get().load(message.text).into(imageViewMessageTo)
+        progressBarImageTo.visibility = View.VISIBLE
+
+        Picasso.get().load(message.text).into(imageViewMessageTo, object : Callback {
+            override fun onSuccess() {
+
+                progressBarImageTo.visibility = View.GONE
+
+            }
+            override fun onError(e: Exception?) {
+
+            }
+        })
 
         val refUser = db.collection("User")
             .document(message.senderId!!)
