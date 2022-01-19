@@ -89,27 +89,25 @@ class SettingsActivity: AppCompatActivity() {
             }
         }
 
-
         logout.setOnClickListener {
 
             var builder = AlertDialog.Builder(this)
             builder.setTitle(getString(R.string.cancel))
             builder.setTitle(getString(R.string.logout))
-            builder.setPositiveButton(
-                getString(R.string.yes),
-                DialogInterface.OnClickListener { dialog, id ->
-                    mAuth.signOut()
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
-                })
-                builder.setNegativeButton(
-                    getString(R.string.no),
-                    DialogInterface.OnClickListener { dialog, id ->
-                })
+            builder.setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener{ dialog, id ->
+                mAuth.signOut()
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
 
+            })
+            builder.setNegativeButton(getString(R.string.no), DialogInterface.OnClickListener{ dialog, id ->
+
+
+            })
             var alert = builder.create()
             alert.show()
-            finish()
+
         }
     }
 }
