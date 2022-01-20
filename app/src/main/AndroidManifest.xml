@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ipca.project.ipchatv2">
 
     <application
@@ -43,6 +44,10 @@
         <activity
             android:name=".Calendar.NewEventActivity"
             android:exported="true" />
+        <activity
+            android:name=".Calendar.EditEventActivity"
+            android:exported="true"
+            tools:ignore="DuplicateActivity" />
         <activity
             android:name=".Calendar.NewCalendarEventActivity"
             android:exported="true" />

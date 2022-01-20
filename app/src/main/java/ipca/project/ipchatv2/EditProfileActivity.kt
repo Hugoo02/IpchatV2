@@ -73,8 +73,6 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         buttonBack.setOnClickListener{
-            val intent = Intent(this, ProfileFragment::class.java)
-            startActivity(intent)
             finish()
         }
 

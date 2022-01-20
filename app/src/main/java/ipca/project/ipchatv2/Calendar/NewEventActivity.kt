@@ -29,9 +29,7 @@ class NewEventActivity : AppCompatActivity() {
         var calendarId = intent.getStringExtra("calendarId")
 
         binding.buttonBack.setOnClickListener {
-
             finish()
-
         }
 
         binding.textViewSelectDate.setOnClickListener {

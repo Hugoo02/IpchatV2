@@ -62,8 +62,7 @@ class SettingsActivity: AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
 
         buttonBack.setOnClickListener {
-            val intent = Intent(this, ProfileFragment::class.java)
-            startActivity(intent)
+            finish()
         }
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(this);
