@@ -1,6 +1,9 @@
 package ipca.project.ipchatv2.Chat
 
+import android.graphics.Color
+import android.graphics.Color.GRAY
 import android.os.Build
+import android.view.View
 import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -36,6 +39,8 @@ class UserListLMRow(val message: MessagePrivate): Item<ViewHolder>(){
         val textViewHourLM = viewHolder.itemView.textViewHourLM
 
         val circleImageLM = viewHolder.itemView.circleImageLM
+        var onlineBall = viewHolder.itemView.onlineBall
+
 
         refMessage.get().addOnSuccessListener { result ->
 
@@ -50,6 +55,13 @@ class UserListLMRow(val message: MessagePrivate): Item<ViewHolder>(){
             refUserChat.get().addOnSuccessListener { result ->
 
                 otherUser = result.toObject(User::class.java)
+
+                if(otherUser!!.status == true){
+                    onlineBall.visibility = View.VISIBLE
+                }
+                else{
+                    onlineBall.visibility = View.GONE
+                }
 
                 textViewChatNameLM.text = otherUser!!.username
 

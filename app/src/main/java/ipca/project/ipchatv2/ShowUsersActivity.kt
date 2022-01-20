@@ -19,8 +19,8 @@ import ipca.project.ipchatv2.RowConfigurations.UserItem
 import ipca.project.ipchatv2.databinding.ActivityShowUsersBinding
 import kotlinx.android.synthetic.main.row_users.view.*
 import android.app.Activity
-
-
+import com.google.firebase.iid.FirebaseInstanceId
+import ipca.project.ipchatv2.Notifications.FirebaseService
 
 
 class ShowUsersActivity : AppCompatActivity() {
@@ -49,6 +49,7 @@ class ShowUsersActivity : AppCompatActivity() {
 
         fetchUsers()
 
+
         binding.recyclerViewShowUsers.adapter = adapter
 
         if(channelType == "private")
@@ -59,6 +60,7 @@ class ShowUsersActivity : AppCompatActivity() {
                 val userItem = item as UserItem
                 var guestUserId : String? = null
                 var channelId : String? = null
+                var otherUserToken :String? = null
 
                 db.collection("User")
                     .document(userItem.user.id!!)
@@ -66,8 +68,9 @@ class ShowUsersActivity : AppCompatActivity() {
                     .addOnSuccessListener { result ->
 
                         guestUserId = result.toObject(User::class.java)!!.id
-
+                        otherUserToken = result.toObject(User::class.java)!!.token
                         println("guestUserId = $guestUserId")
+
 
                         db.collection("User")
                             .document(currentUser.uid!!)
@@ -78,7 +81,7 @@ class ShowUsersActivity : AppCompatActivity() {
                                 if(it.exists()){
 
                                     channelId = it["channelId"] as String
-                                    startChatActivity(channelId!!)
+                                    startChatActivity(channelId!!, otherUserToken!!)
 
                                 }
                                 else
@@ -101,7 +104,7 @@ class ShowUsersActivity : AppCompatActivity() {
                                                 .set(mapOf("channelId" to it.id))
 
                                             channelId = it.id
-                                            startChatActivity(channelId!!)
+                                            startChatActivity(channelId!!,otherUserToken!!)
 
                                     }
                                 }
@@ -161,11 +164,12 @@ class ShowUsersActivity : AppCompatActivity() {
 
     }
 
-    private fun startChatActivity(channelId: String){
+    private fun startChatActivity(channelId: String, otherUserToken: String){
 
         val intent = Intent(this, ChatActivity::class.java)
         intent.putExtra("groupId", channelId)
         intent.putExtra("channelType", "private")
+        intent.putExtra("Token", otherUserToken)
         startActivity(intent)
         finish()
 
@@ -198,6 +202,8 @@ class ShowUsersActivity : AppCompatActivity() {
         finish()
 
     }
+
+
 
 }
 

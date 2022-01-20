@@ -1,5 +1,7 @@
 package ipca.project.ipchatv2.Chat
 
+import android.content.*
+import android.content.ContentValues.TAG
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -12,19 +14,26 @@ import ipca.project.ipchatv2.Models.ChatMessage
 import kotlinx.android.synthetic.main.activity_chat.*
 import java.util.*
 import kotlin.collections.ArrayList
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import ipca.project.ipchatv2.Models.GroupChannel
 import ipca.project.ipchatv2.Models.PrivateChannel
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.R
 import com.google.firebase.storage.FirebaseStorage
+import com.google.gson.Gson
+import com.squareup.picasso.Picasso
+import ipca.project.ipchatv2.Notifications.NotificationData
+import ipca.project.ipchatv2.Notifications.PushNotification
+import ipca.project.ipchatv2.Notifications.RetrofitInstance
 import ipca.project.ipchatv2.databinding.ActivityChatBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ChatActivity : AppCompatActivity() {
 
@@ -63,6 +72,19 @@ class ChatActivity : AppCompatActivity() {
         supportActionBar!!.hide()
 
         binding.constraintLayout.bringToFront()
+
+        val bundle = intent.extras
+        var receiverTokenShowUsers = ""
+        var receiverTokenUserList = ""
+        bundle?.let {
+            receiverTokenShowUsers = it.getString("Token").toString()
+            receiverTokenUserList = it.getString("receiverToken").toString()
+        }
+
+        println(receiverTokenShowUsers)
+        println(receiverTokenUserList)
+        println("SFWEFWEFWGWEGV")
+
 
         configureToolbar()
         listenForMessages()
@@ -114,11 +136,71 @@ class ChatActivity : AppCompatActivity() {
 
         }
 
+
+
         binding.imageButtonSendMessage.setOnClickListener {
+
+            Log.d(TAG, "nova mensagem")
+
+            val ref = FirebaseFirestore.getInstance().collection("User").document(currentUser!!)
+
+            val uid = FirebaseAuth.getInstance().uid
+            //val ref = Firebase.firestore.collection("User").document(uid!!)
+
+            ref.addSnapshotListener { value, error ->
+
+                val user = value!!.toObject(User::class.java)
+
+                val title = user!!.username
+                val message = editTextMessage.text.toString()
+                var receiverToken = ""
+                //val receiverTokenFromShowUsers = receiverTokenShowUsers
+                //val receiverTokenFromUserList = receiverTokenUserList
+
+                if(receiverTokenShowUsers == "null" && receiverTokenUserList != "null"){
+                    receiverToken = receiverTokenUserList
+                }
+                else if(receiverTokenUserList == "null" && receiverTokenShowUsers != "null"){
+                    receiverToken = receiverTokenShowUsers
+                }
+
+                var profileImage = ""
+                profileImage = user!!.imageURL!!
+
+                println(receiverToken)
+                println(profileImage)
+
+
+                if(title!!.isNotEmpty() && message.isNotEmpty()) {
+                    PushNotification(
+                        NotificationData(title, message, profileImage),
+                        receiverToken
+                    ).also {
+                        sendNotification(it)
+                    }
+                }
+
+
+
+            }
 
             performSendMessage()
 
+
+            /*
+            ref.get().addOnSuccessListener { value ->
+
+                val user = value!!.toObject(User::class.java)
+
+                profileImage = user!!.imageURL!!
+
+            }
+
+             */
+
         }
+
+
     }
 
     private fun selectImage() {
@@ -257,6 +339,8 @@ class ChatActivity : AppCompatActivity() {
 
     private fun performSendMessage() {
 
+        Log.d(TAG, "sendmessage")
+
         val text = binding.editTextMessage.text.toString()
         val date = Calendar.getInstance().time
 
@@ -360,5 +444,18 @@ class ChatActivity : AppCompatActivity() {
 
         }
 
+    }
+
+    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val response = RetrofitInstance.api.postNotification(notification)
+            if(response.isSuccessful) {
+                Log.d(ContentValues.TAG, "Response: ${Gson().toJson(response)}")
+            } else {
+                Log.e(ContentValues.TAG, response.errorBody().toString())
+            }
+        } catch(e: Exception) {
+            Log.e(ContentValues.TAG, e.toString())
+        }
     }
 }

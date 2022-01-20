@@ -19,6 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/onlineBall"
         android:layout_width="16dp"
         android:layout_height="16dp"
         app:layout_goneMarginRight="30dp"
