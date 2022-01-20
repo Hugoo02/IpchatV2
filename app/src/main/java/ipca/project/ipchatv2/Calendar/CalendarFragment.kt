@@ -12,7 +12,9 @@ import com.xwray.groupie.ViewHolder
 import java.util.*
 import android.R
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.util.TypedValue
 import android.view.MotionEvent
@@ -30,6 +32,7 @@ import ipca.project.ipchatv2.Models.CalendarModel
 import ipca.project.ipchatv2.databinding.FragmentCalendarBinding
 import android.widget.RelativeLayout
 import android.graphics.RectF
+import ipca.project.ipchatv2.MainActivity
 import kotlinx.android.synthetic.main.activity_create_new_group.*
 
 class CalendarFragment : Fragment() {
@@ -94,6 +97,30 @@ class CalendarFragment : Fragment() {
         binding.recyclerView.adapter = adapter
 
         displayEventIcons()
+
+        adapter.setOnItemLongClickListener { item, view ->
+
+            val row = item as CalendarRow
+
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle(getString(ipca.project.ipchatv2.R.string.cancel))
+            builder.setTitle("Tem a certeza que deseja remover o evento pressionado?")
+            builder.setPositiveButton(getString(ipca.project.ipchatv2.R.string.yes), DialogInterface.OnClickListener{ dialog, id ->
+
+                //removeDate(row.calendar.)
+
+
+            })
+            builder.setNegativeButton(getString(ipca.project.ipchatv2.R.string.no), DialogInterface.OnClickListener{ dialog, id ->
+
+
+            })
+            val alert = builder.create()
+            alert.show()
+
+            return@setOnItemLongClickListener true
+
+        }
 
         binding.buttonBack.setOnClickListener {
 
@@ -173,6 +200,24 @@ class CalendarFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         getCurrentCalendar()
+    }
+
+    fun removeDate(meetingId: String){
+
+        if (channelType == null)
+        {
+
+            db.collection("Calendar")
+                .document(currentUser.uid!!)
+                .collection("Meetings")
+                .document(meetingId)
+                .delete()
+
+
+
+
+        }
+
     }
 
     fun calculateRectOnScreen(view: View): RectF {

@@ -164,6 +164,22 @@ class NewEventActivity : AppCompatActivity() {
                             }
 
                     }
+                }else{
+
+                    db.collection("Calendar")
+                        .document(calendarId!!)
+                        .collection("Meetings")
+                        .add(calendar)
+                        .addOnSuccessListener { calendarObject ->
+
+                            Toast.makeText(
+                                this,
+                                "Evento adicionado com sucesso",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            finish()
+                        }
+
                 }
             }
 

@@ -110,7 +110,7 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
 
         binding.textViewRemoveGroup.setOnClickListener {
 
-            var builder = AlertDialog.Builder(this)
+            val builder = AlertDialog.Builder(this)
             builder.setTitle(getString(R.string.cancel))
             builder.setTitle("Tem a certeza que deseja sair do grupo?")
             builder.setPositiveButton(getString(R.string.yes), DialogInterface.OnClickListener{ dialog, id ->
@@ -126,7 +126,7 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
 
 
             })
-            var alert = builder.create()
+            val alert = builder.create()
             alert.show()
 
         }
