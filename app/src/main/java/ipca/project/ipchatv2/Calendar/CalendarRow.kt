@@ -1,6 +1,10 @@
 package ipca.project.ipchatv2.Calendar
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
+import android.provider.Settings.Global.getString
 import android.util.TypedValue
 import android.view.View
 import android.widget.ImageButton
@@ -10,9 +14,11 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.startActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
+import ipca.project.ipchatv2.Authentication.LoginActivity
 import ipca.project.ipchatv2.Models.CalendarModel
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.R
@@ -34,6 +40,7 @@ class CalendarRow(val calendar: CalendarModel): Item<ViewHolder>() {
         val textViewCreatedBy = viewHolder.itemView.findViewById<TextView>(R.id.textViewCreatedBy)
         val textViewDescription = viewHolder.itemView.findViewById<TextView>(R.id.textViewDescription)
         val imageButtonMoreDetails = viewHolder.itemView.findViewById<ImageButton>(R.id.imageButtonMoreDetails)
+        val butEdit = viewHolder.itemView.findViewById<ImageButton>(R.id.buttonEditEvent)
 
         textViewDate.text = Utils.receiveDateFromDatabaseToCalendar(calendar.date!!)
         textViewTitle.text = calendar.title
@@ -76,7 +83,6 @@ class CalendarRow(val calendar: CalendarModel): Item<ViewHolder>() {
                         val user = result.toObject(User::class.java)
 
                         textViewCreatedBy.text = user!!.username
-
                     }
 
                 imageButtonMoreDetails.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_24)

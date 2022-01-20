@@ -152,8 +152,6 @@ class CalendarFragment : Fragment() {
 
                         binding.recyclerView.layoutParams = params
 
-
-
                     }
                 }
 

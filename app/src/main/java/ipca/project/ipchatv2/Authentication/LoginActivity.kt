@@ -77,11 +77,8 @@ class LoginActivity : AppCompatActivity() {
                         "Email, ou palavra passe estão incorretos!",
                         Toast.LENGTH_SHORT
                     ).show()
-
                 }
-
             }
-
         }
     }
 

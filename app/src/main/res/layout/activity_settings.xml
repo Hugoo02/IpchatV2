@@ -55,10 +55,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
-            android:text="Mudar Tema"
-            android:textColor="@color/text_color"
             android:outlineAmbientShadowColor="@color/primary_color"
             android:outlineSpotShadowColor="@color/primary_color"
+            android:text="MUDAR TEMA "
+            android:textColor="@color/text_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IpchatV2">
         <activity
+            android:name=".Calendar.EditEventActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".Chat.ShowPhotoCloserActivity"
             android:exported="true" />
         <activity
@@ -32,17 +41,13 @@
             android:name=".ShowUsersActivity"
             android:exported="true" />
         <activity
-
             android:name=".Calendar.NewEventActivity"
             android:exported="true" />
         <activity
             android:name=".Calendar.NewCalendarEventActivity"
-
             android:exported="true" />
         <activity
-
             android:name=".EditProfileActivity"
-
             android:exported="true" />
         <activity
             android:name=".Authentication.LoginActivity"

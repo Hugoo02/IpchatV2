@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary_color"
-    tools:context=".Calendar.NewEventActivity">
+    tools:context=".Calendar.EditEventActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -41,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="Novo Evento"
+                android:text="Editar Evento"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"
