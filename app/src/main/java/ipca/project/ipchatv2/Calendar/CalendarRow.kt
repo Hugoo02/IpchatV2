@@ -1,6 +1,9 @@
 package ipca.project.ipchatv2.Calendar
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import android.widget.ImageButton
@@ -18,7 +21,10 @@ import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.R
 import ipca.project.ipchatv2.Utils.Utils
 
-class CalendarRow(val calendar: CalendarModel): Item<ViewHolder>() {
+class CalendarRow(  val calendar: CalendarModel,
+                    val calendarId: String,
+                    val channelType: String? = null,
+                    val activity: Activity): Item<ViewHolder>() {
 
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
@@ -30,10 +36,10 @@ class CalendarRow(val calendar: CalendarModel): Item<ViewHolder>() {
         val textViewLocal = viewHolder.itemView.findViewById<TextView>(R.id.textViewLocal)
         val imageViewMap = viewHolder.itemView.findViewById<ImageView>(R.id.imageViewMap)
         val linearLayout = viewHolder.itemView.findViewById<LinearLayout>(R.id.linearLayout)
-        val textViewCreatedByText = viewHolder.itemView.findViewById<TextView>(R.id.textViewCreatedByText)
         val textViewCreatedBy = viewHolder.itemView.findViewById<TextView>(R.id.textViewCreatedBy)
         val textViewDescription = viewHolder.itemView.findViewById<TextView>(R.id.textViewDescription)
         val imageButtonMoreDetails = viewHolder.itemView.findViewById<ImageButton>(R.id.imageButtonMoreDetails)
+        val buttonEditEvent = viewHolder.itemView.findViewById<ImageButton>(R.id.buttonEditEvent)
 
         textViewDate.text = Utils.receiveDateFromDatabaseToCalendar(calendar.date!!)
         textViewTitle.text = calendar.title
@@ -65,6 +71,7 @@ class CalendarRow(val calendar: CalendarModel): Item<ViewHolder>() {
                 textViewLocal.visibility = View.VISIBLE
                 imageViewMap.visibility = View.VISIBLE
                 linearLayout.visibility = View.VISIBLE
+                buttonEditEvent.visibility = View.VISIBLE
 
                 textViewLocal.text = calendar.local
 
@@ -111,10 +118,21 @@ class CalendarRow(val calendar: CalendarModel): Item<ViewHolder>() {
                 textViewLocal.visibility = View.GONE
                 imageViewMap.visibility = View.GONE
                 linearLayout.visibility = View.GONE
+                buttonEditEvent.visibility = View.GONE
 
                 imageButtonMoreDetails.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24)
 
             }
+
+        }
+
+        buttonEditEvent.setOnClickListener {
+
+            val intent = Intent(activity, EditEventActivity::class.java)
+            intent.putExtra("calendarId", calendarId)
+            intent.putExtra("channelType", channelType)
+            intent.putExtra("event", calendar)
+            activity.startActivity(intent)
 
         }
 

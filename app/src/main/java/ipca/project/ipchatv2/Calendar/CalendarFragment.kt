@@ -98,30 +98,6 @@ class CalendarFragment : Fragment() {
 
         displayEventIcons()
 
-        adapter.setOnItemLongClickListener { item, view ->
-
-            val row = item as CalendarRow
-
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle(getString(ipca.project.ipchatv2.R.string.cancel))
-            builder.setTitle("Tem a certeza que deseja remover o evento pressionado?")
-            builder.setPositiveButton(getString(ipca.project.ipchatv2.R.string.yes), DialogInterface.OnClickListener{ dialog, id ->
-
-                //removeDate(row.calendar.)
-
-
-            })
-            builder.setNegativeButton(getString(ipca.project.ipchatv2.R.string.no), DialogInterface.OnClickListener{ dialog, id ->
-
-
-            })
-            val alert = builder.create()
-            alert.show()
-
-            return@setOnItemLongClickListener true
-
-        }
-
         binding.buttonBack.setOnClickListener {
 
             requireActivity().finish()
@@ -199,7 +175,15 @@ class CalendarFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+
         getCurrentCalendar()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        dateList.clear()
+        adapter.clear()
+        events.clear()
     }
 
     fun removeDate(meetingId: String){
@@ -212,8 +196,6 @@ class CalendarFragment : Fragment() {
                 .collection("Meetings")
                 .document(meetingId)
                 .delete()
-
-
 
 
         }
@@ -247,12 +229,12 @@ class CalendarFragment : Fragment() {
 
     fun getCurrentCalendar(){
 
-        dateList.clear()
-
         val ref = db.collection("Calendar").document(calendarId!!)
             .collection("Meetings")
 
         ref.addSnapshotListener { value, error ->
+
+            dateList.clear()
 
             for (document in value!!.documents){
 
@@ -286,7 +268,9 @@ class CalendarFragment : Fragment() {
 
             if(dayFirebase == dayCalendar && monthFirebase == monthCalendar
                 && yearFirebase == yearCalendar)
-                adapter.add(CalendarRow(it))
+            {
+                adapter.add(CalendarRow(it, calendarId!!, channelType, requireActivity()))
+            }
 
         }
 
