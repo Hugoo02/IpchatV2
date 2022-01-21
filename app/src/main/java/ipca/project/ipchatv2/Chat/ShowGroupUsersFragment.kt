@@ -52,6 +52,8 @@ class ShowGroupUsersFragment : Fragment() {
                 .document(groupId!!)
                 .addSnapshotListener { result, error ->
 
+                    //Snapshot importante para verificar se houve mudanças nos membros do grupo
+
                     adapter.clear()
                     adapterList.clear()
 
@@ -79,27 +81,36 @@ class ShowGroupUsersFragment : Fragment() {
 
                                             var passed = false
 
-                                            adapterList.forEachIndexed { index, userItem ->
+                                            val iter: ListIterator<UserItem> =
+                                                adapterList.listIterator()
 
-                                                if ((user!!.id == userItem.user.id && !admin == userItem.admin))
+                                            val toReplace = mutableMapOf<UserItem, Int>()
+
+                                            while (iter.hasNext()) {
+                                                val str = iter.next()
+                                                val index = iter.nextIndex()
+
+                                                println("strId = " + str.user.id)
+                                                println("index = " + index)
+
+                                                if((user!!.id == str.user.id && !admin == str.admin))
                                                 {
-                                                    val newElement = UserItem(userItem.user, admin)
+                                                    val newElement = UserItem(str.user, admin)
 
-                                                    adapterList[index] = newElement
-                                                    passed = true
-
-                                                }else if ((userItem.user.id!! !in group.userIds!!)){
-
-                                                    adapterList.removeAt(index)
+                                                    toReplace[newElement] = index - 1
                                                     passed = true
 
                                                 }
-                                                else if ((user.id == userItem.user.id && admin == userItem.admin)){
+                                                else if ((user.id == str.user.id && admin == str.admin)){
 
                                                     passed = true
 
-                                                }
+                                                }//else if ((str.user.id!! !in group.userIds!!)){
 
+                                                //    toDelete.add(str)
+                                                //    passed = true
+
+                                                //}
                                             }
 
                                             if(!passed)
@@ -109,17 +120,31 @@ class ShowGroupUsersFragment : Fragment() {
 
                                             }
 
+                                           toReplace.forEach {
+
+                                               adapterList[it.value] = it.key
+
+                                           }
+
                                             refreshAdapter()
                                         }
 
                                 }else{
 
-                                    adapterList.forEachIndexed { index, userItem ->
+                                    val iter: ListIterator<UserItem> =
+                                        adapterList.listIterator()
 
-                                        if(userItem.user.id == id)
-                                            adapterList.removeAt(index)
+                                    val toDelete : MutableList<UserItem> = arrayListOf()
+
+                                    while (iter.hasNext()) {
+                                        val str = iter.next()
+
+                                        if(str.user.id == id)
+                                            toDelete.add(str)
 
                                     }
+
+                                    adapterList.removeAll(toDelete)
 
                                     refreshAdapter()
 
@@ -130,7 +155,7 @@ class ShowGroupUsersFragment : Fragment() {
 
                 }
 
-        }else{
+        }else {
 
             db.collection("groupChannels")
                 .document(groupId!!)
@@ -149,8 +174,7 @@ class ShowGroupUsersFragment : Fragment() {
                             .document(groupId!!)
                             .addSnapshotListener { groupObject, error ->
 
-                                if(groupObject!!["admin"] != null)
-                                {
+                                if (groupObject!!["admin"] != null) {
 
                                     val admin = groupObject["admin"] as Boolean
 
@@ -165,19 +189,28 @@ class ShowGroupUsersFragment : Fragment() {
 
                                                 var passed = false
 
-                                                adapterList.forEachIndexed { index, userItem ->
+                                                val iter: ListIterator<UserItem> =
+                                                    adapterList.listIterator()
 
-                                                    if ((userItem.user.id!! !in group.userIds!!)){
+                                                val toDelete : MutableList<UserItem> = arrayListOf()
 
-                                                        adapterList.removeAt(index)
+                                                while (iter.hasNext()) {
+                                                    val str = iter.next()
+                                                    val index = iter.nextIndex()
+
+                                                    println("strId = " + str.user.id)
+                                                    println("index = " + index)
+
+                                                    if ((str.user.id!! !in group.userIds!!)) {
+
+                                                        toDelete.add(str)
                                                         passed = true
 
-                                                    }else if(user!!.id == userItem.user.id && admin == userItem.admin)
+                                                    } else if (user!!.id == str.user.id && admin == str.admin)
                                                         passed = true
-
                                                 }
 
-                                                if(!passed){
+                                                if (!passed) {
 
                                                     adapterList.add(UserItem(user!!, admin))
 
@@ -187,34 +220,39 @@ class ShowGroupUsersFragment : Fragment() {
 
                                             }
 
-                                    }else{
+                                    } else {
 
-                                        adapterList.forEachIndexed { index, userItem ->
+                                        val iter: ListIterator<UserItem> =
+                                            adapterList.listIterator()
 
-                                            println("id = $id")
-                                            println("userItem.user.id = ${userItem.user.id}")
+                                        val toDelete : MutableList<UserItem> = arrayListOf()
 
-                                            if(id == userItem.user.id)
-                                            {
+                                        while (iter.hasNext()) {
+                                            val str = iter.next()
 
-                                                println("passou aqui")
-                                                adapterList.removeAt(index)
-
-                                            }
-
+                                            if(str.user.id == id)
+                                                toDelete.add(str)
 
                                         }
+
+                                        adapterList.removeAll(toDelete)
 
                                         refreshAdapter()
 
                                     }
 
-                                }else{
+                                } else {
 
-                                    adapterList.forEachIndexed { index, userItem ->
+                                    val iter: ListIterator<UserItem> =
+                                        adapterList.listIterator()
 
-                                        if(userItem.user.id == id)
-                                            adapterList.removeAt(index)
+                                    val toDelete : MutableList<UserItem> = arrayListOf()
+
+                                    while (iter.hasNext()) {
+                                        val str = iter.next()
+
+                                        if(str.user.id == id)
+                                            toDelete.add(str)
 
                                     }
 
@@ -226,7 +264,6 @@ class ShowGroupUsersFragment : Fragment() {
                     }
 
                 }
-
         }
 
         adapter.setOnItemClickListener{ item, view ->
