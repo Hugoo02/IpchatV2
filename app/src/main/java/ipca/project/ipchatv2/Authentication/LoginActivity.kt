@@ -63,12 +63,12 @@ class LoginActivity : AppCompatActivity() {
 
                     val user: FirebaseUser? = auth.currentUser
 
-                    user?.sendEmailVerification()
-                        ?.addOnCompleteListener { task ->
-                            if(task.isSuccessful){
-                                updateUI(user)
+                        user?.sendEmailVerification()
+                            ?.addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    updateUI(user)
+                                }
                             }
-                        }
 
                 }.addOnFailureListener {
                     updateUI(null)

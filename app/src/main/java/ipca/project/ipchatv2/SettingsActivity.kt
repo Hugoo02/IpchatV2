@@ -18,6 +18,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import ipca.project.ipchatv2.Authentication.ChangePasswordActivity
 import ipca.project.ipchatv2.Authentication.LoginActivity
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.databinding.FragmentCalendarBinding
@@ -30,6 +31,7 @@ class SettingsActivity: AppCompatActivity() {
     lateinit var circleImageView: CircleImageView
     lateinit var buttonBack: ImageButton
     lateinit var changeTheme: Switch
+    lateinit var changePass: Button
     lateinit var logout: Button
     lateinit var username: TextView
     private lateinit var mAuth: FirebaseAuth
@@ -57,6 +59,7 @@ class SettingsActivity: AppCompatActivity() {
 
         buttonBack = findViewById(R.id.buttonBack)
         changeTheme = findViewById(R.id.buttonDarkMode)
+        changePass = findViewById(R.id.buttonChangePassword)
         logout = findViewById(R.id.buttonLogout)
 
         mAuth = FirebaseAuth.getInstance()
@@ -87,6 +90,24 @@ class SettingsActivity: AppCompatActivity() {
                 editor.commit()
             }
         }
+
+        changePass.setOnClickListener {
+            var builder = AlertDialog.Builder(this)
+            builder.setTitle("Cancelar")
+            builder.setTitle("Tem a certeza que deseja mudar a Palavra Passe?")
+            builder.setPositiveButton("Confirmar", DialogInterface.OnClickListener{ dialog, id ->
+                val intent = Intent(this, ChangePasswordActivity::class.java)
+                startActivity(intent)
+                finish()
+
+            })
+            builder.setNegativeButton("Cancelar", DialogInterface.OnClickListener{ dialog, id ->
+
+            })
+            var alert = builder.create()
+            alert.show()
+        }
+
 
         logout.setOnClickListener {
 

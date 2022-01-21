@@ -4,8 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Projeto/IpchatV2/app/src/main/res/drawable/tab_layout.xml" value="0.3402777777777778" />
+        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/activity_change_password.xml" value="0.32592592592592595" />
         <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/activity_edit_event.xml" value="0.32592592592592595" />
         <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/activity_edit_profile.xml" value="0.22" />
+        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/activity_login.xml" value="0.32592592592592595" />
         <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/activity_main.xml" value="0.1814814814814815" />
         <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/activity_new_event.xml" value="0.32592592592592595" />
         <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/activity_settings.xml" value="0.32592592592592595" />
