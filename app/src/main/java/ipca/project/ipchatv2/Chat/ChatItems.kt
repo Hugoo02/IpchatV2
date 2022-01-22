@@ -261,6 +261,7 @@ class FileItemFrom(val message: ChatMessage): Item<ViewHolder>(){
 
         val textViewFileNameFrom = viewHolder.itemView.textViewFileNameFrom
         val textViewFileTypeFrom = viewHolder.itemView.textViewFileTypeFrom
+        val imageViewFileFrom = viewHolder.itemView.imageViewFileFrom
 
         db.collection("Files")
             .document(message.text!!)
@@ -268,6 +269,28 @@ class FileItemFrom(val message: ChatMessage): Item<ViewHolder>(){
             .addOnSuccessListener { fileObject ->
 
                 val file = fileObject.toObject(FileModel::class.java)
+
+                when(file!!.extension)
+                {
+                    "pdf" -> {
+
+                        imageViewFileFrom.setImageResource(R.drawable.pdf)
+
+                    }
+
+                    "docx" -> {
+
+                        imageViewFileFrom.setImageResource(R.drawable.word)
+
+                    }
+
+                    else -> {
+
+                        imageViewFileFrom.setImageResource(R.drawable.file)
+
+                    }
+
+                }
 
                 textViewFileNameFrom.text = file!!.name
                 textViewFileTypeFrom.text = file.extension
@@ -291,6 +314,7 @@ class FileItemTo(val message: ChatMessage, val details: Boolean): Item<ViewHolde
         val textViewFileTypeTo = viewHolder.itemView.textViewFileTypeTo
         val imageViewPhotoFileTo = viewHolder.itemView.imageViewPhotoFileTo
         val textViewNameFileTo = viewHolder.itemView.textViewNameFileTo
+        val imageViewFileTo = viewHolder.itemView.imageViewFileTo
 
         val refUser = db.collection("User")
             .document(message.senderId!!)
@@ -322,6 +346,28 @@ class FileItemTo(val message: ChatMessage, val details: Boolean): Item<ViewHolde
 
                 textViewFileNameTo.text = file!!.name
                 textViewFileTypeTo.text = file.extension
+
+                when(file!!.extension)
+                {
+                    "pdf" -> {
+
+                        imageViewFileTo.setImageResource(R.drawable.pdf)
+
+                    }
+
+                    "docx" -> {
+
+                        imageViewFileTo.setImageResource(R.drawable.word)
+
+                    }
+
+                    else -> {
+
+                        imageViewFileTo.setImageResource(R.drawable.file)
+
+                    }
+
+                }
 
             }
 

@@ -13,10 +13,33 @@ class FileItem(val file: FileModel, val details: Boolean): Item<ViewHolder>() {
         val textViewFileName = viewHolder.itemView.textViewFileName
         val imageViewDetails = viewHolder.itemView.imageViewDetails
         val textViewFileExtension = viewHolder.itemView.textViewFileExtension
+        val imageViewFile = viewHolder.itemView.imageViewFile
 
         textViewFileName.text = file.name
 
         textViewFileExtension.text = file.extension
+
+        when(file.extension)
+        {
+            "pdf" -> {
+
+                imageViewFile.setImageResource(R.drawable.pdf)
+
+            }
+
+            "docx" -> {
+
+                imageViewFile.setImageResource(R.drawable.word)
+
+            }
+
+            else -> {
+
+                imageViewFile.setImageResource(R.drawable.file)
+
+            }
+
+        }
 
         if(details)
             imageViewDetails.visibility = View.VISIBLE

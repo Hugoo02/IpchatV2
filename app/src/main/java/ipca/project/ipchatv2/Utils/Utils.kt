@@ -5,7 +5,10 @@ import android.content.Context
 import android.graphics.*
 import androidx.lifecycle.LifecycleOwner
 import ipca.project.ipchatv2.R
+import java.lang.String.format
+import java.text.DecimalFormat
 import java.util.*
+import kotlin.math.min
 import kotlin.system.exitProcess
 
 object Utils {
@@ -39,33 +42,19 @@ object Utils {
 
         val calendar = Calendar.getInstance()
 
+
         calendar.time = date
 
+
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
+        val minute =  calendar.get(Calendar.MINUTE)
 
-        return "$hour:$minute"
+        val formatter = DecimalFormat("00")
+        val formattedHour = formatter.format(hour)
+        val formattedMinute = formatter.format(minute)
 
-    }
+        return "$formattedHour:$formattedMinute"
 
-    fun getRoundedCornerBitmap(bitmap: Bitmap, pixels: Int): Bitmap? {
-        val output = Bitmap.createBitmap(
-            bitmap.width, bitmap
-                .height, Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(output)
-        val color = -0xbdbdbe
-        val paint = Paint()
-        val rect = Rect(0, 0, bitmap.width, bitmap.height)
-        val rectF = RectF(rect)
-        val roundPx = pixels.toFloat()
-        paint.setAntiAlias(true)
-        canvas.drawARGB(0, 0, 0, 0)
-        paint.setColor(color)
-        canvas.drawRoundRect(rectF, roundPx, roundPx, paint)
-        paint.setXfermode(PorterDuffXfermode(PorterDuff.Mode.SRC_IN))
-        canvas.drawBitmap(bitmap, rect, rect, paint)
-        return output
     }
 
     fun receiveDateFromDatabaseToCalendar(date: Date): String {
@@ -77,7 +66,11 @@ object Utils {
         val month = calendar.get(Calendar.MONTH)
         val year = calendar.get(Calendar.YEAR)
 
-        return "$day/$month/$year"
+        val formatter = DecimalFormat("00")
+        val formattedDay = formatter.format(month)
+        val formattedMonth = formatter.format(year)
+
+        return "$formattedDay/$formattedMonth/$year"
     }
 
     fun dateToCalenar(time: Date): Calendar{
@@ -98,8 +91,6 @@ object Utils {
         val messageYear = messageCalendar.get(Calendar.YEAR)
         val messageMonth = messageCalendar.get(Calendar.MONTH)
         val messageDay = messageCalendar.get(Calendar.DAY_OF_MONTH)
-        val messageHour = messageCalendar.get(Calendar.HOUR_OF_DAY)
-        val messageMinutes = messageCalendar.get(Calendar.MINUTE)
 
         val currentYear = currentCalenar.get(Calendar.YEAR)
         val currentMonth = currentCalenar.get(Calendar.MONTH)
@@ -107,9 +98,17 @@ object Utils {
 
         if(currentYear == messageYear && currentMonth == messageMonth
             && currentDay == messageDay)
-                return "${messageHour}:${messageMinutes}"
-        else
-            return "${messageDay}/${messageMonth + 1}/${messageYear} ${messageHour}:${messageMinutes}"
+            //return "Hoje às ${formatDateToChat(time)}"
+            return "Hoje às ${formatDateToChat(time)}"
+        else{
+
+            val formatter = DecimalFormat("00")
+            val formattedDay = formatter.format(messageDay)
+            val formattedMonth = formatter.format(messageMonth + 1)
+
+            return "${formattedDay}/${formattedMonth}/${messageYear} ${formatDateToChat(time)}"
+        }
+           
 
     }
 

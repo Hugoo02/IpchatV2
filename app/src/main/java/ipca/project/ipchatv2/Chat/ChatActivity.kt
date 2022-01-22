@@ -17,6 +17,8 @@ import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
+import android.os.Environment
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import ipca.project.ipchatv2.R
@@ -32,6 +34,8 @@ import ipca.project.ipchatv2.Utils.Utils
 import kotlinx.android.synthetic.main.row_calendar.*
 import java.io.File
 import java.io.FileInputStream
+import java.lang.Exception
+import java.net.URI
 
 class ChatActivity : AppCompatActivity() {
 
@@ -39,21 +43,77 @@ class ChatActivity : AppCompatActivity() {
 
     val adapter = GroupAdapter<ViewHolder>()
 
-    var groupId : String? = null
+    var groupId: String? = null
     var channelType: String? = null
 
     val db = FirebaseFirestore.getInstance()
 
     val currentUser = FirebaseAuth.getInstance().uid
 
-    val messages : MutableList<ChatMessage> = ArrayList()
-    val messageIdList : MutableList<String> = ArrayList()
+    val messages: MutableList<ChatMessage> = ArrayList()
+    val messageIdList: MutableList<String> = ArrayList()
 
-    val getImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+    val getImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
 
         val selectedPhotoUri = it.data?.data
 
-        uploadImageToFirebaseStorage(selectedPhotoUri!!)
+        if (selectedPhotoUri != null)
+            uploadImageToFirebaseStorage(selectedPhotoUri!!)
+
+    }
+
+    val getFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+
+        var path = ""
+        var fileName = ""
+        var uri = it.data?.data
+
+            val clipData = it.data?.clipData
+            if (clipData == null) {
+
+                var cursor: Cursor? = null
+                try {
+                    contentResolver.query(it.data?.data!!, null, null, null, null).use {
+
+                        cursor = it
+
+                        if (cursor != null && cursor!!.moveToFirst()) {
+
+                            fileName = cursor!!.getString(
+                                cursor!!.getColumnIndex(
+                                    OpenableColumns.DISPLAY_NAME
+                                ).toInt()
+                            )
+
+                            val fileSize = cursor!!.getColumnIndexOrThrow(OpenableColumns.SIZE).toInt()
+                            println("fileSize = $fileSize")
+
+                        }
+
+                    }
+                    } finally {
+                        cursor?.close()
+
+                    }
+
+                    path += it.data?.data.toString()
+                } else {
+
+                    for (i in 0 until clipData.itemCount) {
+                        val item = clipData.getItemAt(i)
+                        val uri: Uri = item.uri
+                        path += uri.toString() + "\n"
+                    }
+                }
+
+        Toast.makeText(this, "path = $path", Toast.LENGTH_LONG).show()
+        println("path = $path")
+
+        val file = File("$path/$fileName")
+
+        Toast.makeText(this, "file.name = ${file.name}", Toast.LENGTH_SHORT).show()
+
+        uploadFileToFireStorage(uri!!, file)
 
     }
 
@@ -108,24 +168,7 @@ class ChatActivity : AppCompatActivity() {
 
         binding.imageButtonFile.setOnClickListener {
 
-            val intent = Intent()
-            intent.action = Intent.ACTION_OPEN_DOCUMENT
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            intent.type = "*/*"
-            val extraMimeTypes = arrayOf("application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
-                "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
-                "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
-                "text/plain",
-                "application/pdf",
-                "application/zip",
-                "image/gif", "image/jpeg", "image/jpg", "image/png", "image/svg+xml", "image/webp", "image/vnd.wap.wbmp", "image/vnd.nok-wallpaper", "text/xml",
-                "application/json",
-                "text/json",
-                "text/javascript"
-            )
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes)
-            //intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            startActivityForResult(intent, 1)
+            selectFile()
 
         }
 
@@ -278,6 +321,28 @@ class ChatActivity : AppCompatActivity() {
             performSendMessage()
 
         }
+    }
+
+    private fun selectFile(){
+
+        val intent = Intent()
+        intent.action = Intent.ACTION_OPEN_DOCUMENT
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.type = "*/*"
+        val extraMimeTypes = arrayOf("application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .doc & .docx
+            "application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation", // .ppt & .pptx
+            "application/vnd.ms-excel","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xls & .xlsx
+            "text/plain",
+            "application/pdf",
+            "application/zip",
+            "image/gif", "image/jpeg", "image/jpg", "image/png", "image/svg+xml", "image/webp", "image/vnd.wap.wbmp", "image/vnd.nok-wallpaper", "text/xml",
+            "application/json",
+            "text/json",
+            "text/javascript"
+        )
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, extraMimeTypes)
+        getFile.launch(intent)
+
     }
 
     private fun selectImage() {
@@ -548,12 +613,10 @@ class ChatActivity : AppCompatActivity() {
 
                 }
 
-                println("messageDate = $messageDate")
 
                 if(index > 0 && chatMessage.senderId!! == messages[index - 1].senderId && !messageDate)
                     details = false
 
-                println("details = $details")
 
                 if(chatMessage.type == "firstMessage")
                     adapter.add(FirstMessage(chatMessage))
@@ -578,6 +641,55 @@ class ChatActivity : AppCompatActivity() {
             }
 
             recyclerViewChat.scrollToPosition(adapter.itemCount - 1)
+
+        }
+
+    }
+
+    private fun uploadFileToFireStorage(uri: Uri, file: File){
+
+
+        val filename = UUID.randomUUID().toString()
+        val ref = FirebaseStorage.getInstance().getReference("/files/${filename}")
+        val extension = file.extension
+
+        println("passou aqui")
+
+        if(extension != "jpeg" && extension != "jpg" && extension !in "png") {
+            ref.putFile(uri)
+                .addOnSuccessListener {
+
+                    println("passou ali")
+
+                    println(file)
+
+                    Toast.makeText(this, "Ficheiro adicionado á base de dados", Toast.LENGTH_SHORT)
+                        .show()
+                    ref.downloadUrl.addOnSuccessListener {
+
+                        val name = file.name
+                        val fileSize = (file.length() / (1024 * 1024)).toString()
+
+                        println("extension = $extension")
+
+                        val fileItem = FileModel(name, fileSize, extension)
+
+                        db.collection("Files")
+                            .add(fileItem)
+                            .addOnSuccessListener {
+
+                                performFileMessage(it.id)
+
+                            }
+
+                    }
+
+                }.addOnFailureListener {
+                    Toast.makeText(this, "Erro a uploadar a imagem!", Toast.LENGTH_SHORT).show()
+                }
+        }else{
+
+            uploadImageToFirebaseStorage(uri)
 
         }
 
@@ -636,7 +748,7 @@ class ChatActivity : AppCompatActivity() {
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         var path = ""
         var fileName = ""
@@ -714,5 +826,5 @@ class ChatActivity : AppCompatActivity() {
         //Utilis.uploadFile(path.toUri(), "$currentPath/$fileName")
         //files.add(FirebaseFile(fileName, Utilis.getFileIcon(fileName)))
         //filesAdapter?.notifyDataSetChanged()
-    }
+    }*/
 }
