@@ -11,6 +11,7 @@ import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Models.ChatMessage
 import ipca.project.ipchatv2.Models.FileModel
 import ipca.project.ipchatv2.R
+import ipca.project.ipchatv2.RowConfigurations.EmptyItem
 import ipca.project.ipchatv2.RowConfigurations.FileItem
 import ipca.project.ipchatv2.RowConfigurations.PhotoItem
 import ipca.project.ipchatv2.databinding.FragmentShowDocsBinding
@@ -63,7 +64,9 @@ class ShowDocsFragment : Fragment() {
             .get()
             .addOnSuccessListener { result ->
 
-                for(doc in result.documents){
+                var empty = true
+
+                result.documents.forEachIndexed { index, doc ->
 
                     val message = doc.toObject(ChatMessage::class.java)
 
@@ -77,10 +80,14 @@ class ShowDocsFragment : Fragment() {
                                 val file = fileObject.toObject(FileModel::class.java)
 
                                 adapter.add(FileItem(file!!, true))
+                                empty = false
 
                             }
 
                     }
+
+                    if(index == result.documents.size && empty)
+                        adapter.add(EmptyItem())
 
                 }
 

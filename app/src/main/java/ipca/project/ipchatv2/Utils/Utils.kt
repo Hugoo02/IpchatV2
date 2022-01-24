@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.graphics.*
 import androidx.lifecycle.LifecycleOwner
+import ipca.project.ipchatv2.Models.MessageGroup
 import ipca.project.ipchatv2.R
 import java.lang.String.format
 import java.text.DecimalFormat
@@ -109,6 +110,12 @@ object Utils {
             return "${formattedDay}/${formattedMonth}/${messageYear} ${formatDateToChat(time)}"
         }
            
+
+    }
+
+    fun filterAdapter(queryText: String, array: HashMap<String, MessageGroup>){
+
+
 
     }
 

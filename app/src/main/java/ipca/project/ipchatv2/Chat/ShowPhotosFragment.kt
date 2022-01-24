@@ -6,13 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Models.ChatMessage
 import ipca.project.ipchatv2.R
+import ipca.project.ipchatv2.RowConfigurations.EmptyItem
 import ipca.project.ipchatv2.RowConfigurations.PhotoItem
 import ipca.project.ipchatv2.databinding.FragmentShowPhotosBinding
 import ipca.project.ipchatv2.databinding.FragmentUserListBinding
@@ -86,6 +89,8 @@ class ShowPhotosFragment : Fragment() {
             .get()
             .addOnSuccessListener { result ->
 
+                var empty = true
+
                 for(doc in result.documents){
 
                     println("passou aqui")
@@ -93,9 +98,26 @@ class ShowPhotosFragment : Fragment() {
                     val message = doc.toObject(ChatMessage::class.java)
 
                     if(message!!.type == "IMAGE")
+                    {
+                        empty = false
+                        adapter.spanCount = 3
+                        binding.recyclerViewShowPhotos.layoutManager = GridLayoutManager(requireContext(), 3)
+
                         adapter.add(PhotoItem(message))
+                    }
+
 
                 }
+
+                if(empty)
+                {
+
+                    adapter.spanCount = 1
+                    binding.recyclerViewShowPhotos.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL ,false)
+                    adapter.add(EmptyItem())
+
+                }
+
 
             }
 

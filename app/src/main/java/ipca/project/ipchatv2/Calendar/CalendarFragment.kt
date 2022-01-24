@@ -5,35 +5,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import java.util.*
-import android.R
+import ipca.project.ipchatv2.R
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.widget.ImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.view.marginStart
 import com.applandeo.materialcalendarview.CalendarView
 import com.applandeo.materialcalendarview.EventDay
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.FirebaseFirestoreKtxRegistrar
 import ipca.project.ipchatv2.Models.CalendarModel
 import ipca.project.ipchatv2.databinding.FragmentCalendarBinding
-import android.widget.RelativeLayout
 import android.graphics.RectF
-import ipca.project.ipchatv2.MainActivity
-import kotlinx.android.synthetic.main.activity_create_new_group.*
+
+
+
 
 class CalendarFragment : Fragment() {
 
@@ -186,22 +179,6 @@ class CalendarFragment : Fragment() {
         events.clear()
     }
 
-    fun removeDate(meetingId: String){
-
-        if (channelType == null)
-        {
-
-            db.collection("Calendar")
-                .document(currentUser.uid!!)
-                .collection("Meetings")
-                .document(meetingId)
-                .delete()
-
-
-        }
-
-    }
-
     fun calculateRectOnScreen(view: View): RectF {
         val location = IntArray(2)
         view.getLocationOnScreen(location)
@@ -219,7 +196,7 @@ class CalendarFragment : Fragment() {
 
             val calendar = Calendar.getInstance()
             calendar.time = it.date!!
-            events.add(EventDay(calendar, R.drawable.ic_menu_my_calendar))
+            events.add(EventDay(calendar, R.drawable.ic_resizer))
 
         }
 
@@ -235,6 +212,7 @@ class CalendarFragment : Fragment() {
         ref.addSnapshotListener { value, error ->
 
             dateList.clear()
+            events.clear()
 
             for (document in value!!.documents){
 

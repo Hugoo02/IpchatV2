@@ -1,8 +1,11 @@
 package ipca.project.ipchatv2.Chat
 
+import android.Manifest
+import android.app.Activity
+import android.app.Dialog
+import android.content.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -11,14 +14,10 @@ import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_chat.*
 import java.util.*
 import kotlin.collections.ArrayList
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
 import android.database.Cursor
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.Environment
-import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import ipca.project.ipchatv2.R
@@ -28,14 +27,23 @@ import ipca.project.ipchatv2.MainActivity
 import ipca.project.ipchatv2.databinding.ActivityChatBinding
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import android.provider.OpenableColumns
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.widget.LinearLayout
 import ipca.project.ipchatv2.Models.*
 import ipca.project.ipchatv2.Utils.Utils
 import kotlinx.android.synthetic.main.row_calendar.*
 import java.io.File
-import java.io.FileInputStream
 import java.lang.Exception
-import java.net.URI
+import android.content.Intent
+import android.graphics.Bitmap
+import android.os.Environment
+import android.provider.MediaStore
+import androidx.core.content.FileProvider
+import kotlinx.coroutines.selects.select
+import java.io.ByteArrayOutputStream
 
 class ChatActivity : AppCompatActivity() {
 
@@ -50,17 +58,41 @@ class ChatActivity : AppCompatActivity() {
 
     val currentUser = FirebaseAuth.getInstance().uid
 
+    var photoFile : File? = null
+    val FILE_NAME = "photo.jpg"
+
     val messages: MutableList<ChatMessage> = ArrayList()
     val messageIdList: MutableList<String> = ArrayList()
 
-    val getImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+    val getGalleryImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
 
         val selectedPhotoUri = it.data?.data
 
         if (selectedPhotoUri != null)
-            uploadImageToFirebaseStorage(selectedPhotoUri!!)
+            uploadImageToFirebaseStorage(selectedPhotoUri)
 
     }
+
+    val takePicture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+
+        val photoUri = Uri.fromFile(photoFile)
+
+        if(it.resultCode == Activity.RESULT_OK)
+            uploadImageToFirebaseStorage(photoUri)
+
+    }
+
+    val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                return@registerForActivityResult
+            } else {
+                Toast.makeText(this, "Precisa aceitar a permissão para poder enviar fotografias"
+                ,Toast.LENGTH_SHORT).show()
+            }
+        }
 
     val getFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
 
@@ -68,8 +100,10 @@ class ChatActivity : AppCompatActivity() {
         var fileName = ""
         var uri = it.data?.data
 
+        try {
+
             val clipData = it.data?.clipData
-            if (clipData == null) {
+            if (clipData == null && uri != null) {
 
                 var cursor: Cursor? = null
                 try {
@@ -91,29 +125,35 @@ class ChatActivity : AppCompatActivity() {
                         }
 
                     }
-                    } finally {
-                        cursor?.close()
+                } finally {
+                    cursor?.close()
 
-                    }
-
-                    path += it.data?.data.toString()
-                } else {
-
-                    for (i in 0 until clipData.itemCount) {
-                        val item = clipData.getItemAt(i)
-                        val uri: Uri = item.uri
-                        path += uri.toString() + "\n"
-                    }
                 }
 
-        Toast.makeText(this, "path = $path", Toast.LENGTH_LONG).show()
-        println("path = $path")
+                path += it.data?.data.toString()
+            } else {
 
-        val file = File("$path/$fileName")
+                for (i in 0 until clipData!!.itemCount) {
+                    val item = clipData.getItemAt(i)
+                    val uri: Uri = item.uri
+                    path += uri.toString() + "\n"
+                }
+            }
 
-        Toast.makeText(this, "file.name = ${file.name}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "path = $path", Toast.LENGTH_LONG).show()
+            println("path = $path")
 
-        uploadFileToFireStorage(uri!!, file)
+            val file = File("$path/$fileName")
+
+            Toast.makeText(this, "file.name = ${file.name}", Toast.LENGTH_SHORT).show()
+
+            uploadFileToFireStorage(uri!!, file)
+
+        }catch (exception: Exception){}
+
+
+
+
 
     }
 
@@ -162,7 +202,32 @@ class ChatActivity : AppCompatActivity() {
 
         binding.imageButtonCamera.setOnClickListener {
 
-            selectImage()
+            val dialog = Dialog(this)
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setContentView(R.layout.dialog_choose_pic_method)
+
+            val linearLayoutCam = dialog.findViewById<LinearLayout>(R.id.linearLayoutCam)
+            val linearLayoutGallery = dialog.findViewById<LinearLayout>(R.id.linearLayoutGallery)
+
+            linearLayoutCam.setOnClickListener {
+
+                takePicture()
+                dialog.dismiss()
+
+            }
+
+            linearLayoutGallery.setOnClickListener {
+
+                selectImage()
+                dialog.dismiss()
+
+            }
+
+            dialog.show()
+            dialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            dialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window!!.setGravity(Gravity.BOTTOM)
 
         }
 
@@ -259,11 +324,24 @@ class ChatActivity : AppCompatActivity() {
 
             binding.linearLayoutRemove.setOnClickListener {
 
-                val row = item as ChatFromItem
+                var message : ChatMessage? = null
+
+                if(item.layout == R.layout.row_text_message_from)
+                {
+
+                    val row = item as ChatFromItem
+                    message = row.message
+
+                }else{
+
+                    val row = item as ImageFromItem
+                    message = row.message
+
+                }
 
                 messages.forEachIndexed { index, chatMessage ->
 
-                    if (row.message == chatMessage) {
+                    if (message == chatMessage) {
                         if (channelType == "group") {
 
                             if (index == (messages.size - 1)) {
@@ -302,8 +380,6 @@ class ChatActivity : AppCompatActivity() {
 
                         }
                     }
-
-                    adapter.notifyDataSetChanged()
 
                     binding.constraintMessage.visibility = View.VISIBLE
 
@@ -349,7 +425,31 @@ class ChatActivity : AppCompatActivity() {
 
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
-        getImage.launch(intent)
+        getGalleryImage.launch(intent)
+
+    }
+
+    private fun takePicture() {
+
+        //requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+        photoFile = getPhotoFile(FILE_NAME)
+        val fileProvider =
+            FileProvider.getUriForFile(this, "ipca.project.ipchatv2.fileprovider", photoFile!!)
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
+
+        if(intent.resolveActivity(this.packageManager) != null) {
+            takePicture.launch(intent)
+        }
+
+    }
+
+    private fun getPhotoFile(fileName: String): File {
+
+        val storageDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(fileName, ".jpg", storageDirectory)
 
     }
 
@@ -418,6 +518,8 @@ class ChatActivity : AppCompatActivity() {
         }
 
         refSendMessage.add(message).addOnSuccessListener {
+
+            refSendMessage.document(it.id).update(mapOf("messageId" to it.id))
 
             binding.editTextMessage.text.clear()
             binding.recyclerViewChat.scrollToPosition(adapter.itemCount - 1)

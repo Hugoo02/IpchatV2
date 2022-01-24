@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import ipca.project.ipchatv2.MainActivity
 import ipca.project.ipchatv2.Models.CalendarModel
+import ipca.project.ipchatv2.Models.GroupChannel
 import ipca.project.ipchatv2.databinding.ActivityEditEventBinding
 import java.util.*
 
@@ -97,41 +98,76 @@ class EditEventActivity : AppCompatActivity() {
         val finalLocal = binding.editTextLocal.text.toString()
         val finalDescription = binding.editTextDescription.text.toString()
 
-        val finalEvent = CalendarModel(time, finalTitle, event!!.createdBy, finalDescription, finalLocal)
+        var finalEvent : CalendarModel? = null
+
+        if(time != null)
+             finalEvent = CalendarModel(event!!.calendarId, time, finalTitle, event!!.createdBy, finalDescription, finalLocal)
+        else
+            finalEvent = CalendarModel(event!!.calendarId, event!!.date, finalTitle, event!!.createdBy, finalDescription, finalLocal)
 
         if(channelType == "group") {
 
+            db.collection("groupChannels")
+                .document(calendarId!!)
+                .get()
+                .addOnSuccessListener { result ->
+
+                    val channel = result.toObject(GroupChannel::class.java)
+
+                    db.collection("Calendar")
+                        .document(calendarId!!)
+                        .collection("Meetings")
+                        .document(event!!.calendarId!!)
+                        .set(finalEvent)
 
 
-        } else if (channelType == "private") {
+                    channel!!.userIds!!.forEach {
 
-
-
-        } else {
-
-            val calendarRef = db.collection("Calendar")
-                .document(currentUser.uid!!)
-                .collection("Meetings")
-
-            calendarRef
-            .get()
-            .addOnSuccessListener { calendarObject ->
-
-                for(doc in calendarObject.documents){
-
-                    val calendar = doc.toObject(CalendarModel::class.java)
-
-                    if(calendar!!.title == event!!.title && calendar.date == event!!.date
-                        && calendar.description == event!!.description &&
-                        calendar.local == event!!.description){
-
-                        calendarRef.document(doc.id).set(finalEvent)
+                        db.collection("Calendar")
+                            .document(it)
+                            .collection("Meetings")
+                            .document(event!!.calendarId!!)
+                            .set(finalEvent)
 
                     }
 
                 }
 
-            }
+        } else if (channelType == "private") {
+
+            db.collection("privateChannels")
+                .document(calendarId!!)
+                .get()
+                .addOnSuccessListener { result ->
+
+                    val channel = result.toObject(GroupChannel::class.java)
+
+                    db.collection("Calendar")
+                        .document(calendarId!!)
+                        .collection("Meetings")
+                        .document(event!!.calendarId!!)
+                        .set(finalEvent)
+
+
+                    channel!!.userIds!!.forEach {
+
+                        db.collection("Calendar")
+                            .document(it)
+                            .collection("Meetings")
+                            .document(event!!.calendarId!!)
+                            .set(finalEvent)
+
+                    }
+
+                }
+
+        } else {
+
+            db.collection("Calendar")
+                .document(currentUser.uid!!)
+                .collection("Meetings")
+                .document(event!!.calendarId!!)
+                .set(finalEvent)
 
         }
 
@@ -141,37 +177,67 @@ class EditEventActivity : AppCompatActivity() {
 
         if(channelType == "group") {
 
-
-
-        } else if (channelType == "private") {
-
-
-
-        } else {
-
-            val calendarRef = db.collection("Calendar")
-                .document(currentUser.uid!!)
-                .collection("Meetings")
-
-            calendarRef
+            db.collection("groupChannels")
+                .document(calendarId!!)
                 .get()
-                .addOnSuccessListener { calendarObject ->
+                .addOnSuccessListener { result ->
 
-                    for(doc in calendarObject.documents){
+                    val channel = result.toObject(GroupChannel::class.java)
 
-                        val calendar = doc.toObject(CalendarModel::class.java)
+                    db.collection("Calendar")
+                        .document(calendarId!!)
+                        .collection("Meetings")
+                        .document(event!!.calendarId!!)
+                        .delete()
 
-                        if(calendar!!.title == event!!.title && calendar.date == event!!.date
-                            && calendar.description == event!!.description &&
-                            calendar.local == event!!.description){
 
-                            calendarRef.document(doc.id).delete()
+                    channel!!.userIds!!.forEach {
 
-                        }
+                        db.collection("Calendar")
+                            .document(it)
+                            .collection("Meetings")
+                            .document(event!!.calendarId!!)
+                            .delete()
 
                     }
 
                 }
+
+        } else if (channelType == "private") {
+
+            db.collection("privateChannels")
+                .document(calendarId!!)
+                .get()
+                .addOnSuccessListener { result ->
+
+                    val channel = result.toObject(GroupChannel::class.java)
+
+                    db.collection("Calendar")
+                        .document(calendarId!!)
+                        .collection("Meetings")
+                        .document(event!!.calendarId!!)
+                        .delete()
+
+
+                    channel!!.userIds!!.forEach {
+
+                        db.collection("Calendar")
+                            .document(it)
+                            .collection("Meetings")
+                            .document(event!!.calendarId!!)
+                            .delete()
+
+                    }
+
+                }
+
+        } else {
+
+            db.collection("Calendar")
+                .document(currentUser.uid!!)
+                .collection("Meetings")
+                .document(event!!.calendarId!!)
+                .delete()
 
         }
 

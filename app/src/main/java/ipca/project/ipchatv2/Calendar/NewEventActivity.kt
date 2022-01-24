@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.text.isDigitsOnly
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -74,7 +75,7 @@ class NewEventActivity : AppCompatActivity() {
                 Toast.makeText(this, "Por favor, preencha todos os dados", Toast.LENGTH_SHORT).show()
             }else{
 
-                val calendar = CalendarModel(time, editTextTitle.text.toString(),
+                val calendar = CalendarModel(null, time, editTextTitle.text.toString(),
                                             currentUser.uid, editTextDescription.text.toString(),
                                             editTextLocal.text.toString())
 
@@ -91,11 +92,17 @@ class NewEventActivity : AppCompatActivity() {
 
                                 val userIds = channel!!.userIds
 
-                                db.collection("Calendar")
+                                val channelCalendar = db.collection("Calendar")
                                     .document(calendarId)
                                     .collection("Meetings")
-                                    .add(calendar)
+
+                                    channelCalendar.add(calendar)
                                     .addOnSuccessListener { calendarObject ->
+
+                                        channelCalendar.document(calendarObject.id)
+                                            .update(mapOf("calendarId" to calendarObject.id))
+
+                                        calendar.calendarId = calendarObject.id
 
                                         Toast.makeText(this, "Evento adicionado com sucesso", Toast.LENGTH_SHORT).show()
 
@@ -133,11 +140,17 @@ class NewEventActivity : AppCompatActivity() {
 
                                 val userIds = channel!!.userIds
 
-                                db.collection("Calendar")
+                                val channelCalendar = db.collection("Calendar")
                                     .document(calendarId)
                                     .collection("Meetings")
-                                    .add(calendar)
+
+                                channelCalendar.add(calendar)
                                     .addOnSuccessListener { calendarObject ->
+
+                                        channelCalendar.document(calendarObject.id)
+                                            .update(mapOf("calendarId" to calendarObject.id))
+
+                                        calendar.calendarId = calendarObject.id
 
                                         Toast.makeText(this, "Evento adicionado com sucesso", Toast.LENGTH_SHORT).show()
 
@@ -166,11 +179,15 @@ class NewEventActivity : AppCompatActivity() {
                     }
                 }else{
 
-                    db.collection("Calendar")
+                    val channelCalendar = db.collection("Calendar")
                         .document(calendarId!!)
                         .collection("Meetings")
-                        .add(calendar)
+
+                    channelCalendar.add(calendar)
                         .addOnSuccessListener { calendarObject ->
+
+                            channelCalendar.document(calendarObject.id)
+                                .update(mapOf("calendarId" to calendarObject.id))
 
                             Toast.makeText(
                                 this,

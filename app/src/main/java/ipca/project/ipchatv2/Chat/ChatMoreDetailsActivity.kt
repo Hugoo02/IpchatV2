@@ -43,7 +43,8 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
         groupId = intent.getStringExtra("groupId")
         channelType = intent.getStringExtra("channelType")
 
-        checkIfAdmin()
+        if(channelType == "group")
+            checkIfAdmin()
 
         configureActivity()
 
