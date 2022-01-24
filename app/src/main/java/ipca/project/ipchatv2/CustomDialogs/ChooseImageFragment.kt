@@ -127,6 +127,8 @@ class ChooseImageFragment : DialogFragment() {
                 val date = Calendar.getInstance().time
                 val firstMessage = ChatMessage(currentUser.uid, null, date, "firstMessage")
 
+
+
                 val refSendMessage = db.collection("groupChannels")
                     .document(it.id)
                     .collection("messages")

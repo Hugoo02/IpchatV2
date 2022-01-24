@@ -1,16 +1,20 @@
 package ipca.project.ipchatv2.Chat
 
+import android.content.*
+import android.content.ContentValues.TAG
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.content.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import ipca.project.ipchatv2.Models.ChatMessage
 import kotlinx.android.synthetic.main.activity_chat.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -18,13 +22,27 @@ import android.database.Cursor
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import ipca.project.ipchatv2.Models.GroupChannel
+import ipca.project.ipchatv2.Models.PrivateChannel
+import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.R
 import com.google.firebase.storage.FirebaseStorage
+import com.google.gson.Gson
+import com.squareup.picasso.Picasso
+import ipca.project.ipchatv2.Notifications.NotificationData
+import ipca.project.ipchatv2.Notifications.PushNotification
+import ipca.project.ipchatv2.Notifications.RetrofitInstance
 import ipca.project.ipchatv2.Calendar.CalendarActivity
 import ipca.project.ipchatv2.MainActivity
 import ipca.project.ipchatv2.databinding.ActivityChatBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import android.provider.OpenableColumns
 import android.view.Gravity
@@ -44,12 +62,22 @@ import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import kotlinx.coroutines.selects.select
 import java.io.ByteArrayOutputStream
+import javax.crypto.Cipher
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.PBEKeySpec
+import javax.crypto.spec.SecretKeySpec
+import android.util.Base64
 
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChatBinding
 
     val adapter = GroupAdapter<ViewHolder>()
+
+    val secretKey = "tK5UTui+DPh8lIlBxya5XVsmeDCoUl6vHhdIESMB6sQ="
+    val salt = "QWlGNHNhMTJTQWZ2bGhpV3U="
+    val iv = "bVQzNFNhRkQ1Njc4UUFaWA=="
 
     var groupId: String? = null
     var channelType: String? = null
@@ -170,6 +198,19 @@ class ChatActivity : AppCompatActivity() {
         supportActionBar!!.hide()
 
         binding.constraintLayout.bringToFront()
+
+        val bundle = intent.extras
+        var receiverTokenShowUsers = ""
+        var receiverTokenUserList = ""
+        bundle?.let {
+            receiverTokenShowUsers = it.getString("Token").toString()
+            receiverTokenUserList = it.getString("receiverToken").toString()
+        }
+
+        println(receiverTokenShowUsers)
+        println(receiverTokenUserList)
+        println("SFWEFWEFWGWEGV")
+
 
         configureToolbar()
         listenForMessages()
@@ -391,11 +432,71 @@ class ChatActivity : AppCompatActivity() {
 
         }
 
+
+
         binding.imageButtonSendMessage.setOnClickListener {
+
+            Log.d(TAG, "nova mensagem")
+
+            val ref = FirebaseFirestore.getInstance().collection("User").document(currentUser!!)
+
+            val uid = FirebaseAuth.getInstance().uid
+            //val ref = Firebase.firestore.collection("User").document(uid!!)
+
+            ref.addSnapshotListener { value, error ->
+
+                val user = value!!.toObject(User::class.java)
+
+                val title = user!!.username
+                val message = editTextMessage.text.toString()
+                var receiverToken = ""
+                //val receiverTokenFromShowUsers = receiverTokenShowUsers
+                //val receiverTokenFromUserList = receiverTokenUserList
+
+                if(receiverTokenShowUsers == "null" && receiverTokenUserList != "null"){
+                    receiverToken = receiverTokenUserList
+                }
+                else if(receiverTokenUserList == "null" && receiverTokenShowUsers != "null"){
+                    receiverToken = receiverTokenShowUsers
+                }
+
+                var profileImage = ""
+                profileImage = user!!.imageURL!!
+
+                println(receiverToken)
+                println(profileImage)
+
+
+                if(title!!.isNotEmpty() && message.isNotEmpty()) {
+                    PushNotification(
+                        NotificationData(title, message, profileImage),
+                        receiverToken
+                    ).also {
+                        sendNotification(it)
+                    }
+                }
+
+
+
+            }
 
             performSendMessage()
 
+
+            /*
+            ref.get().addOnSuccessListener { value ->
+
+                val user = value!!.toObject(User::class.java)
+
+                profileImage = user!!.imageURL!!
+
+            }
+
+             */
+
         }
+
+
     }
 
     private fun selectFile(){
@@ -479,7 +580,27 @@ class ChatActivity : AppCompatActivity() {
 
         val date = Calendar.getInstance().time
 
-        val message = ChatMessage(currentUser, imageURL, date, "IMAGE")
+
+        var string : String
+        var string1: String
+
+        string = imageURL.toString()
+
+
+        val ivParameterSpec = IvParameterSpec(Base64.decode(iv, Base64.DEFAULT))
+
+        val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+        val spec =  PBEKeySpec(secretKey.toCharArray(), Base64.decode(salt, Base64.DEFAULT), 10000, 256)
+        val tmp = factory.generateSecret(spec)
+        val secretKey =  SecretKeySpec(tmp.encoded, "AES")
+
+        val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec)
+        string1 = Base64.encodeToString(cipher.doFinal(string.toByteArray(Charsets.UTF_8)), Base64.DEFAULT)
+
+
+
+        val message = ChatMessage(currentUser, string1, date, "IMAGE")
 
         var refSendMessage : CollectionReference? = null
         var refSendLastMessage : CollectionReference? = null
@@ -582,10 +703,32 @@ class ChatActivity : AppCompatActivity() {
 
     private fun performSendMessage() {
 
+        Log.d(TAG, "sendmessage")
+
         val text = binding.editTextMessage.text.toString()
+
+        var string : String
+        var string1: String
+
+        string = text.toString()
+
+
+        val ivParameterSpec = IvParameterSpec(Base64.decode(iv, Base64.DEFAULT))
+
+        val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+        val spec =  PBEKeySpec(secretKey.toCharArray(), Base64.decode(salt, Base64.DEFAULT), 10000, 256)
+        val tmp = factory.generateSecret(spec)
+        val secretKey =  SecretKeySpec(tmp.encoded, "AES")
+
+        val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec)
+        string1 = Base64.encodeToString(cipher.doFinal(string.toByteArray(Charsets.UTF_8)), Base64.DEFAULT)
+
+
+
         val date = Calendar.getInstance().time
 
-        val message = ChatMessage(currentUser, text, date, "TEXT")
+        val message = ChatMessage(currentUser, string1, date, "TEXT")
 
         var refSendMessage : CollectionReference? = null
         var refSendLastMessage : CollectionReference? = null
@@ -723,6 +866,25 @@ class ChatActivity : AppCompatActivity() {
                     details = false
 
 
+                if(chatMessage.text != null){
+                    var string1 :String
+
+                    val ivParameterSpec =  IvParameterSpec(Base64.decode(iv, Base64.DEFAULT))
+
+                    val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+                    val spec =  PBEKeySpec(secretKey.toCharArray(), Base64.decode(salt, Base64.DEFAULT), 10000, 256)
+                    val tmp = factory.generateSecret(spec);
+                    val secretKey =  SecretKeySpec(tmp.encoded, "AES")
+
+                    val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
+                    cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParameterSpec);
+                    string1 = String(cipher.doFinal(Base64.decode(chatMessage.text, Base64.DEFAULT)))
+
+
+                    chatMessage.text = string1
+                }
+
+
                 if(chatMessage.type == "firstMessage")
                     adapter.add(FirstMessage(chatMessage))
                 else if (chatMessage.senderId == currentUser && chatMessage.type == "TEXT")
@@ -749,6 +911,19 @@ class ChatActivity : AppCompatActivity() {
 
         }
 
+    }
+
+    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val response = RetrofitInstance.api.postNotification(notification)
+            if(response.isSuccessful) {
+                Log.d(ContentValues.TAG, "Response: ${Gson().toJson(response)}")
+            } else {
+                Log.e(ContentValues.TAG, response.errorBody().toString())
+            }
+        } catch(e: Exception) {
+            Log.e(ContentValues.TAG, e.toString())
+        }
     }
 
     private fun uploadFileToFireStorage(uri: Uri, file: File){
@@ -804,7 +979,24 @@ class ChatActivity : AppCompatActivity() {
 
         val date = Calendar.getInstance().time
 
-        val message = ChatMessage(currentUser, fileDocument, date, "FILE")
+        var string : String
+        var string1: String
+
+        string = fileDocument.toString()
+
+
+        val ivParameterSpec = IvParameterSpec(Base64.decode(iv, Base64.DEFAULT))
+
+        val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+        val spec =  PBEKeySpec(secretKey.toCharArray(), Base64.decode(salt, Base64.DEFAULT), 10000, 256)
+        val tmp = factory.generateSecret(spec)
+        val secretKey =  SecretKeySpec(tmp.encoded, "AES")
+
+        val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec)
+        string1 = Base64.encodeToString(cipher.doFinal(string.toByteArray(Charsets.UTF_8)), Base64.DEFAULT)
+
+        val message = ChatMessage(currentUser, string1, date, "FILE")
 
         var refSendMessage : CollectionReference? = null
         var refSendLastMessage : CollectionReference? = null
@@ -840,6 +1032,7 @@ class ChatActivity : AppCompatActivity() {
             }
 
         }
+
 
         refSendMessage.add(message).addOnSuccessListener {
 

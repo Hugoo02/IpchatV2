@@ -11,6 +11,7 @@
     <color name="cyan_blue">#0090B2</color>
 
     <color name="green_online">#006400</color>
+    <color name="gray_offline">#6C6B6B</color>
     <color name="green_message">#037B4A</color>
     <color name="primary_color">#0F4F33</color>
 

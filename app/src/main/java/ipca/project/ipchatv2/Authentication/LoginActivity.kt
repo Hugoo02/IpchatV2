@@ -21,6 +21,9 @@ import androidx.annotation.NonNull
 
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.iid.FirebaseInstanceId
+import ipca.project.ipchatv2.Models.User
+import ipca.project.ipchatv2.Notifications.FirebaseService
 
 
 class LoginActivity : AppCompatActivity() {
@@ -106,7 +109,10 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(baseContext, "Login Failed.", Toast.LENGTH_SHORT).show()
         }
     }
+
+
 }
+
 
 
 /*

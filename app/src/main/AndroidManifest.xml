@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ipca.project.ipchatv2">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -13,6 +16,17 @@
         android:exported="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.IpchatV2">
+
+        <service android:name=".Notifications.FirebaseService"
+            android:permission="com.google.android.c2dm.permission.SEND"
+            android:exported= "true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+
+        </service>
+
 
         <provider
             android:authorities="ipca.project.ipchatv2.fileprovider"
@@ -54,10 +68,13 @@
             android:name=".ShowUsersActivity"
             android:exported="true" />
         <activity
+
             android:name=".Calendar.NewEventActivity"
             android:exported="true" />
         <activity
+
             android:name=".EditProfileActivity"
+
             android:exported="true" />
         <activity
             android:name=".Authentication.LoginActivity"

@@ -1,10 +1,12 @@
 package ipca.project.ipchatv2.Home
 
 import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.ColorFilter
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,11 +22,13 @@ import ipca.project.ipchatv2.Chat.ChatActivity
 import ipca.project.ipchatv2.Chat.UserListLMRow
 import ipca.project.ipchatv2.Models.MessagePrivate
 import ipca.project.ipchatv2.Models.PrivateChannel
+import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.R
 import ipca.project.ipchatv2.ShowUsersActivity
 import ipca.project.ipchatv2.databinding.FragmentUserListBinding
 import java.util.*
 import kotlin.collections.HashMap
+
 
 class UserListFragment : Fragment() {
     private lateinit var binding: FragmentUserListBinding
@@ -50,6 +54,7 @@ class UserListFragment : Fragment() {
 
         listenForLatestMessages()
 
+
         binding.buttonNewMessage.setColorFilter(Color.WHITE)
 
         binding.buttonNewMessage.setOnClickListener {
@@ -64,11 +69,27 @@ class UserListFragment : Fragment() {
         adapter.setOnItemClickListener{item, view ->
 
             val row = item as UserListLMRow
+            var otherUserToken :String? = null
 
-            val intent = Intent(requireContext(), ChatActivity::class.java)
-            intent.putExtra("groupId", row.message.groupId)
-            intent.putExtra("channelType", "private")
-            startActivity(intent)
+            db.collection("User")
+                .document(row.message.otherUserId!!)
+                .get()
+                .addOnSuccessListener { result ->
+
+                    otherUserToken = result.toObject(User::class.java)!!.token
+
+                    println("OOOOOO SKRRRRRRR")
+                    println(otherUserToken)
+
+                    val intent = Intent(requireContext(), ChatActivity::class.java)
+                    intent.putExtra("groupId", row.message.groupId)
+                    intent.putExtra("receiverToken", otherUserToken)
+                    intent.putExtra("channelType", "private")
+
+                    startActivity(intent)
+                }
+
+
 
         }
 
@@ -96,6 +117,7 @@ class UserListFragment : Fragment() {
                 it.data!!.values.forEach{
 
                     groupId = it.toString()
+                    println("userList groupId = $groupId")
 
                 }
 
@@ -121,34 +143,36 @@ class UserListFragment : Fragment() {
                         otherUserId = usersList[0]
 
 
-                val refLastMessageId = db.collection("privateChannels").document(groupId!!)
-                    .collection("lastMessage")
+                    val refLastMessageId = db.collection("privateChannels").document(groupId!!)
+                        .collection("lastMessage")
 
-                //Referencia responsável por resgatar as ultimas mensagens de todos os grupos em que o user pertence
+                    //Referencia responsável por resgatar as ultimas mensagens de todos os grupos em que o user pertence
 
-                refLastMessageId.addSnapshotListener{ documents, e ->
+                    refLastMessageId.addSnapshotListener{ documents, e ->
 
-                    documents?.let {
+                        documents?.let {
 
-                        var lastMessage: MessagePrivate? = null
+                            var lastMessage: MessagePrivate? = null
 
-                        var message : MessagePrivate? = null
+                            var message : MessagePrivate? = null
 
-                        for (document in it){
+                            for (document in it){
 
-                            println("2. otherUserId = $otherUserId")
+                                println("2. otherUserId = $otherUserId")
 
-                            lastMessage = document.toObject(MessagePrivate::class.java)
+                                lastMessage = document.toObject(MessagePrivate::class.java)
 
-                            message = MessagePrivate(groupId, otherUserId, document.id, lastMessage.time)
+                                message = MessagePrivate(groupId, otherUserId, document.id, lastMessage.time)
 
-                            println("2. group = ${message.groupId}")
+                                println("2. group = ${message.groupId}")
 
-                            groupList[message.groupId!!] = message
+
+
+                                groupList[message.groupId!!] = message
 
                             }
 
-                        refreshAdapter()
+                            refreshAdapter()
 
                         }
 
