@@ -4,8 +4,12 @@ import android.app.AlertDialog
 import android.content.Context
 import android.graphics.*
 import androidx.lifecycle.LifecycleOwner
+import ipca.project.ipchatv2.Models.MessageGroup
 import ipca.project.ipchatv2.R
+import java.lang.String.format
+import java.text.DecimalFormat
 import java.util.*
+import kotlin.math.min
 import kotlin.system.exitProcess
 
 object Utils {
@@ -39,47 +43,19 @@ object Utils {
 
         val calendar = Calendar.getInstance()
 
+
         calendar.time = date
+
 
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
+        val minute =  calendar.get(Calendar.MINUTE)
 
-        return "$hour:$minute"
+        val formatter = DecimalFormat("00")
+        val formattedHour = formatter.format(hour)
+        val formattedMinute = formatter.format(minute)
 
-    }
+        return "$formattedHour:$formattedMinute"
 
-    fun formatDateToFistChat(date: Date) : String {
-
-        val calendar = Calendar.getInstance()
-
-        calendar.time = date
-
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-        val month = calendar.get(Calendar.MONTH) + 1
-        val year = calendar.get(Calendar.YEAR)
-
-        return "$day/$month/$year"
-
-    }
-
-    fun getRoundedCornerBitmap(bitmap: Bitmap, pixels: Int): Bitmap? {
-        val output = Bitmap.createBitmap(
-            bitmap.width, bitmap
-                .height, Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(output)
-        val color = -0xbdbdbe
-        val paint = Paint()
-        val rect = Rect(0, 0, bitmap.width, bitmap.height)
-        val rectF = RectF(rect)
-        val roundPx = pixels.toFloat()
-        paint.setAntiAlias(true)
-        canvas.drawARGB(0, 0, 0, 0)
-        paint.setColor(color)
-        canvas.drawRoundRect(rectF, roundPx, roundPx, paint)
-        paint.setXfermode(PorterDuffXfermode(PorterDuff.Mode.SRC_IN))
-        canvas.drawBitmap(bitmap, rect, rect, paint)
-        return output
     }
 
     fun receiveDateFromDatabaseToCalendar(date: Date): String {
@@ -91,7 +67,56 @@ object Utils {
         val month = calendar.get(Calendar.MONTH)
         val year = calendar.get(Calendar.YEAR)
 
-        return "$day/$month/$year"
+        val formatter = DecimalFormat("00")
+        val formattedDay = formatter.format(month)
+        val formattedMonth = formatter.format(year)
+
+        return "$formattedDay/$formattedMonth/$year"
+    }
+
+    fun dateToCalenar(time: Date): Calendar{
+
+        val calendar = Calendar.getInstance()
+        calendar.time = time
+
+        return calendar
+
+    }
+
+    fun getMessageDate(time: Date) : String{
+
+        val currentCalenar = Calendar.getInstance()
+        val messageCalendar = Calendar.getInstance()
+        messageCalendar.time = time
+
+        val messageYear = messageCalendar.get(Calendar.YEAR)
+        val messageMonth = messageCalendar.get(Calendar.MONTH)
+        val messageDay = messageCalendar.get(Calendar.DAY_OF_MONTH)
+
+        val currentYear = currentCalenar.get(Calendar.YEAR)
+        val currentMonth = currentCalenar.get(Calendar.MONTH)
+        val currentDay = currentCalenar.get(Calendar.DAY_OF_MONTH)
+
+        if(currentYear == messageYear && currentMonth == messageMonth
+            && currentDay == messageDay)
+            //return "Hoje às ${formatDateToChat(time)}"
+            return "Hoje às ${formatDateToChat(time)}"
+        else{
+
+            val formatter = DecimalFormat("00")
+            val formattedDay = formatter.format(messageDay)
+            val formattedMonth = formatter.format(messageMonth + 1)
+
+            return "${formattedDay}/${formattedMonth}/${messageYear} ${formatDateToChat(time)}"
+        }
+           
+
+    }
+
+    fun filterAdapter(queryText: String, array: HashMap<String, MessageGroup>){
+
+
+
     }
 
 }

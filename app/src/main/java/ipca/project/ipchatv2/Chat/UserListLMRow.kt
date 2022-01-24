@@ -1,6 +1,9 @@
 package ipca.project.ipchatv2.Chat
 
+import android.graphics.Color
+import android.graphics.Color.GRAY
 import android.os.Build
+import android.view.View
 import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -36,6 +39,8 @@ class UserListLMRow(val message: MessagePrivate): Item<ViewHolder>(){
         val textViewHourLM = viewHolder.itemView.textViewHourLM
 
         val circleImageLM = viewHolder.itemView.circleImageLM
+        var onlineBall = viewHolder.itemView.onlineBall
+
 
         refMessage.get().addOnSuccessListener { result ->
 
@@ -51,6 +56,13 @@ class UserListLMRow(val message: MessagePrivate): Item<ViewHolder>(){
 
                 otherUser = result.toObject(User::class.java)
 
+                if(otherUser!!.status == true){
+                    onlineBall.visibility = View.VISIBLE
+                }
+                else{
+                    onlineBall.visibility = View.GONE
+                }
+
                 textViewChatNameLM.text = otherUser!!.username
 
                 Picasso.get().load(otherUser!!.imageURL).into(circleImageLM)
@@ -63,6 +75,14 @@ class UserListLMRow(val message: MessagePrivate): Item<ViewHolder>(){
                     textViewMessageLM.text = "Tu enviaste uma fotografia"
                 else if(message!!.type == "IMAGE")
                     textViewMessageLM.text = "${otherUser!!.username} enviou uma fotografia"
+                else if(message!!.senderId == currentUser && message!!.type == "REMOVED")
+                    textViewMessageLM.text = "Tu removeste uma mensagem"
+                else if(message!!.type == "REMOVED")
+                    textViewMessageLM.text = "${otherUser!!.username} removeu uma mensagem"
+                else if(message!!.senderId == currentUser && message!!.type == "FILE")
+                    textViewMessageLM.text = "Tu enviaste um ficheiro"
+                else if(message!!.type == "FILE")
+                    textViewMessageLM.text = "${otherUser!!.username} removeu uma mensagem"
 
             }
 

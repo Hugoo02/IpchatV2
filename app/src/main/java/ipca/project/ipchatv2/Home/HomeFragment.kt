@@ -7,7 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import ipca.project.ipchatv2.Home.HomeAdapter
+import ipca.project.ipchatv2.Models.User
+import ipca.project.ipchatv2.Notifications.FirebaseService
 import ipca.project.ipchatv2.Utils.Utils
 import ipca.project.ipchatv2.databinding.FragmentHomeBinding
 
@@ -17,10 +22,12 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         Utils.connectionLiveData(requireContext())
+
 
     }
 
@@ -63,6 +70,4 @@ class HomeFragment : Fragment() {
 
         return binding.root
     }
-
-
 }

@@ -15,6 +15,7 @@
         <!-- Applied to framework control highlights (i.e ripples or list selectors) -->
         <item name="colorControlHighlight">@color/white</item>
 
+
         <!-- Enable these below if you want clicking icons to trigger a ripple effect -->
         <!--
         <item name="selectableItemBackground">?android:selectableItemBackground</item>
@@ -25,6 +26,11 @@
     <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">21sp</item>
         <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="roundedCorners" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">10dp</item>
     </style>
 
 </resources>

@@ -59,6 +59,10 @@ class GroupListLMRow(val messageGroup: MessageGroup): Item<ViewHolder>(){
                 textViewMessageLM.text = "Tu: ${message.text}"
             else if(message.senderId == currentUser && message.type == "IMAGE")
                 textViewMessageLM.text = "Tu enviaste uma fotografia"
+            else if(message.senderId == currentUser && message.type == "REMOVED")
+                textViewMessageLM.text = "Tu removeste uma mensagem"
+            else if(message.senderId == currentUser && message.type == "FILE")
+                textViewMessageLM.text = "Tu enviaste um ficheiro"
             else{
 
                 val refSenderUser = db.collection("User")
@@ -70,8 +74,12 @@ class GroupListLMRow(val messageGroup: MessageGroup): Item<ViewHolder>(){
 
                     if(message.type == "TEXT")
                         textViewMessageLM.text = "${senderUser!!.username}: ${message.text}"
-                    else
+                    else if(message.type == "IMAGE")
                         textViewMessageLM.text = "${senderUser!!.username} enviou uma fotografia"
+                    else if(message.type == "REMOVED")
+                        textViewMessageLM.text = "${senderUser!!.username} removeu uma mensagem"
+                    else if(message.type == "FILE")
+                        textViewMessageLM.text = "${senderUser!!.username} removeu uma mensagem"
                 }
 
             }

@@ -4,16 +4,16 @@
 
     <item
         android:id="@+id/calendarFragment"
-        android:title="Calendar"
+        android:title="Calendário"
         android:icon="@drawable/ic_baseline_calendar_today_40"/>
 
     <item
         android:id="@+id/homeFragment"
-        android:title="Home"
+        android:title="Conversas"
         android:icon="@drawable/ic_baseline_home_24"/>
 
     <item
         android:id="@+id/profileFragment"
-        android:title="Profile"
+        android:title="Perfil"
         android:icon="@drawable/ic_baseline_person_24"/>
 </menu>
