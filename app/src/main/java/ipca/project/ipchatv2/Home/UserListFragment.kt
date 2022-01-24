@@ -29,6 +29,7 @@ import ipca.project.ipchatv2.databinding.FragmentUserListBinding
 import java.util.*
 import kotlin.collections.HashMap
 
+
 class UserListFragment : Fragment() {
     private lateinit var binding: FragmentUserListBinding
     private var db = FirebaseFirestore.getInstance()
@@ -164,6 +165,8 @@ class UserListFragment : Fragment() {
                                 message = MessagePrivate(groupId, otherUserId, document.id, lastMessage.time)
 
                                 println("2. group = ${message.groupId}")
+
+
 
                                 groupList[message.groupId!!] = message
 

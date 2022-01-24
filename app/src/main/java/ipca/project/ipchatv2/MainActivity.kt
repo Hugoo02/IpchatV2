@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
         checkAuthentication()
 
-        checkDevice()
+
 
     }
 
@@ -60,6 +60,9 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
 
+        }
+        else{
+            checkDevice()
         }
 
     }

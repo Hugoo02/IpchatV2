@@ -62,12 +62,22 @@ import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import kotlinx.coroutines.selects.select
 import java.io.ByteArrayOutputStream
+import javax.crypto.Cipher
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.PBEKeySpec
+import javax.crypto.spec.SecretKeySpec
+import android.util.Base64
 
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChatBinding
 
     val adapter = GroupAdapter<ViewHolder>()
+
+    val secretKey = "tK5UTui+DPh8lIlBxya5XVsmeDCoUl6vHhdIESMB6sQ="
+    val salt = "QWlGNHNhMTJTQWZ2bGhpV3U="
+    val iv = "bVQzNFNhRkQ1Njc4UUFaWA=="
 
     var groupId: String? = null
     var channelType: String? = null
@@ -571,7 +581,27 @@ class ChatActivity : AppCompatActivity() {
 
         val date = Calendar.getInstance().time
 
-        val message = ChatMessage(currentUser, imageURL, date, "IMAGE")
+
+        var string : String
+        var string1: String
+
+        string = imageURL.toString()
+
+
+        val ivParameterSpec = IvParameterSpec(Base64.decode(iv, Base64.DEFAULT))
+
+        val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+        val spec =  PBEKeySpec(secretKey.toCharArray(), Base64.decode(salt, Base64.DEFAULT), 10000, 256)
+        val tmp = factory.generateSecret(spec)
+        val secretKey =  SecretKeySpec(tmp.encoded, "AES")
+
+        val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec)
+        string1 = Base64.encodeToString(cipher.doFinal(string.toByteArray(Charsets.UTF_8)), Base64.DEFAULT)
+
+
+
+        val message = ChatMessage(currentUser, string1, date, "IMAGE")
 
         var refSendMessage : CollectionReference? = null
         var refSendLastMessage : CollectionReference? = null
@@ -677,9 +707,29 @@ class ChatActivity : AppCompatActivity() {
         Log.d(TAG, "sendmessage")
 
         val text = binding.editTextMessage.text.toString()
+
+        var string : String
+        var string1: String
+
+        string = text.toString()
+
+
+        val ivParameterSpec = IvParameterSpec(Base64.decode(iv, Base64.DEFAULT))
+
+        val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+        val spec =  PBEKeySpec(secretKey.toCharArray(), Base64.decode(salt, Base64.DEFAULT), 10000, 256)
+        val tmp = factory.generateSecret(spec)
+        val secretKey =  SecretKeySpec(tmp.encoded, "AES")
+
+        val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec)
+        string1 = Base64.encodeToString(cipher.doFinal(string.toByteArray(Charsets.UTF_8)), Base64.DEFAULT)
+
+
+
         val date = Calendar.getInstance().time
 
-        val message = ChatMessage(currentUser, text, date, "TEXT")
+        val message = ChatMessage(currentUser, string1, date, "TEXT")
 
         var refSendMessage : CollectionReference? = null
         var refSendLastMessage : CollectionReference? = null
@@ -813,6 +863,25 @@ class ChatActivity : AppCompatActivity() {
                     details = false
 
 
+                if(chatMessage.text != null){
+                    var string1 :String
+
+                    val ivParameterSpec =  IvParameterSpec(Base64.decode(iv, Base64.DEFAULT))
+
+                    val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+                    val spec =  PBEKeySpec(secretKey.toCharArray(), Base64.decode(salt, Base64.DEFAULT), 10000, 256)
+                    val tmp = factory.generateSecret(spec);
+                    val secretKey =  SecretKeySpec(tmp.encoded, "AES")
+
+                    val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
+                    cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParameterSpec);
+                    string1 = String(cipher.doFinal(Base64.decode(chatMessage.text, Base64.DEFAULT)))
+
+
+                    chatMessage.text = string1
+                }
+
+
                 if(chatMessage.type == "firstMessage")
                     adapter.add(FirstMessage(chatMessage))
                 else if (chatMessage.senderId == currentUser && chatMessage.type == "TEXT")
@@ -907,7 +976,24 @@ class ChatActivity : AppCompatActivity() {
 
         val date = Calendar.getInstance().time
 
-        val message = ChatMessage(currentUser, fileDocument, date, "FILE")
+        var string : String
+        var string1: String
+
+        string = fileDocument.toString()
+
+
+        val ivParameterSpec = IvParameterSpec(Base64.decode(iv, Base64.DEFAULT))
+
+        val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+        val spec =  PBEKeySpec(secretKey.toCharArray(), Base64.decode(salt, Base64.DEFAULT), 10000, 256)
+        val tmp = factory.generateSecret(spec)
+        val secretKey =  SecretKeySpec(tmp.encoded, "AES")
+
+        val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec)
+        string1 = Base64.encodeToString(cipher.doFinal(string.toByteArray(Charsets.UTF_8)), Base64.DEFAULT)
+
+        val message = ChatMessage(currentUser, string1, date, "FILE")
 
         var refSendMessage : CollectionReference? = null
         var refSendLastMessage : CollectionReference? = null
@@ -943,6 +1029,7 @@ class ChatActivity : AppCompatActivity() {
             }
 
         }
+
 
         refSendMessage.add(message).addOnSuccessListener {
 
