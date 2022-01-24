@@ -23,7 +23,6 @@ import ipca.project.ipchatv2.Chat.UserListLMRow
 import ipca.project.ipchatv2.Models.MessagePrivate
 import ipca.project.ipchatv2.Models.PrivateChannel
 import ipca.project.ipchatv2.Models.User
-import ipca.project.ipchatv2.Models.PrivateChannel
 import ipca.project.ipchatv2.R
 import ipca.project.ipchatv2.ShowUsersActivity
 import ipca.project.ipchatv2.databinding.FragmentUserListBinding
