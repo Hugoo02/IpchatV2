@@ -7,8 +7,6 @@ plugins {
 
 apply plugin: 'kotlin-android-extensions'
 
-//provavel não precisar
-apply plugin: 'kotlin-android'
 
 android {
     compileSdk 31
@@ -91,4 +89,10 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
+    // image picker
+    implementation 'com.github.florent37:inline-activity-result-kotlin:1.0.4'
 }

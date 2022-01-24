@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -21,9 +22,13 @@ class ShowGroupUsersFragment : Fragment() {
     private var groupId: String? = null
     private var userType: String? = null
 
+    var passou = false
+
     val db = FirebaseFirestore.getInstance()
 
     val adapter = GroupAdapter<ViewHolder>()
+
+    val adapterList : MutableList<UserItem> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,67 +50,103 @@ class ShowGroupUsersFragment : Fragment() {
 
             db.collection("groupChannels")
                 .document(groupId!!)
-                .get().addOnSuccessListener { result ->
+                .addSnapshotListener { result, error ->
 
-                    val group = result.toObject(GroupChannel::class.java)
+                    //Snapshot importante para verificar se houve mudanças nos membros do grupo
 
-                    group!!.userIds!!.forEach {
+                    adapter.clear()
+                    adapterList.clear()
 
-                        db.collection("User")
-                            .document(it)
-                            .collection("groupChannels")
-                            .document(groupId!!)
-                            .get()
-                            .addOnSuccessListener { groupObject ->
+                    val group = result!!.toObject(GroupChannel::class.java)
 
-                                val admin = groupObject["admin"] as Boolean
-
-                                db.collection("User")
-                                    .document(it)
-                                    .get()
-                                    .addOnSuccessListener { userObject ->
-
-                                        val user = userObject.toObject(User::class.java)
-
-                                        adapter.add(UserItem(user!!, admin))
-                                    }
-
-                            }
-
-                    }
-
-                }
-
-        }else{
-
-            db.collection("groupChannels")
-                .document(groupId!!)
-                .get().addOnSuccessListener { result ->
-
-                    val group = result.toObject(GroupChannel::class.java)
-
-                    group!!.userIds!!.forEach {
+                    group!!.userIds!!.forEachIndexed { index, id ->
 
                         db.collection("User")
-                            .document(it)
+                            .document(id)
                             .collection("groupChannels")
                             .document(groupId!!)
-                            .get()
-                            .addOnSuccessListener { groupObject ->
+                            .addSnapshotListener { groupObject, error ->
 
-                                val admin = groupObject["admin"] as Boolean
+                                if(groupObject!!["admin"] != null)
+                                {
 
-                                if(admin){
+                                    val admin = groupObject["admin"] as Boolean
 
                                     db.collection("User")
-                                        .document(it)
+                                        .document(id)
                                         .get()
                                         .addOnSuccessListener { userObject ->
 
                                             val user = userObject.toObject(User::class.java)
 
-                                            adapter.add(UserItem(user!!, admin))
+                                            var passed = false
+
+                                            val iter: ListIterator<UserItem> =
+                                                adapterList.listIterator()
+
+                                            val toReplace = mutableMapOf<UserItem, Int>()
+
+                                            while (iter.hasNext()) {
+                                                val str = iter.next()
+                                                val index = iter.nextIndex()
+
+                                                println("strId = " + str.user.id)
+                                                println("index = " + index)
+
+                                                if((user!!.id == str.user.id && !admin == str.admin))
+                                                {
+                                                    val newElement = UserItem(str.user, admin)
+
+                                                    toReplace[newElement] = index - 1
+                                                    passed = true
+
+                                                }
+                                                else if ((user.id == str.user.id && admin == str.admin)){
+
+                                                    passed = true
+
+                                                }//else if ((str.user.id!! !in group.userIds!!)){
+
+                                                //    toDelete.add(str)
+                                                //    passed = true
+
+                                                //}
+                                            }
+
+                                            if(!passed)
+                                            {
+
+                                                adapterList.add(UserItem(user!!, admin))
+
+                                            }
+
+                                           toReplace.forEach {
+
+                                               adapterList[it.value] = it.key
+
+                                           }
+
+                                            refreshAdapter()
                                         }
+
+                                }else{
+
+                                    val iter: ListIterator<UserItem> =
+                                        adapterList.listIterator()
+
+                                    val toDelete : MutableList<UserItem> = arrayListOf()
+
+                                    while (iter.hasNext()) {
+                                        val str = iter.next()
+
+                                        if(str.user.id == id)
+                                            toDelete.add(str)
+
+                                    }
+
+                                    adapterList.removeAll(toDelete)
+
+                                    refreshAdapter()
 
                                 }
 
@@ -114,6 +155,115 @@ class ShowGroupUsersFragment : Fragment() {
 
                 }
 
+        }else {
+
+            db.collection("groupChannels")
+                .document(groupId!!)
+                .addSnapshotListener { result, error ->
+
+                    adapter.clear()
+                    adapterList.clear()
+
+                    val group = result!!.toObject(GroupChannel::class.java)
+
+                    group!!.userIds!!.forEachIndexed { index, id ->
+
+                        db.collection("User")
+                            .document(id)
+                            .collection("groupChannels")
+                            .document(groupId!!)
+                            .addSnapshotListener { groupObject, error ->
+
+                                if (groupObject!!["admin"] != null) {
+
+                                    val admin = groupObject["admin"] as Boolean
+
+                                    if(admin){
+
+                                        db.collection("User")
+                                            .document(id)
+                                            .get()
+                                            .addOnSuccessListener { userObject ->
+
+                                                val user = userObject.toObject(User::class.java)
+
+                                                var passed = false
+
+                                                val iter: ListIterator<UserItem> =
+                                                    adapterList.listIterator()
+
+                                                val toDelete : MutableList<UserItem> = arrayListOf()
+
+                                                while (iter.hasNext()) {
+                                                    val str = iter.next()
+                                                    val index = iter.nextIndex()
+
+                                                    println("strId = " + str.user.id)
+                                                    println("index = " + index)
+
+                                                    if ((str.user.id!! !in group.userIds!!)) {
+
+                                                        toDelete.add(str)
+                                                        passed = true
+
+                                                    } else if (user!!.id == str.user.id && admin == str.admin)
+                                                        passed = true
+                                                }
+
+                                                if (!passed) {
+
+                                                    adapterList.add(UserItem(user!!, admin))
+
+                                                }
+
+                                                refreshAdapter()
+
+                                            }
+
+                                    } else {
+
+                                        val iter: ListIterator<UserItem> =
+                                            adapterList.listIterator()
+
+                                        val toDelete : MutableList<UserItem> = arrayListOf()
+
+                                        while (iter.hasNext()) {
+                                            val str = iter.next()
+
+                                            if(str.user.id == id)
+                                                toDelete.add(str)
+
+                                        }
+
+                                        adapterList.removeAll(toDelete)
+
+                                        refreshAdapter()
+
+                                    }
+
+                                } else {
+
+                                    val iter: ListIterator<UserItem> =
+                                        adapterList.listIterator()
+
+                                    val toDelete : MutableList<UserItem> = arrayListOf()
+
+                                    while (iter.hasNext()) {
+                                        val str = iter.next()
+
+                                        if(str.user.id == id)
+                                            toDelete.add(str)
+
+                                    }
+
+                                    refreshAdapter()
+
+                                }
+
+                            }
+                    }
+
+                }
         }
 
         adapter.setOnItemClickListener{ item, view ->
@@ -122,6 +272,8 @@ class ShowGroupUsersFragment : Fragment() {
 
             val bundle = Bundle()
             bundle.putString("userId", row.user.id)
+            bundle.putBoolean("admin", row.admin)
+            bundle.putString("groupId", groupId)
             val dialog = ProfileDelaisFragment()
             dialog.arguments = bundle
 
@@ -130,5 +282,20 @@ class ShowGroupUsersFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun refreshAdapter() {
+
+        adapter.clear()
+
+        adapterList.forEach {
+
+            println("it.user.id = " + it.user.id)
+            println("it.admin = " + it.admin)
+
+            adapter.add(it)
+
+        }
+
     }
 }

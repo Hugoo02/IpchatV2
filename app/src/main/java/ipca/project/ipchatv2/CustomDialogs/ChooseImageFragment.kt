@@ -12,10 +12,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import ipca.project.ipchatv2.Chat.ChatActivity
 import ipca.project.ipchatv2.MainActivity
+import ipca.project.ipchatv2.Models.ChatMessage
+import ipca.project.ipchatv2.Models.GroupChannel
 import ipca.project.ipchatv2.R
 import ipca.project.ipchatv2.ShowUsersActivity
 import ipca.project.ipchatv2.databinding.FragmentChooseImageBinding
@@ -27,11 +30,13 @@ class ChooseImageFragment : DialogFragment() {
 
     private lateinit var binding: FragmentChooseImageBinding
 
-    private var groupId : String? = null
+    private var groupChannel : GroupChannel? = null
 
     private var selectedPhotoUri: Uri? = null
 
     val db = FirebaseFirestore.getInstance()
+
+    val currentUser = FirebaseAuth.getInstance()
 
     val getImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
 
@@ -46,7 +51,7 @@ class ChooseImageFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            groupId = it.getString("groupId")
+            groupChannel = it.getParcelable("groupChannel")
         }
     }
 
@@ -67,8 +72,6 @@ class ChooseImageFragment : DialogFragment() {
         binding.buttonSubmit.setOnClickListener {
 
             uploadImageToFirebaseStorage()
-            startChatActivity(groupId!!)
-            dismiss()
 
         }
 
@@ -105,7 +108,7 @@ class ChooseImageFragment : DialogFragment() {
 
                 ref.downloadUrl.addOnSuccessListener {
 
-                    sendImageToDB(it.toString())
+                    createGroupChannel(it.toString())
 
                 }
 
@@ -113,11 +116,69 @@ class ChooseImageFragment : DialogFragment() {
 
     }
 
-    private fun sendImageToDB(imageUrl: String) {
+    private fun createGroupChannel(imageUrl: String) {
+
+        groupChannel!!.groupImageURL = imageUrl
 
         db.collection("groupChannels")
-            .document(groupId!!)
-            .update(mapOf("groupImageURL" to imageUrl))
+            .add(groupChannel!!)
+            .addOnSuccessListener {
+
+                val date = Calendar.getInstance().time
+                val firstMessage = ChatMessage(currentUser.uid, null, date, "firstMessage")
+
+                val refSendMessage = db.collection("groupChannels")
+                    .document(it.id)
+                    .collection("messages")
+
+                val refSendLastMessage = db.collection("groupChannels")
+                    .document(it.id)
+                    .collection("lastMessage")
+
+                refSendMessage.add(firstMessage).addOnSuccessListener {
+
+                    refSendLastMessage.document(it.id)
+                        .set(firstMessage)
+
+                }
+
+                groupChannel!!.userIds!!.forEachIndexed{ index, userId ->
+
+                    println("userId = $userId")
+
+                    if(userId == currentUser.uid)
+                    {
+
+                        db.collection("User")
+                            .document(userId)
+                            .collection("groupChannels")
+                            .document(it.id)
+                            .set(mapOf("admin" to true))
+
+                    }
+                    else
+                    {
+
+                        db.collection("User")
+                            .document(userId)
+                            .collection("groupChannels")
+                            .document(it.id)
+                            .set(mapOf("admin" to false))
+
+                    }
+
+
+                    if(index == (groupChannel!!.userIds!!.size - 1))
+                    {
+
+                        startChatActivity(it.id)
+                        dismiss()
+
+                    }
+
+
+                }
+            }
 
     }
 }

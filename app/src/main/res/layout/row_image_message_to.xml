@@ -45,14 +45,18 @@
         app:layout_constraintStart_toEndOf="@+id/imageViewContactPhotoTo"
         app:layout_constraintTop_toTopOf="@+id/imageViewContactPhotoTo" />
 
-    <TextView
-        android:id="@+id/textViewChatImageMessageTimeStampTo"
+    <ImageView
+        android:id="@+id/progressBarImageTo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:text="00/00"
-        android:textSize="11sp"
-        app:layout_constraintStart_toStartOf="@+id/imageViewMessageTo"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewMessageTo" />
+        android:layout_marginStart="8dp"
+        android:adjustViewBounds="true"
+        android:maxWidth="220dp"
+        android:paddingStart="10dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="14dp"
+        android:paddingBottom="6dp"
+        app:layout_constraintStart_toEndOf="@+id/imageViewContactPhotoTo"
+        app:layout_constraintTop_toTopOf="@+id/imageViewContactPhotoTo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

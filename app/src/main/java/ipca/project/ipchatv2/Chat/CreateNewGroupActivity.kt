@@ -64,64 +64,8 @@ class CreateNewGroupActivity : AppCompatActivity() {
                 val groupName = editTextGroupName.text.toString()
                 val groupChannel = GroupChannel(groupName, userIds, null)
 
-                    db.collection("groupChannels")
-                        .add(groupChannel)
-                        .addOnSuccessListener {
+                chooseGroupImage(groupChannel)
 
-                            val date = Calendar.getInstance().time
-                            val firstMessage = ChatMessage(currentUser.uid, null, date, "firstMessage")
-
-                            val refSendMessage = db.collection("groupChannels")
-                                .document(it.id)
-                                .collection("messages")
-
-                            val refSendLastMessage = db.collection("groupChannels")
-                                .document(it.id)
-                                .collection("lastMessage")
-
-                            refSendMessage.add(firstMessage).addOnSuccessListener {
-
-                                refSendLastMessage.document(it.id)
-                                    .set(firstMessage)
-
-                            }
-
-                            userIds.forEachIndexed{ index, userId ->
-
-                                println("userId = $userId")
-
-                                if(userId == currentUser.uid)
-                                {
-
-                                    db.collection("User")
-                                        .document(userId)
-                                        .collection("groupChannels")
-                                        .document(it.id)
-                                        .set(mapOf("admin" to true))
-
-                                }
-                                else
-                                {
-
-                                    db.collection("User")
-                                        .document(userId)
-                                        .collection("groupChannels")
-                                        .document(it.id)
-                                        .set(mapOf("admin" to false))
-
-                                }
-
-
-                                if(index == (userIds.size - 1))
-                                {
-
-                                    chooseGroupImage(it.id)
-
-                                }
-
-
-                            }
-                        }
             }
 
         }
@@ -129,10 +73,10 @@ class CreateNewGroupActivity : AppCompatActivity() {
 
     }
 
-    private fun chooseGroupImage(groupId: String) {
+    private fun chooseGroupImage(groupChannel: GroupChannel) {
 
         val bundle = Bundle()
-        bundle.putString("groupId", groupId)
+        bundle.putParcelable("groupChannel", groupChannel)
         val dialog = ChooseImageFragment()
         dialog.arguments = bundle
 

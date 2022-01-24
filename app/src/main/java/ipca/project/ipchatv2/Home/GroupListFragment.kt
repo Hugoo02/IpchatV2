@@ -7,15 +7,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Chat.ChatActivity
 import ipca.project.ipchatv2.Chat.GroupListLMRow
+import ipca.project.ipchatv2.Models.GroupChannel
 import ipca.project.ipchatv2.Models.MessageGroup
 import ipca.project.ipchatv2.ShowUsersActivity
+import ipca.project.ipchatv2.Utils.Utils
 import ipca.project.ipchatv2.databinding.FragmentGroupListBinding
 
 class GroupListFragment : Fragment() {
@@ -38,7 +43,6 @@ class GroupListFragment : Fragment() {
         // Inflate the layout for this fragment
 
         binding.recyclerViewGroupLM.adapter = adapter
-        binding.recyclerViewGroupLM.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
         listenForLatestMessages()
 
@@ -78,29 +82,36 @@ class GroupListFragment : Fragment() {
         //Referencia responsável por resgatar todos os grupos do utilizador
         refIdGroups.addSnapshotListener { documents, e ->
 
-            documents!!.documents.forEach {
+            if(!documents!!.isEmpty)
+            {
 
-                val groupId = it.id
+                documents!!.documents.forEach {
 
-                val refLastMessageId = db.collection("groupChannels").document(groupId)
-                    .collection("lastMessage")
+                    println("groupId = ${it.id}")
 
-                //Referencia responsável por resgatar as ultimas mensagens de todos os grupos em que o user pertence
+                    val groupId = it.id
 
-                refLastMessageId.addSnapshotListener{ documents, e ->
+                    val refLastMessageId = db.collection("groupChannels").document(groupId)
+                        .collection("lastMessage")
 
-                    documents?.let {
+                    //Referencia responsável por resgatar as ultimas mensagens de todos os grupos em que o user pertence
 
-                        for (document in it){
+                    refLastMessageId.addSnapshotListener{ documents, e ->
 
-                            val lastMessageId = document.id
-                            val lastMessageGroup = document.toObject(MessageGroup::class.java)
-                            val message = MessageGroup(groupId, lastMessageId, lastMessageGroup.time)
+                        documents?.let {
 
-                            groupList[message.groupId!!] = message
+                            for (document in it){
+
+                                val lastMessageId = document.id
+                                val lastMessageGroup = document.toObject(MessageGroup::class.java)
+                                val message = MessageGroup(groupId, lastMessageId, lastMessageGroup.time)
+
+                                groupList[message.groupId!!] = message
+                            }
+
+                            refreshAdapter()
+
                         }
-
-                        refreshAdapter()
 
                     }
 
@@ -123,3 +134,5 @@ class GroupListFragment : Fragment() {
     }
 
 }
+
+

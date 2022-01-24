@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.22708333333333333" />
         <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/drawable-v24/profile_layout.xml" value="0.2188034188034188" />
         <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/drawable/ic_add_calendar.xml" value="0.3141025641025641" />
         <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/drawable/ic_baseline_calendar_today_24.xml" value="0.22179487179487178" />
@@ -43,14 +44,19 @@
         <entry key="..\:/Users/pedro/AndroidStudio/IpchatV2_erro/app/src/main/res/layout/row_users.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/pedro/AndroidStudio/IpchatV2_erro/app/src/main/res/layout/teste.xml" value="0.26458333333333334" />
         <entry key="app/src/main/res/drawable-v24/ic_insert_emoticon_black_24dp.xml" value="0.228125" />
+        <entry key="app/src/main/res/drawable-v24/rounded_rectangle_message_to.xml" value="0.12239583333333333" />
         <entry key="app/src/main/res/drawable/admin_text_view.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/background_image.xml" value="0.228125" />
         <entry key="app/src/main/res/drawable/background_image_row.xml" value="0.21851851851851853" />
         <entry key="app/src/main/res/drawable/button_rounded.xml" value="0.228125" />
         <entry key="app/src/main/res/drawable/button_toolbar.xml" value="0.17592592592592593" />
         <entry key="app/src/main/res/drawable/buttonwhite.xml" value="0.228125" />
+        <entry key="app/src/main/res/drawable/choose_method_background.xml" value="0.134375" />
         <entry key="app/src/main/res/drawable/constraint_background.xml" value="0.2246153846153846" />
         <entry key="app/src/main/res/drawable/dialog_background.xml" value="0.228125" />
+        <entry key="app/src/main/res/drawable/dialog_bg.xml" value="0.228125" />
         <entry key="app/src/main/res/drawable/edit_text_rounded.xml" value="0.228125" />
+        <entry key="app/src/main/res/drawable/event_icon.xml" value="0.1515625" />
         <entry key="app/src/main/res/drawable/formulariologin.xml" value="0.228125" />
         <entry key="app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.20555555555555555" />
         <entry key="app/src/main/res/drawable/ic_baseline_calendar_month_24.xml" value="0.20555555555555555" />
@@ -64,24 +70,35 @@
         <entry key="app/src/main/res/drawable/ic_baseline_send_24.xml" value="0.2175925925925926" />
         <entry key="app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.2037037037037037" />
         <entry key="app/src/main/res/drawable/ic_sem_wi_fi.xml" value="0.228125" />
+        <entry key="app/src/main/res/drawable/message_removed.xml" value="0.12239583333333333" />
         <entry key="app/src/main/res/drawable/rounded_select_photo.xml" value="0.228125" />
+        <entry key="app/src/main/res/drawable/sample_circle.xml" value="0.1515625" />
         <entry key="app/src/main/res/drawable/tab_indicator.xml" value="0.228125" />
         <entry key="app/src/main/res/drawable/tab_layout.xml" value="0.228125" />
+        <entry key="app/src/main/res/drawable/test.xml" value="0.1515625" />
         <entry key="app/src/main/res/drawable/toolbar_background.xml" value="0.228125" />
+        <entry key="app/src/main/res/layout/activity_calendar.xml" value="0.11458333333333333" />
         <entry key="app/src/main/res/layout/activity_chat.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/activity_chat_more_details.xml" value="0.28191489361702127" />
+        <entry key="app/src/main/res/layout/activity_chat_more_details.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_create_new_group.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/activity_group_members.xml" value="0.11367753623188406" />
+        <entry key="app/src/main/res/layout/activity_edit_event.xml" value="0.11458333333333333" />
+        <entry key="app/src/main/res/layout/activity_edit_profile.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_group_members.xml" value="0.21" />
+        <entry key="app/src/main/res/layout/activity_inside_path.xml" value="0.1203125" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.12" />
         <entry key="app/src/main/res/layout/activity_new_calendar_event.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_new_event.xml" value="0.151268115942029" />
+        <entry key="app/src/main/res/layout/activity_select_file.xml" value="0.16802536231884058" />
+        <entry key="app/src/main/res/layout/activity_select_path.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_show_files.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/layout/activity_show_photo_closer.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_show_users.xml" value="0.1793478260869565" />
+        <entry key="app/src/main/res/layout/dialog_choose_pic_method.xml" value="0.12862453531598514" />
         <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.2" />
         <entry key="app/src/main/res/layout/fragment_choose_image.xml" value="0.18840579710144928" />
-        <entry key="app/src/main/res/layout/fragment_group_list.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_choose_pic_method.xml" value="0.15670289855072464" />
+        <entry key="app/src/main/res/layout/fragment_group_list.xml" value="0.18" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/fragment_profile_delais.xml" value="0.33" />
@@ -91,13 +108,22 @@
         <entry key="app/src/main/res/layout/fragment_show_photo.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_show_photo_closer.xml" value="0.10081053698074975" />
         <entry key="app/src/main/res/layout/fragment_show_photos.xml" value="0.13541666666666666" />
-        <entry key="app/src/main/res/layout/fragment_user_list.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_user_list.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/message_hold_settings.xml" value="0.33" />
         <entry key="app/src/main/res/layout/popwindow_alertinternet.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/row_calendar.xml" value="0.12907608695652173" />
+        <entry key="app/src/main/res/layout/row_download_file.xml" value="0.1203125" />
+        <entry key="app/src/main/res/layout/row_empty.xml" value="0.17028985507246377" />
+        <entry key="app/src/main/res/layout/row_file.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/row_file_from.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/row_file_to.xml" value="0.5" />
         <entry key="app/src/main/res/layout/row_first_message.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/row_image_message_from.xml" value="1.1" />
+        <entry key="app/src/main/res/layout/row_hour_message.xml" value="0.75" />
+        <entry key="app/src/main/res/layout/row_image_message_from.xml" value="0.33" />
         <entry key="app/src/main/res/layout/row_image_message_to.xml" value="0.75" />
         <entry key="app/src/main/res/layout/row_last_messages.xml" value="0.18070652173913043" />
+        <entry key="app/src/main/res/layout/row_removed_message_from.xml" value="0.21" />
+        <entry key="app/src/main/res/layout/row_removed_message_to.xml" value="0.5" />
         <entry key="app/src/main/res/layout/row_show_image.xml" value="0.14990942028985507" />
         <entry key="app/src/main/res/layout/row_text_message_from.xml" value="0.5" />
         <entry key="app/src/main/res/layout/row_text_message_to.xml" value="0.5" />

@@ -75,6 +75,14 @@ class UserListLMRow(val message: MessagePrivate): Item<ViewHolder>(){
                     textViewMessageLM.text = "Tu enviaste uma fotografia"
                 else if(message!!.type == "IMAGE")
                     textViewMessageLM.text = "${otherUser!!.username} enviou uma fotografia"
+                else if(message!!.senderId == currentUser && message!!.type == "REMOVED")
+                    textViewMessageLM.text = "Tu removeste uma mensagem"
+                else if(message!!.type == "REMOVED")
+                    textViewMessageLM.text = "${otherUser!!.username} removeu uma mensagem"
+                else if(message!!.senderId == currentUser && message!!.type == "FILE")
+                    textViewMessageLM.text = "Tu enviaste um ficheiro"
+                else if(message!!.type == "FILE")
+                    textViewMessageLM.text = "${otherUser!!.username} removeu uma mensagem"
 
             }
 

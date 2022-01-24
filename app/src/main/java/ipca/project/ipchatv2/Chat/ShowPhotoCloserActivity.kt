@@ -1,20 +1,13 @@
 package ipca.project.ipchatv2.Chat
 
-import android.app.Activity
-import android.graphics.Point
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.squareup.picasso.Picasso
 import ipca.project.ipchatv2.Models.ChatMessage
-import ipca.project.ipchatv2.databinding.ActivityShowFilesBinding
 import ipca.project.ipchatv2.databinding.ActivityShowPhotoCloserBinding
-import java.util.*
 import android.util.DisplayMetrics
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
 import ipca.project.ipchatv2.Models.User
-import kotlin.math.roundToInt
 
 
 class ShowPhotoCloserActivity : AppCompatActivity() {

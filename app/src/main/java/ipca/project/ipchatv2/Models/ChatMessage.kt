@@ -10,9 +10,10 @@ class ChatMessage (
     var senderId    : String? = null,
     var text        : String? = null,
     var time        : Date? = null,
-    var type        : String? = null): Parcelable {
+    var type        : String? = null,
+    var messageId   : String? = null): Parcelable {
 
-    constructor() : this(null, null, null, null)
+    constructor() : this(null, null, null, null, null)
 
     fun toHashMap() : HashMap<String, Any?>{
         val hashMap = HashMap<String, Any?>()
@@ -20,6 +21,7 @@ class ChatMessage (
         hashMap["text"]             = text
         hashMap["time"]             = time
         hashMap["type"]             = type
+        hashMap["messageId"]        = messageId
 
         return hashMap
     }
@@ -29,7 +31,8 @@ class ChatMessage (
                 hashMap["senderId"].toString(),
                 hashMap["text"].toString(),
                 hashMap["time"] as Date,
-                hashMap["type"].toString()
+                hashMap["type"].toString(),
+                hashMap["messageId"].toString()
             )
             return item
         }
