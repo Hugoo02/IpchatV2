@@ -21,6 +21,10 @@ import androidx.annotation.NonNull
 
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.FirebaseUserMetadata
+
+
+
 
 
 class LoginActivity : AppCompatActivity() {
@@ -92,9 +96,17 @@ class LoginActivity : AppCompatActivity() {
 
         if(currentUser != null){
             if(currentUser.isEmailVerified){
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
+                val metadata = auth.currentUser!!.metadata
+                if (metadata!!.creationTimestamp == metadata!!.lastSignInTimestamp) {
+                    val intent = Intent(this, ChangePasswordActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+
             } else{
                 Toast.makeText(baseContext, "Please verify your email address.", Toast.LENGTH_SHORT).show()
             }
