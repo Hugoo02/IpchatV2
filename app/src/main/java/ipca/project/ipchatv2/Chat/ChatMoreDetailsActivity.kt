@@ -1,11 +1,21 @@
 package ipca.project.ipchatv2.Chat
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
@@ -56,6 +66,8 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
             binding.imageViewLeaveGroup.visibility = View.GONE
             binding.textViewRemoveGroup.visibility = View.GONE
             binding.imageViewRemoveGroup.visibility = View.GONE
+            binding.textViewChangeGroupName.visibility = View.GONE
+            binding.textViewChangeGroupImage.visibility = View.GONE
 
         }
 
@@ -129,6 +141,52 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
             })
             val alert = builder.create()
             alert.show()
+
+        }
+
+        binding.textViewChangeGroupName.setOnClickListener {
+
+            val dialog = Dialog(this)
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setContentView(R.layout.dialog_change_group_name)
+
+            val editTextName = dialog.findViewById<EditText>(R.id.editTextName)
+            val buttonCancel = dialog.findViewById<Button>(R.id.buttonCancel)
+            val buttonConfirm = dialog.findViewById<Button>(R.id.buttonConfirm)
+
+            buttonCancel.setOnClickListener {
+
+                dialog.dismiss()
+
+            }
+
+            buttonConfirm.setOnClickListener {
+
+                val name = editTextName.text.toString()
+
+                if(name.isBlank()){
+
+                    Toast.makeText(this, "Nome vazio!", Toast.LENGTH_SHORT).show()
+
+                }else{
+
+                    db.collection("groupChannels")
+                        .document(groupId!!)
+                        .update(mapOf("chatName" to editTextName.text.toString())).addOnSuccessListener {
+
+                            dialog.dismiss()
+
+                        }
+
+                }
+
+            }
+
+            dialog.show()
+            dialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            dialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window!!.setGravity(Gravity.CENTER)
 
         }
 

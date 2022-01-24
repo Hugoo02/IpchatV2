@@ -227,7 +227,6 @@ class ChatActivity : AppCompatActivity() {
             dialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             dialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
             dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialog.window!!.setGravity(Gravity.BOTTOM)
 
         }
 
@@ -679,12 +678,14 @@ class ChatActivity : AppCompatActivity() {
 
                 var details = true
 
-                if(index == 0){
+                if(channelType == "private" && index == 0){
 
                     adapter.add(HourItem(chatMessage.time!!))
                     messageDate = true
 
-                }else{
+                }else if (channelType == "group" && index == 0){
+                    messageDate = false
+                } else{
 
                     val previousMessageDate = Utils.dateToCalenar(messages[index - 1].time!!)
                     val currentMessageDate = Utils.dateToCalenar(chatMessage.time!!)
@@ -705,6 +706,8 @@ class ChatActivity : AppCompatActivity() {
                         && previousMessageDay == currentMessageDay && previousMessageHour == currentMessageHour
                         && previousMessageMinutes >= (currentMessageMinutes - 5)))
                     {
+
+                        println("index = $index")
 
                         adapter.add(HourItem(chatMessage.time!!))
                         messageDate = true

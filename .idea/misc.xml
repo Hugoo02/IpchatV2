@@ -34,6 +34,7 @@
         <entry key="app/src/main/res/drawable/admin_text_view.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/background_image.xml" value="0.228125" />
         <entry key="app/src/main/res/drawable/background_image_row.xml" value="0.21851851851851853" />
+        <entry key="app/src/main/res/drawable/backgroung_dialog.xml" value="0.10208333333333333" />
         <entry key="app/src/main/res/drawable/button_rounded.xml" value="0.228125" />
         <entry key="app/src/main/res/drawable/button_toolbar.xml" value="0.17592592592592593" />
         <entry key="app/src/main/res/drawable/buttonwhite.xml" value="0.228125" />
@@ -80,7 +81,9 @@
         <entry key="app/src/main/res/layout/activity_show_files.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/layout/activity_show_photo_closer.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_show_users.xml" value="0.1793478260869565" />
+        <entry key="app/src/main/res/layout/dialog_change_group_name.xml" value="0.33" />
         <entry key="app/src/main/res/layout/dialog_choose_pic_method.xml" value="0.12862453531598514" />
+        <entry key="app/src/main/res/layout/dialog_group_details.xml" value="0.1403985507246377" />
         <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.2" />
         <entry key="app/src/main/res/layout/fragment_choose_image.xml" value="0.18840579710144928" />
         <entry key="app/src/main/res/layout/fragment_choose_pic_method.xml" value="0.15670289855072464" />

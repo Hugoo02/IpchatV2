@@ -72,7 +72,6 @@
             android:textColor="@color/black"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/textView2"
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -80,13 +79,12 @@
             android:id="@+id/textViewLeaveGroup"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:text="Sair do Grupo"
             android:textColor="@color/red"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/textViewFiles"
             app:layout_constraintStart_toStartOf="@+id/textViewFiles"
-            app:layout_constraintTop_toBottomOf="@+id/textViewGroupMembers" />
+            tools:layout_editor_absoluteY="466dp" />
 
         <TextView
             android:id="@+id/textViewRemoveGroup"
@@ -171,6 +169,30 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/textViewGroupInformation"
             app:layout_constraintTop_toBottomOf="@+id/textViewGroupInformation" />
+
+        <TextView
+            android:id="@+id/textViewChangeGroupName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Mudar nome do grupo"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@+id/textViewGroupMembers"
+            app:layout_constraintStart_toStartOf="@+id/textViewGroupInformation"
+            app:layout_constraintTop_toBottomOf="@+id/textViewGroupMembers" />
+
+        <TextView
+            android:id="@+id/textViewChangeGroupImage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Mudar imagem do grupo"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@+id/textViewChangeGroupName"
+            app:layout_constraintStart_toStartOf="@+id/textViewGroupInformation"
+            app:layout_constraintTop_toBottomOf="@+id/textViewChangeGroupName" />
 
         <ImageView
             android:id="@+id/imageViewLeaveGroup"
