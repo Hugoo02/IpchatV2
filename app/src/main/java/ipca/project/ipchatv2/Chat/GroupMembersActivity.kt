@@ -8,11 +8,8 @@ import androidx.fragment.app.FragmentManager
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import ipca.project.ipchatv2.Home.HomeAdapter
 import ipca.project.ipchatv2.Models.GroupChannel
-import ipca.project.ipchatv2.R
 import ipca.project.ipchatv2.ShowUsersActivity
-import ipca.project.ipchatv2.databinding.ActivityChatMoreDetailsBinding
 import ipca.project.ipchatv2.databinding.ActivityGroupMembersBinding
 import java.util.ArrayList
 

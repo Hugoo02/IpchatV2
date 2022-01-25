@@ -79,12 +79,13 @@
             android:id="@+id/textViewLeaveGroup"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:text="Sair do Grupo"
             android:textColor="@color/red"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/textViewFiles"
             app:layout_constraintStart_toStartOf="@+id/textViewFiles"
-            tools:layout_editor_absoluteY="466dp" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewChangeGroupImage" />
 
         <TextView
             android:id="@+id/textViewRemoveGroup"

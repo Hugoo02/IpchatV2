@@ -2,13 +2,10 @@ package ipca.project.ipchatv2.Chat
 
 import android.content.*
 import android.content.ContentValues.TAG
-import android.Manifest
 import android.app.Activity
 import android.app.Dialog
-import android.content.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,15 +22,12 @@ import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import ipca.project.ipchatv2.Models.GroupChannel
 import ipca.project.ipchatv2.Models.PrivateChannel
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.R
 import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
-import com.squareup.picasso.Picasso
 import ipca.project.ipchatv2.Notifications.NotificationData
 import ipca.project.ipchatv2.Notifications.PushNotification
 import ipca.project.ipchatv2.Notifications.RetrofitInstance
@@ -45,7 +39,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import android.provider.OpenableColumns
-import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -56,12 +49,9 @@ import kotlinx.android.synthetic.main.row_calendar.*
 import java.io.File
 import java.lang.Exception
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
-import kotlinx.coroutines.selects.select
-import java.io.ByteArrayOutputStream
 import javax.crypto.Cipher
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.IvParameterSpec
@@ -206,11 +196,6 @@ class ChatActivity : AppCompatActivity() {
             receiverTokenShowUsers = it.getString("Token").toString()
             receiverTokenUserList = it.getString("receiverToken").toString()
         }
-
-        println(receiverTokenShowUsers)
-        println(receiverTokenUserList)
-        println("SFWEFWEFWGWEGV")
-
 
         configureToolbar()
         listenForMessages()
@@ -658,9 +643,9 @@ class ChatActivity : AppCompatActivity() {
             val refGroup = db.collection("groupChannels")
                 .document(groupId!!)
 
-            refGroup.get().addOnSuccessListener { result ->
+            refGroup.addSnapshotListener { result, error ->
 
-                val group = result.toObject(GroupChannel::class.java)
+                val group = result!!.toObject(GroupChannel::class.java)
 
                 binding.textViewUsername.text = group!!.chatName
 
@@ -672,9 +657,9 @@ class ChatActivity : AppCompatActivity() {
             val refPrivateChannel = db.collection("privateChannels")
                 .document(groupId!!)
 
-            refPrivateChannel.get().addOnSuccessListener { result ->
+            refPrivateChannel.addSnapshotListener { result, error ->
 
-                val users = result.toObject(PrivateChannel::class.java)
+                val users = result!!.toObject(PrivateChannel::class.java)
 
                 users!!.userIds!!.forEach {
 

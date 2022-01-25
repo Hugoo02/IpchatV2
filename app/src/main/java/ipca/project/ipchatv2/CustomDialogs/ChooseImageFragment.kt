@@ -31,6 +31,7 @@ class ChooseImageFragment : DialogFragment() {
     private lateinit var binding: FragmentChooseImageBinding
 
     private var groupChannel : GroupChannel? = null
+    private var groupId : String? = null
 
     private var selectedPhotoUri: Uri? = null
 
@@ -52,6 +53,7 @@ class ChooseImageFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             groupChannel = it.getParcelable("groupChannel")
+            groupId = it.getString("groupId")
         }
     }
 
@@ -108,7 +110,19 @@ class ChooseImageFragment : DialogFragment() {
 
                 ref.downloadUrl.addOnSuccessListener {
 
-                    createGroupChannel(it.toString())
+                    if(groupId != null){
+
+                        db.collection("groupChannels")
+                            .document(groupId!!)
+                            .update(mapOf("groupImageURL" to it.toString()))
+                            .addOnSuccessListener {
+
+                                dismiss()
+
+                            }
+
+                    }else
+                        createGroupChannel(it.toString())
 
                 }
 

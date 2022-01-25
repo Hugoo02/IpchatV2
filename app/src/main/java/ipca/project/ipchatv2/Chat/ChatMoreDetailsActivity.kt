@@ -16,11 +16,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.squareup.picasso.Picasso
 import ipca.project.ipchatv2.Authentication.LoginActivity
+import ipca.project.ipchatv2.CustomDialogs.ChooseImageFragment
+import ipca.project.ipchatv2.CustomDialogs.ProfileDelaisFragment
 import ipca.project.ipchatv2.MainActivity
 import ipca.project.ipchatv2.Models.GroupChannel
 import ipca.project.ipchatv2.Models.PrivateChannel
@@ -187,6 +190,20 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
             dialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
             dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.window!!.setGravity(Gravity.CENTER)
+
+        }
+
+        binding.textViewChangeGroupImage.setOnClickListener {
+
+            val dialog = ChooseImageFragment()
+
+            val bundle = Bundle()
+
+            bundle.putString("groupId", groupId!!)
+
+            dialog.arguments = bundle
+
+            dialog.show((this as FragmentActivity).supportFragmentManager, "customDialog")
 
         }
 
@@ -466,9 +483,9 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
 
             db.collection("groupChannels")
                 .document(groupId!!)
-                .get().addOnSuccessListener { result ->
+                .addSnapshotListener { result, error ->
 
-                    val group = result.toObject(GroupChannel::class.java)
+                    val group = result!!.toObject(GroupChannel::class.java)
 
                     val circleImageViewGroup = binding.circleImageViewGroup
                     val textViewGroupName = binding.textViewGroupName
@@ -483,9 +500,9 @@ class ChatMoreDetailsActivity : AppCompatActivity() {
 
             db.collection("privateChannels")
                 .document(groupId!!)
-                .get().addOnSuccessListener { result ->
+                .addSnapshotListener { result, error ->
 
-                    val chat = result.toObject(PrivateChannel::class.java)
+                    val chat = result!!.toObject(PrivateChannel::class.java)
 
                     val circleImageViewGroup = binding.circleImageViewGroup
                     val textViewGroupName = binding.textViewGroupName
