@@ -6,18 +6,27 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Models.ChatMessage
 import ipca.project.ipchatv2.R
+import ipca.project.ipchatv2.RowConfigurations.EmptyItem
 import ipca.project.ipchatv2.RowConfigurations.PhotoItem
 import ipca.project.ipchatv2.databinding.FragmentShowPhotosBinding
 import ipca.project.ipchatv2.databinding.FragmentUserListBinding
 import java.io.Serializable
 import java.lang.ref.Reference
+import javax.crypto.Cipher
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.PBEKeySpec
+import javax.crypto.spec.SecretKeySpec
+import android.util.Base64
 
 class ShowPhotosFragment : Fragment() {
 
@@ -25,6 +34,10 @@ class ShowPhotosFragment : Fragment() {
 
     var groupId : String? = null
     var channelType: String? = null
+
+    val secretKey = "tK5UTui+DPh8lIlBxya5XVsmeDCoUl6vHhdIESMB6sQ="
+    val salt = "QWlGNHNhMTJTQWZ2bGhpV3U="
+    val iv = "bVQzNFNhRkQ1Njc4UUFaWA=="
 
     val db = FirebaseFirestore.getInstance()
 
@@ -68,8 +81,6 @@ class ShowPhotosFragment : Fragment() {
 
         listenForPhotos()
 
-
-
         return binding.root
     }
 
@@ -88,16 +99,54 @@ class ShowPhotosFragment : Fragment() {
             .get()
             .addOnSuccessListener { result ->
 
+                var empty = true
+
                 for(doc in result.documents){
 
                     println("passou aqui")
 
                     val message = doc.toObject(ChatMessage::class.java)
 
+                    if(message!!.text != null){
+                        var string1 :String
+
+                        val ivParameterSpec =  IvParameterSpec(Base64.decode(iv, Base64.DEFAULT))
+
+                        val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+                        val spec =  PBEKeySpec(secretKey.toCharArray(), Base64.decode(salt, Base64.DEFAULT), 10000, 256)
+                        val tmp = factory.generateSecret(spec);
+                        val secretKey =  SecretKeySpec(tmp.encoded, "AES")
+
+                        val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
+                        cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParameterSpec);
+                        string1 = String(cipher.doFinal(Base64.decode(message!!.text, Base64.DEFAULT)))
+
+
+                        message.text = string1
+                    }
+
+
                     if(message!!.type == "IMAGE")
+                    {
+                        empty = false
+                        adapter.spanCount = 3
+                        binding.recyclerViewShowPhotos.layoutManager = GridLayoutManager(requireContext(), 3)
+
                         adapter.add(PhotoItem(message))
+                    }
+
 
                 }
+
+                if(empty)
+                {
+
+                    adapter.spanCount = 1
+                    binding.recyclerViewShowPhotos.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL ,false)
+                    adapter.add(EmptyItem())
+
+                }
+
 
             }
 

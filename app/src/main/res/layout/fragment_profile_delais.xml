@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minWidth="300dp"
     android:background="@drawable/dialog_background"
     tools:context=".CustomDialogs.ChooseImageFragment">
 
@@ -35,7 +36,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
         android:src="@drawable/ic_baseline_clear"
-        app:tint="@color/text_color"
+        app:tint="@color/black"
         android:backgroundTint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -47,7 +48,7 @@
         android:layout_marginTop="10dp"
         android:text=""
         android:textSize="25sp"
-        android:textColor="@color/text_color"
+        android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/circleImagePhoto"
         app:layout_constraintStart_toStartOf="@+id/circleImagePhoto"
@@ -60,7 +61,7 @@
         android:layout_marginTop="20dp"
         android:text=""
         android:textSize="18sp"
-        android:textColor="@color/text_color"
+        android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/textViewUserName"
         app:layout_constraintStart_toStartOf="@+id/textViewUserName"
@@ -73,7 +74,7 @@
         android:layout_marginTop="20dp"
         android:text=""
         android:textSize="18sp"
-        android:textColor="@color/text_color"
+        android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/textViewUserName"
         app:layout_constraintHorizontal_bias="0.501"
@@ -87,7 +88,7 @@
         android:layout_marginTop="20dp"
         android:text=""
         android:textSize="18sp"
-        android:textColor="@color/text_color"
+        android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/textViewUserName"
         app:layout_constraintStart_toStartOf="@+id/textViewUserName"
@@ -98,14 +99,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
         android:text=""
+        android:textColor="@color/black"
         android:textSize="18sp"
-        android:textColor="@color/text_color"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/textViewUserName"
         app:layout_constraintStart_toStartOf="@+id/textViewUserName"
         app:layout_constraintTop_toBottomOf="@+id/textViewGrade" />
+
+    <TextView
+        android:id="@+id/textViewAdmin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Atribuir cargo de admininstrador"
+        android:textColor="@color/primary_color"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/textViewStudentNumber"
+        app:layout_constraintStart_toStartOf="@+id/textViewStudentNumber"
+        app:layout_constraintTop_toBottomOf="@+id/textViewStudentNumber" />
+
+    <TextView
+        android:id="@+id/textViewRemove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="20dp"
+        android:text="Remover do Grupo"
+        android:textColor="@color/red"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textViewAdmin"
+        app:layout_constraintStart_toStartOf="@+id/textViewAdmin"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAdmin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

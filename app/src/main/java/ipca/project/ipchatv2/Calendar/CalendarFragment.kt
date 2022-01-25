@@ -5,12 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import java.util.*
-import android.R
+import ipca.project.ipchatv2.R
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -18,21 +16,14 @@ import android.util.TypedValue
 import android.view.MotionEvent
 import android.widget.ImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.view.marginStart
 import com.applandeo.materialcalendarview.CalendarView
 import com.applandeo.materialcalendarview.EventDay
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.FirebaseFirestoreKtxRegistrar
 import ipca.project.ipchatv2.Models.CalendarModel
 import ipca.project.ipchatv2.databinding.FragmentCalendarBinding
-import android.widget.RelativeLayout
 import android.graphics.RectF
-
-
-
 
 
 
@@ -50,8 +41,17 @@ class CalendarFragment : Fragment() {
     val currentUser = FirebaseAuth.getInstance()
 
     var calendarId : String? = null
+    var channelType : String? = null
 
     var yDown = 0f
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            calendarId = it.getString("calendarId")
+            channelType = it.getString("channelType")
+        }
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
@@ -63,7 +63,7 @@ class CalendarFragment : Fragment() {
         //Get Layout
         binding = FragmentCalendarBinding.inflate(layoutInflater)
 
-        if(calendarId == null){
+        if(channelType == null){
             calendarId = currentUser.uid
             binding.buttonBack.visibility = View.GONE
 
@@ -91,19 +91,21 @@ class CalendarFragment : Fragment() {
 
         displayEventIcons()
 
+        binding.buttonBack.setOnClickListener {
+
+            requireActivity().finish()
+
+        }
+
         imageButtonAdd.setOnClickListener {
 
             val intent = Intent(requireContext(), NewEventActivity::class.java)
             intent.putExtra("calendarId", calendarId)
+            intent.putExtra("channelType", channelType)
             startActivity(intent)
             getCurrentCalendar()
 
         }
-
-        println("imageY = "+ imageViewResizeCalendar.y )
-        println("recyclerViewY = "+ binding.recyclerView.y )
-        println("binding.recyclerView.bottom = " + binding.recyclerView.bottom)
-
 
         calendarView.setOnDayClickListener(object : OnDayClickListener {
             override fun onDayClick(eventDay: EventDay) {
@@ -164,7 +166,15 @@ class CalendarFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+
         getCurrentCalendar()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        dateList.clear()
+        adapter.clear()
+        events.clear()
     }
 
     fun calculateRectOnScreen(view: View): RectF {
@@ -184,7 +194,7 @@ class CalendarFragment : Fragment() {
 
             val calendar = Calendar.getInstance()
             calendar.time = it.date!!
-            events.add(EventDay(calendar, R.drawable.presence_online))
+            events.add(EventDay(calendar, R.drawable.ic_resizer))
 
         }
 
@@ -194,17 +204,13 @@ class CalendarFragment : Fragment() {
 
     fun getCurrentCalendar(){
 
-        dateList.clear()
-
-        val uid = FirebaseAuth.getInstance().uid
-
-        if(calendarId == null)
-            calendarId = uid
-
-        val ref = db.collection("Calendar").document(uid!!)
+        val ref = db.collection("Calendar").document(calendarId!!)
             .collection("Meetings")
 
         ref.addSnapshotListener { value, error ->
+
+            dateList.clear()
+            events.clear()
 
             for (document in value!!.documents){
 
@@ -238,7 +244,9 @@ class CalendarFragment : Fragment() {
 
             if(dayFirebase == dayCalendar && monthFirebase == monthCalendar
                 && yearFirebase == yearCalendar)
-                adapter.add(CalendarRow(it))
+            {
+                adapter.add(CalendarRow(it, calendarId!!, channelType, requireActivity()))
+            }
 
         }
 

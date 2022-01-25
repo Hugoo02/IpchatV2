@@ -19,8 +19,12 @@ import ipca.project.ipchatv2.RowConfigurations.UserItem
 import ipca.project.ipchatv2.databinding.ActivityShowUsersBinding
 import kotlinx.android.synthetic.main.row_users.view.*
 import android.app.Activity
-
-
+import com.google.firebase.iid.FirebaseInstanceId
+import ipca.project.ipchatv2.Notifications.FirebaseService
+import android.app.AlertDialog
+import android.content.DialogInterface
+import ipca.project.ipchatv2.Authentication.LoginActivity
+import ipca.project.ipchatv2.Models.GroupChannel
 
 
 class ShowUsersActivity : AppCompatActivity() {
@@ -30,6 +34,9 @@ class ShowUsersActivity : AppCompatActivity() {
     val adapter = GroupAdapter<ViewHolder>()
     val currentUser = FirebaseAuth.getInstance()
     val userIds : ArrayList<String> = ArrayList()
+    var channelType : String? = null
+    var channelMemberList : ArrayList<String>? = null
+    var groupId : String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +46,11 @@ class ShowUsersActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        val channelType = intent.getStringExtra("channelType")
+        channelType = intent.getStringExtra("channelType")
+
+        val bundle = intent.extras
+        channelMemberList = bundle!!.getStringArrayList("channelMemberList")
+        groupId = bundle.getString("groupId")
 
         binding.buttonBack.setOnClickListener {
 
@@ -48,6 +59,7 @@ class ShowUsersActivity : AppCompatActivity() {
         }
 
         fetchUsers()
+
 
         binding.recyclerViewShowUsers.adapter = adapter
 
@@ -59,6 +71,7 @@ class ShowUsersActivity : AppCompatActivity() {
                 val userItem = item as UserItem
                 var guestUserId : String? = null
                 var channelId : String? = null
+                var otherUserToken :String? = null
 
                 db.collection("User")
                     .document(userItem.user.id!!)
@@ -66,8 +79,9 @@ class ShowUsersActivity : AppCompatActivity() {
                     .addOnSuccessListener { result ->
 
                         guestUserId = result.toObject(User::class.java)!!.id
-
+                        otherUserToken = result.toObject(User::class.java)!!.token
                         println("guestUserId = $guestUserId")
+
 
                         db.collection("User")
                             .document(currentUser.uid!!)
@@ -78,14 +92,13 @@ class ShowUsersActivity : AppCompatActivity() {
                                 if(it.exists()){
 
                                     channelId = it["channelId"] as String
-                                    startChatActivity(channelId!!)
+                                    startChatActivity(channelId!!, otherUserToken!!)
 
                                 }
                                 else
                                 {
 
-                                    db.collection("privateChannels")
-                                        .add(PrivateChannel(mutableListOf(currentUser.uid!!, guestUserId!!)))
+                                    db.collection("privateChannels").add(PrivateChannel(mutableListOf(currentUser.uid!!, guestUserId!!)))
                                         .addOnSuccessListener {
 
                                             db.collection("User")
@@ -101,9 +114,9 @@ class ShowUsersActivity : AppCompatActivity() {
                                                 .set(mapOf("channelId" to it.id))
 
                                             channelId = it.id
-                                            startChatActivity(channelId!!)
+                                            startChatActivity(channelId!!,otherUserToken!!)
 
-                                    }
+                                        }
                                 }
                         }
                     }
@@ -112,7 +125,7 @@ class ShowUsersActivity : AppCompatActivity() {
             }
 
         }
-        else
+        else if (channelType == "group")
         {
 
             binding.imageButtonNext.setOnClickListener {
@@ -158,14 +171,61 @@ class ShowUsersActivity : AppCompatActivity() {
 
             }
         }
+        else {
+
+            adapter.setOnItemClickListener { item, view ->
+
+                val row = item as UserItem
+
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle(getString(R.string.cancel))
+                builder.setTitle("Tem a certeza que deseja adicionar ${row.user.username}")
+                builder.setPositiveButton("Sim", DialogInterface.OnClickListener{ dialog, id ->
+
+                    val refGroup = db.collection("groupChannels").document(groupId!!)
+
+                    db.collection("User")
+                        .document(row.user.id!!)
+                        .collection("groupChannels")
+                        .document(groupId!!)
+                        .set(mapOf("admin" to false))
+
+                    refGroup.get()
+                        .addOnSuccessListener {
+
+                            val channel = it.toObject(GroupChannel::class.java)
+
+                            val channelMembers = channel!!.userIds
+
+                            channelMembers!!.add(row.user.id!!)
+
+                            refGroup.update("userIds", channelMembers).addOnSuccessListener {
+
+                                finish()
+
+                            }
+
+                        }
+
+                })
+                builder.setNegativeButton(getString(R.string.no), DialogInterface.OnClickListener{ dialog, id ->
+
+
+                })
+                val alert = builder.create()
+                alert.show()
+
+            }
+        }
 
     }
 
-    private fun startChatActivity(channelId: String){
+    private fun startChatActivity(channelId: String, otherUserToken: String){
 
         val intent = Intent(this, ChatActivity::class.java)
         intent.putExtra("groupId", channelId)
         intent.putExtra("channelType", "private")
+        intent.putExtra("Token", otherUserToken)
         startActivity(intent)
         finish()
 
@@ -174,30 +234,28 @@ class ShowUsersActivity : AppCompatActivity() {
     private fun fetchUsers(){
 
         db.collection("User")
-            .get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
+            .addSnapshotListener { documents, error ->
+
+                for (document in documents!!) {
                     val user = document.toObject(User::class.java)
 
-                    if(user.id != currentUser.uid)
-                    {
+                    if(channelMemberList != null){
 
-                        adapter.add(UserItem(user, false))
+                        if(!(user.id in channelMemberList!!))
+                            adapter.add(UserItem(user, false))
+
+                    }else {
+
+                        if(user.id != currentUser.uid)
+                            adapter.add(UserItem(user, false))
 
                     }
 
                 }
             }
-            .addOnFailureListener { exception ->
-                println("Erro")
-            }
     }
 
-    fun closeActivity(){
 
-        finish()
-
-    }
 
 }
 

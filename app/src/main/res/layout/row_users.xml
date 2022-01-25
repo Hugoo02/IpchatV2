@@ -19,6 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/onlineBall"
         android:layout_width="16dp"
         android:layout_height="16dp"
         app:layout_goneMarginRight="30dp"
@@ -36,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:text="TextView"
-        android:textColor="@color/text_color"
+        android:textColor="@color/black"
         android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/circleImagePhoto"
@@ -48,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Aluno do Curso de Computação Móvel"
-        android:textColor="@color/text_color"
+        android:textColor="@color/black"
         android:layout_marginTop="6dp"
         app:layout_constraintStart_toStartOf="@+id/textViewUserName"
         app:layout_constraintTop_toBottomOf="@+id/textViewUserName" />
@@ -57,18 +58,17 @@
         android:id="@+id/textViewAdmin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
         android:layout_marginTop="1dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="1dp"
-        android:paddingBottom="1dp"
-        android:visibility="invisible"
-        android:textColor="@color/text_color"
         android:background="@drawable/admin_text_view"
+        android:paddingLeft="5dp"
+        android:paddingTop="1dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="1dp"
         android:text="admininstrador"
+        android:textColor="@color/primary_color"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/textViewUserName"
-        app:layout_constraintStart_toEndOf="@+id/textViewUserName"
+        app:layout_constraintEnd_toEndOf="@+id/textViewBio"
         app:layout_constraintTop_toTopOf="@+id/textViewUserName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

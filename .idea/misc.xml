@@ -3,29 +3,6 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/drawable/tab_layout.xml" value="0.3402777777777778" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/activity_change_password.xml" value="0.32592592592592595" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/activity_edit_event.xml" value="0.32592592592592595" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/activity_edit_profile.xml" value="0.22" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/activity_login.xml" value="0.32592592592592595" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/activity_main.xml" value="0.1814814814814815" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/activity_new_event.xml" value="0.32592592592592595" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/activity_settings.xml" value="0.32592592592592595" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/fragment_calendar.xml" value="0.32592592592592595" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/fragment_group_list.xml" value="0.32592592592592595" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/fragment_home.xml" value="0.32592592592592595" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/fragment_profile.xml" value="0.1" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/fragment_profile_delais.xml" value="0.32592592592592595" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/fragment_show_docs.xml" value="0.32592592592592595" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/fragment_user_list.xml" value="0.32592592592592595" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/pop_up_logout.xml" value="0.32592592592592595" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/popwindow_alertinternet.xml" value="0.32592592592592595" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/row_calendar.xml" value="0.32592592592592595" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/row_first_message.xml" value="0.32592592592592595" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/row_last_messages.xml" value="0.32592592592592595" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/row_text_message_from.xml" value="0.32592592592592595" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/row_text_message_to.xml" value="0.32592592592592595" />
-        <entry key="..\:/Projeto/IpchatV2/app/src/main/res/layout/row_users.xml" value="0.32592592592592595" />
         <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/drawable-v24/profile_layout.xml" value="0.2188034188034188" />
         <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/drawable/ic_add_calendar.xml" value="0.3141025641025641" />
         <entry key="..\:/Users/bruno/AndroidStudioProjects/IpchatV2/app/src/main/res/drawable/ic_baseline_calendar_today_24.xml" value="0.22179487179487178" />
@@ -79,19 +56,15 @@
         <entry key="app/src/main/res/drawable/toolbar_background.xml" value="0.228125" />
         <entry key="app/src/main/res/layout/activity_chat.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_chat_more_details.xml" value="0.28191489361702127" />
-        <entry key="app/src/main/res/layout/activity_contact_ipca.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_create_new_group.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_group_members.xml" value="0.11367753623188406" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.12" />
         <entry key="app/src/main/res/layout/activity_new_calendar_event.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_new_event.xml" value="0.151268115942029" />
-        <entry key="app/src/main/res/layout/activity_settings.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/activity_show_files.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/layout/activity_show_photo_closer.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_show_users.xml" value="0.1793478260869565" />
-        <entry key="app/src/main/res/layout/activity_web_view.xml" value="0.16927083333333334" />
-        <entry key="app/src/main/res/layout/dialog_change_group_name.xml" value="0.1752786220871327" />
         <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.2" />
         <entry key="app/src/main/res/layout/fragment_choose_image.xml" value="0.18840579710144928" />
         <entry key="app/src/main/res/layout/fragment_group_list.xml" value="0.1" />
@@ -101,20 +74,16 @@
         <entry key="app/src/main/res/layout/fragment_select_date.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_show_docs.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/layout/fragment_show_group_users.xml" value="0.18" />
-        <entry key="app/src/main/res/layout/fragment_show_links.xml" value="0.29347826086956524" />
         <entry key="app/src/main/res/layout/fragment_show_photo.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_show_photo_closer.xml" value="0.10081053698074975" />
         <entry key="app/src/main/res/layout/fragment_show_photos.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/layout/fragment_user_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/popwindow_alertinternet.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/row_calendar.xml" value="0.12907608695652173" />
-        <entry key="app/src/main/res/layout/row_contact.xml" value="0.36041666666666666" />
-        <entry key="app/src/main/res/layout/row_file.xml" value="0.1752786220871327" />
         <entry key="app/src/main/res/layout/row_first_message.xml" value="0.33" />
         <entry key="app/src/main/res/layout/row_image_message_from.xml" value="1.1" />
         <entry key="app/src/main/res/layout/row_image_message_to.xml" value="0.75" />
         <entry key="app/src/main/res/layout/row_last_messages.xml" value="0.18070652173913043" />
-        <entry key="app/src/main/res/layout/row_link.xml" value="0.29347826086956524" />
         <entry key="app/src/main/res/layout/row_show_image.xml" value="0.14990942028985507" />
         <entry key="app/src/main/res/layout/row_text_message_from.xml" value="0.5" />
         <entry key="app/src/main/res/layout/row_text_message_to.xml" value="0.5" />
@@ -125,7 +94,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

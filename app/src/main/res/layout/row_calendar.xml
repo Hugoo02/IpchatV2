@@ -45,6 +45,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewDate">
 
+        <ImageButton
+            android:id="@+id/buttonEditEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:backgroundTint="@color/white"
+            android:visibility="gone"
+            android:src="@drawable/ic_baseline_edit_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/black"
+            tools:src="@drawable/ic_baseline_edit_24" />
+
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
@@ -76,31 +90,17 @@
             app:layout_constraintStart_toEndOf="@+id/textView1"
             app:layout_constraintTop_toTopOf="@+id/textView1" />
 
-        <ImageView
-            android:id="@+id/imageViewMap"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="10dp"
-            android:backgroundTint="@color/white"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/textViewLocal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textViewLocal"
-            app:srcCompat="@drawable/ic_baseline_edit_24"
-            app:tint="@color/black" />
-
         <TextView
             android:id="@+id/textViewLocal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginTop="15dp"
+            android:textStyle="bold"
             android:text="Local"
+            android:visibility="gone"
             android:textColor="@color/black"
             android:textSize="16dp"
-            android:textStyle="bold"
-            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/imageViewMap"
             app:layout_constraintTop_toBottomOf="@+id/textViewDescription" />
 
@@ -108,21 +108,32 @@
             android:id="@+id/imageButtonMoreDetails"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
             android:backgroundTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_baseline_keyboard_arrow_down_24"
+            app:tint="@color/black" />
+
+        <ImageView
+            android:id="@+id/imageViewMap"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="20dp"
+            android:backgroundTint="@color/white"
             app:tint="@color/black"
-            tools:ignore="SpeakableTextPresentCheck" />
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewLocal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textViewLocal"
+            app:srcCompat="@drawable/ic_baseline_map_24" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
-            android:layout_width="365dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -143,40 +154,29 @@
 
             <TextView
                 android:id="@+id/textViewCreatedBy"
-                android:layout_width="220dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
                 android:text="Hugo Oliveira"
-                android:textColor="@color/black"
                 android:textStyle="bold"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintEnd_toStartOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textViewLocal" />
-
-            <ImageButton
-                android:id="@+id/buttonEditEvent"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="5dp"
-                android:backgroundTint="@color/white"
-                android:src="@drawable/ic_baseline_edit_24"
-                android:tint="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/black"
-                tools:ignore="SpeakableTextPresentCheck"
-                tools:src="@drawable/ic_baseline_edit_24" />
 
         </LinearLayout>
 
 
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

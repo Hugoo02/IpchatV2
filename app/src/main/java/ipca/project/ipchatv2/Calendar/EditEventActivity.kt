@@ -8,15 +8,10 @@ import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import com.squareup.picasso.Picasso
+import ipca.project.ipchatv2.MainActivity
 import ipca.project.ipchatv2.Models.CalendarModel
-import ipca.project.ipchatv2.Models.User
-import ipca.project.ipchatv2.ProfileFragment
+import ipca.project.ipchatv2.Models.GroupChannel
 import ipca.project.ipchatv2.databinding.ActivityEditEventBinding
-import kotlinx.android.synthetic.main.activity_edit_event.*
 import java.util.*
 
 class EditEventActivity : AppCompatActivity() {
@@ -26,19 +21,33 @@ class EditEventActivity : AppCompatActivity() {
     val db = FirebaseFirestore.getInstance()
     val currentUser = FirebaseAuth.getInstance()
 
+    var calendarId: String? = null
+    var channelType: String? = null
+    var event: CalendarModel? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditEventBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var currentEvent = intent.getStringExtra("calendarId")
+        calendarId = intent.getStringExtra("calendarId")
+        channelType = intent.getStringExtra("channelType")
+        event = intent.extras!!.getParcelable("event")
+
+        binding.editTextTitle.setText(event!!.title)
+        binding.editTextLocal.setText(event!!.local)
+        binding.editTextDescription.setText(event!!.description)
+
+        val eventCalendar = Calendar.getInstance()
+        eventCalendar.time = event!!.date
+
+        val eventCalendarDay = eventCalendar.get(Calendar.DAY_OF_MONTH)
+        val eventCalendarMonth = eventCalendar.get(Calendar.MONTH)
+        val eventCalendarYear = eventCalendar.get(Calendar.YEAR)
+
+        binding.textViewSelectDate.text = "$eventCalendarDay/${eventCalendarMonth + 1}/$eventCalendarYear"
 
         supportActionBar?.hide()
-
-        var title = binding.editTextTitle
-        var local = binding.editTextLocal
-        var description = binding.editTextDescription
-
 
         binding.buttonBack.setOnClickListener {
             finish()
@@ -47,6 +56,7 @@ class EditEventActivity : AppCompatActivity() {
         binding.textViewSelectDate.setOnClickListener {
 
             val calendar = Calendar.getInstance()
+            calendar.time = event!!.date!!
 
             val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
             val month: Int = calendar.get(Calendar.MONTH)
@@ -67,20 +77,15 @@ class EditEventActivity : AppCompatActivity() {
             picker.show()
         }
 
-
         binding.imageButtonSave.setOnClickListener {
             editCurrentEvent()
             Toast.makeText(this, "Evento editado com sucesso!", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, CalendarFragment::class.java)
-            startActivity(intent)
             finish()
         }
 
         binding.buttonDelete.setOnClickListener {
             deleteCurrentEvent()
             Toast.makeText(this, "Evento eliminado com sucesso!", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, CalendarFragment::class.java)
-            startActivity(intent)
             finish()
         }
     }
@@ -89,9 +94,152 @@ class EditEventActivity : AppCompatActivity() {
 
     private fun editCurrentEvent() {
 
+        val finalTitle = binding.editTextTitle.text.toString()
+        val finalLocal = binding.editTextLocal.text.toString()
+        val finalDescription = binding.editTextDescription.text.toString()
+
+        var finalEvent : CalendarModel? = null
+
+        if(time != null)
+             finalEvent = CalendarModel(event!!.calendarId, time, finalTitle, event!!.createdBy, finalDescription, finalLocal)
+        else
+            finalEvent = CalendarModel(event!!.calendarId, event!!.date, finalTitle, event!!.createdBy, finalDescription, finalLocal)
+
+        if(channelType == "group") {
+
+            db.collection("groupChannels")
+                .document(calendarId!!)
+                .get()
+                .addOnSuccessListener { result ->
+
+                    val channel = result.toObject(GroupChannel::class.java)
+
+                    db.collection("Calendar")
+                        .document(calendarId!!)
+                        .collection("Meetings")
+                        .document(event!!.calendarId!!)
+                        .set(finalEvent)
+
+
+                    channel!!.userIds!!.forEach {
+
+                        db.collection("Calendar")
+                            .document(it)
+                            .collection("Meetings")
+                            .document(event!!.calendarId!!)
+                            .set(finalEvent)
+
+                    }
+
+                }
+
+        } else if (channelType == "private") {
+
+            db.collection("privateChannels")
+                .document(calendarId!!)
+                .get()
+                .addOnSuccessListener { result ->
+
+                    val channel = result.toObject(GroupChannel::class.java)
+
+                    db.collection("Calendar")
+                        .document(calendarId!!)
+                        .collection("Meetings")
+                        .document(event!!.calendarId!!)
+                        .set(finalEvent)
+
+
+                    channel!!.userIds!!.forEach {
+
+                        db.collection("Calendar")
+                            .document(it)
+                            .collection("Meetings")
+                            .document(event!!.calendarId!!)
+                            .set(finalEvent)
+
+                    }
+
+                }
+
+        } else {
+
+            db.collection("Calendar")
+                .document(currentUser.uid!!)
+                .collection("Meetings")
+                .document(event!!.calendarId!!)
+                .set(finalEvent)
+
+        }
+
     }
 
     private fun deleteCurrentEvent(){
+
+        if(channelType == "group") {
+
+            db.collection("groupChannels")
+                .document(calendarId!!)
+                .get()
+                .addOnSuccessListener { result ->
+
+                    val channel = result.toObject(GroupChannel::class.java)
+
+                    db.collection("Calendar")
+                        .document(calendarId!!)
+                        .collection("Meetings")
+                        .document(event!!.calendarId!!)
+                        .delete()
+
+
+                    channel!!.userIds!!.forEach {
+
+                        db.collection("Calendar")
+                            .document(it)
+                            .collection("Meetings")
+                            .document(event!!.calendarId!!)
+                            .delete()
+
+                    }
+
+                }
+
+        } else if (channelType == "private") {
+
+            db.collection("privateChannels")
+                .document(calendarId!!)
+                .get()
+                .addOnSuccessListener { result ->
+
+                    val channel = result.toObject(GroupChannel::class.java)
+
+                    db.collection("Calendar")
+                        .document(calendarId!!)
+                        .collection("Meetings")
+                        .document(event!!.calendarId!!)
+                        .delete()
+
+
+                    channel!!.userIds!!.forEach {
+
+                        db.collection("Calendar")
+                            .document(it)
+                            .collection("Meetings")
+                            .document(event!!.calendarId!!)
+                            .delete()
+
+                    }
+
+                }
+
+        } else {
+
+            db.collection("Calendar")
+                .document(currentUser.uid!!)
+                .collection("Meetings")
+                .document(event!!.calendarId!!)
+                .delete()
+
+        }
 
     }
 }

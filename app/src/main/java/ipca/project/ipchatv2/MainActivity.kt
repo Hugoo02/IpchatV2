@@ -15,7 +15,11 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import ipca.project.ipchatv2.Authentication.LoginActivity
+import ipca.project.ipchatv2.Models.User
+import ipca.project.ipchatv2.Notifications.FirebaseService
 import ipca.project.ipchatv2.Utils.Utils
 import ipca.project.ipchatv2.databinding.ActivityMainBinding
 import android.preference.PreferenceManager
@@ -33,6 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
+    private val db = FirebaseFirestore.getInstance()
 
     val IS_DARK = "IS_DARK"
 
@@ -62,6 +67,8 @@ class MainActivity : AppCompatActivity() {
 
         checkAuthentication()
 
+
+
     }
 
     private fun checkAuthentication() {
@@ -75,6 +82,72 @@ class MainActivity : AppCompatActivity() {
             finish()
 
         }
+        else{
+            checkDevice()
+        }
 
     }
+
+
+    private fun checkDevice(){
+
+        var userReference = db.collection("User").document(auth.currentUser!!.uid)
+
+        userReference.get().addOnSuccessListener { result ->
+            val user = result.toObject(User::class.java)
+
+            FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+                FirebaseService.token = it.token
+
+
+                if(user!!.token != it.token){
+                    user.token = it.token
+
+
+                    userReference.set(user)
+                }
+            }
+        }
+    }
+
+
+
+
+
+    override fun onPause() {
+        super.onPause()
+
+
+        var userReference = db.collection("User").document(auth.currentUser!!.uid)
+        val uid = FirebaseAuth.getInstance().uid
+
+        userReference.get().addOnSuccessListener { result ->
+            val user = result.toObject(User::class.java)
+
+            val updateUser = User(uid.toString(), user!!.username, user!!.course, user!!.email,
+                user!!.address, user!!.imageURL, user!!.student_number, user!!.year, user!!.gender, user!!.biography, user!!.token, false)
+
+            db.collection("User").document(uid.toString()).set(updateUser)
+
+        }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+
+        var userReference = db.collection("User").document(auth.currentUser!!.uid)
+        val uid = FirebaseAuth.getInstance().uid
+
+        userReference.get().addOnSuccessListener { result ->
+            val user = result.toObject(User::class.java)
+
+            val updateUser = User(uid.toString(), user!!.username, user!!.course, user!!.email,
+                user!!.address, user!!.imageURL, user!!.student_number, user!!.year, user!!.gender, user!!.biography, user!!.token, true)
+
+            db.collection("User").document(uid.toString()).set(updateUser)
+
+        }
+    }
+
 }

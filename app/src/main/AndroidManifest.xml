@@ -2,8 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ipca.project.ipchatv2" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
+        android:exported="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -16,6 +22,36 @@
             android:name=".Calendar.EditEventActivity"
             android:exported="true" >
         </activity>
+        <activity
+            android:name=".Chat.WebViewActivity"
+            android:exported="true" />
+
+        <service
+            android:name=".Notifications.FirebaseService"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="ipca.project.ipchatv2.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_files" />
+        </provider>
+
+        <activity
+            android:name=".Calendar.EditEventActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Calendar.CalendarActivity"
+            android:exported="true" />
         <activity
             android:name=".Chat.ShowPhotoCloserActivity"
             android:exported="true" />
