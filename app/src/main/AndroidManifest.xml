@@ -47,9 +47,6 @@
         </provider>
 
         <activity
-            android:name=".Calendar.EditEventActivity"
-            android:exported="true" />
-        <activity
             android:name=".Calendar.CalendarActivity"
             android:exported="true" />
         <activity

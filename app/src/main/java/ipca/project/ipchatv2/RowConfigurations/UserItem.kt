@@ -15,6 +15,8 @@ class UserItem(val user: User, val admin: Boolean): Item<ViewHolder>() {
         val circleImagePhoto = viewHolder.itemView.circleImagePhoto
         val textViewAdmin = viewHolder.itemView.textViewAdmin
 
+        println("passou na configuração da row")
+
         if(admin)
             textViewAdmin.visibility = View.VISIBLE
         else

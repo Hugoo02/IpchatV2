@@ -7,9 +7,7 @@ import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import ipca.project.ipchatv2.Chat.ChatActivity
 import ipca.project.ipchatv2.Chat.CreateNewGroupActivity
@@ -17,13 +15,8 @@ import ipca.project.ipchatv2.Models.PrivateChannel
 import ipca.project.ipchatv2.Models.User
 import ipca.project.ipchatv2.RowConfigurations.UserItem
 import ipca.project.ipchatv2.databinding.ActivityShowUsersBinding
-import kotlinx.android.synthetic.main.row_users.view.*
-import android.app.Activity
-import com.google.firebase.iid.FirebaseInstanceId
-import ipca.project.ipchatv2.Notifications.FirebaseService
 import android.app.AlertDialog
 import android.content.DialogInterface
-import ipca.project.ipchatv2.Authentication.LoginActivity
 import ipca.project.ipchatv2.Models.GroupChannel
 
 
@@ -234,20 +227,26 @@ class ShowUsersActivity : AppCompatActivity() {
     private fun fetchUsers(){
 
         db.collection("User")
-            .addSnapshotListener { documents, error ->
+            .get()
+            .addOnSuccessListener{ documents ->
 
                 for (document in documents!!) {
                     val user = document.toObject(User::class.java)
 
                     if(channelMemberList != null){
 
-                        if(!(user.id in channelMemberList!!))
+                        if((user.id !in channelMemberList!!))
+                        {
                             adapter.add(UserItem(user, false))
+                        }
 
                     }else {
 
-                        if(user.id != currentUser.uid)
+                        if(user.id != currentUser.uid){
+
                             adapter.add(UserItem(user, false))
+
+                        }
 
                     }
 

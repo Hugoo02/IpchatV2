@@ -81,8 +81,6 @@ class EditProfileActivity : AppCompatActivity() {
             editCurrentUser()
             uploadImageToFirebaseStorage()
             Toast.makeText(this, "Perfil editado com sucesso!", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, ProfileFragment::class.java)
-            startActivity(intent)
             finish()
         }
 

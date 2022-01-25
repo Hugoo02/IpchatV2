@@ -58,6 +58,7 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 import android.util.Base64
+import android.view.Gravity
 
 class ChatActivity : AppCompatActivity() {
 
@@ -253,6 +254,7 @@ class ChatActivity : AppCompatActivity() {
             dialog.window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             dialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
             dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window!!.setGravity(Gravity.BOTTOM)
 
         }
 

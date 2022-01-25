@@ -68,8 +68,8 @@ object Utils {
         val year = calendar.get(Calendar.YEAR)
 
         val formatter = DecimalFormat("00")
-        val formattedDay = formatter.format(month)
-        val formattedMonth = formatter.format(year)
+        val formattedDay = formatter.format(day)
+        val formattedMonth = formatter.format(month)
 
         return "$formattedDay/$formattedMonth/$year"
     }
