@@ -1,7 +1,6 @@
 package ipca.project.ipchatv2
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
@@ -82,6 +81,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile)  {
         ref.addSnapshotListener { value, error ->
 
             val user = value!!.toObject(User::class.java)
+
 
             Picasso.get().load(user!!.imageURL).into(circleImageView)
             username.text = user.username
