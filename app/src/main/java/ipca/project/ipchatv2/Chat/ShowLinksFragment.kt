@@ -95,7 +95,7 @@ class ShowLinksFragment : Fragment() {
 
                     val message = doc.toObject(ChatMessage::class.java)
 
-                    if (message!!.text != null) {
+                    if (message!!.text != null && message.type != "IMAGE" && message.type != "REMOVED") {
                         var string1: String
 
                         val ivParameterSpec = IvParameterSpec(Base64.decode(iv, Base64.DEFAULT))
