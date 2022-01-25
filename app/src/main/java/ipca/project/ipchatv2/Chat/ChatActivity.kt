@@ -159,18 +159,13 @@ class ChatActivity : AppCompatActivity() {
                 }
             }
 
-            Toast.makeText(this, "path = $path", Toast.LENGTH_LONG).show()
             println("path = $path")
 
             val file = File("$path/$fileName")
 
-            Toast.makeText(this, "file.name = ${file.name}", Toast.LENGTH_SHORT).show()
-
             uploadFileToFireStorage(uri!!, file)
 
         }catch (exception: Exception){}
-
-
 
 
 
