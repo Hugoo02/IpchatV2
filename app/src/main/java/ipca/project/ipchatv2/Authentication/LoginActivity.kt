@@ -67,12 +67,12 @@ class LoginActivity : AppCompatActivity() {
 
                     val user: FirebaseUser? = auth.currentUser
 
-                        user?.sendEmailVerification()
-                            ?.addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    updateUI(user)
-                                }
+                    user?.sendEmailVerification()
+                        ?.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                updateUI(user)
                             }
+                        }
 
                 }.addOnFailureListener {
                     updateUI(null)
@@ -96,17 +96,9 @@ class LoginActivity : AppCompatActivity() {
 
         if(currentUser != null){
             if(currentUser.isEmailVerified){
-                val metadata = auth.currentUser!!.metadata
-                if (metadata!!.creationTimestamp == metadata!!.lastSignInTimestamp) {
-                    val intent = Intent(this, ChangePasswordActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                } else {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()
-                }
-
             } else{
                 Toast.makeText(baseContext, "Please verify your email address.", Toast.LENGTH_SHORT).show()
             }
