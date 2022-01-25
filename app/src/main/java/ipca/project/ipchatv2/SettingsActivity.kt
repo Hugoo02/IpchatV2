@@ -21,6 +21,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import ipca.project.ipchatv2.Authentication.ChangePasswordActivity
 import ipca.project.ipchatv2.Authentication.LoginActivity
 import ipca.project.ipchatv2.Models.User
+import ipca.project.ipchatv2.Profile.ContactIpcaActivity
 import ipca.project.ipchatv2.databinding.FragmentCalendarBinding
 
 class SettingsActivity: AppCompatActivity() {
@@ -34,6 +35,7 @@ class SettingsActivity: AppCompatActivity() {
     lateinit var changePass: Button
     lateinit var logout: Button
     lateinit var username: TextView
+    lateinit var textViewContactIpca: TextView
     private lateinit var mAuth: FirebaseAuth
 
     val IS_DARK = "IS_DARK"
@@ -61,8 +63,16 @@ class SettingsActivity: AppCompatActivity() {
         changeTheme = findViewById(R.id.buttonDarkMode)
         changePass = findViewById(R.id.buttonChangePassword)
         logout = findViewById(R.id.buttonLogout)
+        textViewContactIpca = findViewById(R.id.textViewContactIpca)
 
         mAuth = FirebaseAuth.getInstance()
+
+        textViewContactIpca.setOnClickListener {
+
+            val intent = Intent(this, ContactIpcaActivity::class.java)
+            startActivity(intent)
+
+        }
 
         buttonBack.setOnClickListener {
             finish()

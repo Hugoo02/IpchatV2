@@ -79,15 +79,19 @@
         <entry key="app/src/main/res/drawable/toolbar_background.xml" value="0.228125" />
         <entry key="app/src/main/res/layout/activity_chat.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_chat_more_details.xml" value="0.28191489361702127" />
+        <entry key="app/src/main/res/layout/activity_contact_ipca.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_create_new_group.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_group_members.xml" value="0.11367753623188406" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.12" />
         <entry key="app/src/main/res/layout/activity_new_calendar_event.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_new_event.xml" value="0.151268115942029" />
+        <entry key="app/src/main/res/layout/activity_settings.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/activity_show_files.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/layout/activity_show_photo_closer.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_show_users.xml" value="0.1793478260869565" />
+        <entry key="app/src/main/res/layout/activity_web_view.xml" value="0.16927083333333334" />
+        <entry key="app/src/main/res/layout/dialog_change_group_name.xml" value="0.1752786220871327" />
         <entry key="app/src/main/res/layout/fragment_calendar.xml" value="0.2" />
         <entry key="app/src/main/res/layout/fragment_choose_image.xml" value="0.18840579710144928" />
         <entry key="app/src/main/res/layout/fragment_group_list.xml" value="0.1" />
@@ -97,16 +101,20 @@
         <entry key="app/src/main/res/layout/fragment_select_date.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_show_docs.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/layout/fragment_show_group_users.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/fragment_show_links.xml" value="0.29347826086956524" />
         <entry key="app/src/main/res/layout/fragment_show_photo.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_show_photo_closer.xml" value="0.10081053698074975" />
         <entry key="app/src/main/res/layout/fragment_show_photos.xml" value="0.13541666666666666" />
         <entry key="app/src/main/res/layout/fragment_user_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/popwindow_alertinternet.xml" value="0.14855072463768115" />
         <entry key="app/src/main/res/layout/row_calendar.xml" value="0.12907608695652173" />
+        <entry key="app/src/main/res/layout/row_contact.xml" value="0.36041666666666666" />
+        <entry key="app/src/main/res/layout/row_file.xml" value="0.1752786220871327" />
         <entry key="app/src/main/res/layout/row_first_message.xml" value="0.33" />
         <entry key="app/src/main/res/layout/row_image_message_from.xml" value="1.1" />
         <entry key="app/src/main/res/layout/row_image_message_to.xml" value="0.75" />
         <entry key="app/src/main/res/layout/row_last_messages.xml" value="0.18070652173913043" />
+        <entry key="app/src/main/res/layout/row_link.xml" value="0.29347826086956524" />
         <entry key="app/src/main/res/layout/row_show_image.xml" value="0.14990942028985507" />
         <entry key="app/src/main/res/layout/row_text_message_from.xml" value="0.5" />
         <entry key="app/src/main/res/layout/row_text_message_to.xml" value="0.5" />
